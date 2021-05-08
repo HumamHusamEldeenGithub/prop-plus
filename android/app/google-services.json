@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "550784313642",
+    "project_id": "propplus-1613c",
+    "storage_bucket": "propplus-1613c.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:550784313642:android:1434e056a83a89b5469653",
+        "android_client_info": {
+          "package_name": "com.humam.prop_plus"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "550784313642-h6f1ohgd6q5mgcnqqhjhl35fht3rqr8g.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyABAKszF8XDrAn8vY-msKzVEe5wnHWCAuo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "550784313642-h6f1ohgd6q5mgcnqqhjhl35fht3rqr8g.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
