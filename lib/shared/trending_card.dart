@@ -68,7 +68,7 @@ class _TrendingCardState extends State<TrendingCard> {
                                   icon: favorite
                                       ? Icon(
                                     Icons.favorite,
-                                    color: MainTheme.heart_color,
+                                    color: MainTheme.mainColor,
                                     size: 20,
                                   )
                                       : Icon(

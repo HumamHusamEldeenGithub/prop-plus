@@ -114,11 +114,7 @@ class _PropertyCardState extends State<PropertyCard> {
                 height: 50,
                 width: 50,
                 decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                    begin: Alignment.centerLeft,
-                    end: Alignment.centerRight,
-                    colors: [MainTheme.mainColor, MainTheme.secondaryColor,],
-                  ),
+                  color: Colors.white,
                   borderRadius: BorderRadius.circular(30),
                 ),
                 child: Center(
@@ -126,9 +122,9 @@ class _PropertyCardState extends State<PropertyCard> {
                   icon: favorite
                       ? Icon(
                           Icons.favorite,
-                          color: MainTheme.heart_color,
+                          color: MainTheme.mainColor,
                         )
-                      : Icon(Icons.favorite_border, color: Colors.white,),
+                      : Icon(Icons.favorite_border, ),
                   onPressed: () {
                     setState(() {
                       favorite = !favorite;
