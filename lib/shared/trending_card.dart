@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:prop_plus/constant/MainTheme.dart';
 
 class TrendingCard extends StatefulWidget {
   final String title, description, price, imgSrc;
@@ -63,10 +64,11 @@ class _TrendingCardState extends State<TrendingCard> {
                               height: 20,
                               width: 35,
                               child: IconButton(
+                                  color: MainTheme.mainColor,
                                   icon: favorite
                                       ? Icon(
                                     Icons.favorite,
-                                    color: Colors.red,
+                                    color: MainTheme.heart_color,
                                     size: 20,
                                   )
                                       : Icon(

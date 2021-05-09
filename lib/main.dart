@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
+import 'package:prop_plus/constant/MainTheme.dart';
 import 'package:prop_plus/screens/explore.dart';
 import 'package:prop_plus/screens/home.dart';
 import 'package:prop_plus/screens/notification.dart';
@@ -49,6 +50,15 @@ class _MainWidgetState extends State<MainWidget> {
 
     return Scaffold(
         appBar: AppBar(
+          flexibleSpace: Container(
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                begin: Alignment.centerLeft,
+                end: Alignment.centerRight,
+                colors: [MainTheme.mainColor, MainTheme.secondaryColor,],
+              ),
+            ),
+          ),
           title: Text("Prop+"),
         ),
         bottomNavigationBar: Container(

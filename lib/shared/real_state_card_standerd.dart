@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:prop_plus/constant/MainTheme.dart';
 
 class PropertyCard extends StatefulWidget {
   final String title, description, price, imgSrc;
@@ -113,7 +114,11 @@ class _PropertyCardState extends State<PropertyCard> {
                 height: 50,
                 width: 50,
                 decoration: BoxDecoration(
-                  color: Colors.white,
+                  gradient: LinearGradient(
+                    begin: Alignment.centerLeft,
+                    end: Alignment.centerRight,
+                    colors: [MainTheme.mainColor, MainTheme.secondaryColor,],
+                  ),
                   borderRadius: BorderRadius.circular(30),
                 ),
                 child: Center(
@@ -121,9 +126,9 @@ class _PropertyCardState extends State<PropertyCard> {
                   icon: favorite
                       ? Icon(
                           Icons.favorite,
-                          color: Colors.red,
+                          color: MainTheme.heart_color,
                         )
-                      : Icon(Icons.favorite_border),
+                      : Icon(Icons.favorite_border, color: Colors.white,),
                   onPressed: () {
                     setState(() {
                       favorite = !favorite;

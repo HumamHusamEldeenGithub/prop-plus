@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 
 class MainTheme{
-  static Color gradient_color_1 = Color(0xFF78e08f);
-  static Color gradient_color_2 = Color(0xFFb8e994);
+  static Color mainColor = Color(0xFF00B9FF);
+  static Color secondaryColor = Color(0xFF3DD6EB);
+  static Color heart_color = Color(0xFFff5959);
   static ThemeData finalTheme = ThemeData(
-    primaryColor: Color(0xFF78e08f),
-    accentColor: Color(0xFF78e08f),
+    primaryColor: mainColor,
+    accentColor: secondaryColor,
     scaffoldBackgroundColor: Colors.white,
     fontFamily: 'OpenSans',
   );

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:prop_plus/constant/MainTheme.dart';
 
 class Category extends StatefulWidget {
   bool selected = false;
@@ -16,7 +17,7 @@ class _CategoryState extends State<Category> {
         children: [
           Container(
             decoration: BoxDecoration(
-                color: widget.selected ? Color(0xFFFF5713) : Color(0xFFFF723C),
+                color: widget.selected ? MainTheme.mainColor : MainTheme.secondaryColor,
                 borderRadius: BorderRadius.circular(15)),
             child: IconButton(
               icon: Icon(
