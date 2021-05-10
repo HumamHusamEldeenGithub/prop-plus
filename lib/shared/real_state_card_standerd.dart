@@ -1,19 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:prop_plus/constant/MainTheme.dart';
+import 'package:prop_plus/modules/property_module.dart';
 
 class PropertyCard extends StatefulWidget {
-  final String title, description, price, imgSrc;
-  final double rating;
 
-  const PropertyCard(
-      {Key key,
-      this.title,
-      this.description,
-      this.price,
-      this.imgSrc,
-      this.rating})
-      : super(key: key);
+  final PropertyModel model ;
+
+  const PropertyCard({Key key, this.model}) : super(key: key);
+
+
+
+
   @override
   _PropertyCardState createState() => _PropertyCardState();
 }
@@ -35,8 +33,8 @@ class _PropertyCardState extends State<PropertyCard> {
               children: [
                 ClipRect(
                     child: Align(
-                  child: Image.asset(widget.imgSrc),
-                  heightFactor: 0.80,
+                  child: Image.asset(widget.model.imgSrc),
+                  heightFactor: 0.65,
                 )),
                 Padding(
                   padding: const EdgeInsets.all(10),
@@ -47,7 +45,7 @@ class _PropertyCardState extends State<PropertyCard> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            widget.title,
+                            widget.model.title,
                             style: TextStyle(
                                 fontWeight: FontWeight.bold, fontSize: 20),
                           ),
@@ -55,7 +53,7 @@ class _PropertyCardState extends State<PropertyCard> {
                             height: 3,
                           ),
                           Text(
-                            widget.description,
+                            widget.model.description,
                             style: TextStyle(color: Colors.grey[600]),
                           ),
                           SizedBox(
@@ -64,7 +62,7 @@ class _PropertyCardState extends State<PropertyCard> {
                           Row(
                             children: [
                               RatingBar.builder(
-                                initialRating: widget.rating,
+                                initialRating: widget.model.rating,
                                 minRating: 1,
                                 direction: Axis.horizontal,
                                 allowHalfRating: true,
@@ -81,7 +79,7 @@ class _PropertyCardState extends State<PropertyCard> {
                                 },
                               ),
                               Text(
-                                "${widget.rating} reviews",
+                                "${widget.model.rating} reviews",
                                 style: TextStyle(color: Colors.grey[600]),
                               )
                             ],
@@ -91,7 +89,7 @@ class _PropertyCardState extends State<PropertyCard> {
                       Column(
                         children: [
                           Text(
-                            "\$ ${widget.price}",
+                            "\$ ${widget.model.price}",
                             style: TextStyle(
                                 fontSize: 20, fontWeight: FontWeight.bold),
                           ),
@@ -114,11 +112,7 @@ class _PropertyCardState extends State<PropertyCard> {
                 height: 50,
                 width: 50,
                 decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                    begin: Alignment.centerLeft,
-                    end: Alignment.centerRight,
-                    colors: [MainTheme.mainColor, MainTheme.secondaryColor,],
-                  ),
+                  color: Colors.white,
                   borderRadius: BorderRadius.circular(30),
                 ),
                 child: Center(
@@ -126,9 +120,11 @@ class _PropertyCardState extends State<PropertyCard> {
                   icon: favorite
                       ? Icon(
                           Icons.favorite,
-                          color: MainTheme.heart_color,
+                          color: MainTheme.mainColor,
                         )
-                      : Icon(Icons.favorite_border, color: Colors.white,),
+                      : Icon(
+                          Icons.favorite_border,
+                        ),
                   onPressed: () {
                     setState(() {
                       favorite = !favorite;

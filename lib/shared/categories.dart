@@ -1,44 +1,47 @@
 import 'package:flutter/material.dart';
 import 'package:prop_plus/constant/MainTheme.dart';
+import 'package:prop_plus/modules/category_module.dart';
 
-class Category extends StatefulWidget {
-  bool selected = false;
+
+
+class CategoryRadioButton extends StatefulWidget {
+  final CategoryModel model;
+
+  const CategoryRadioButton({Key key, this.model}) : super(key: key);
   @override
-  _CategoryState createState() => _CategoryState();
+  _CategoryRadioButtonState createState() => _CategoryRadioButtonState();
 }
 
-class _CategoryState extends State<Category> {
+class _CategoryRadioButtonState extends State<CategoryRadioButton> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(left: 20),
+      padding: const EdgeInsets.only(right: 20),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Container(
             decoration: BoxDecoration(
-                color: widget.selected ? MainTheme.mainColor : MainTheme.secondaryColor,
+                color: widget.model.isSelected
+                    ? MainTheme.mainColor
+                    : MainTheme.secondaryColor,
                 borderRadius: BorderRadius.circular(15)),
             child: IconButton(
               icon: Icon(
-                Icons.hotel,
+                widget.model.icon,
                 color: Colors.white,
               ),
-              onPressed: () {
-                setState(() {
-                  widget.selected = !widget.selected;
-                });
-              },
             ),
           ),
           SizedBox(
             height: 10,
           ),
           Text(
-            "Cat name",
+            widget.model.title,
             style: TextStyle(
-                fontWeight:
-                    widget.selected ? FontWeight.bold : FontWeight.normal),
+                fontWeight: widget.model.isSelected
+                    ? FontWeight.bold
+                    : FontWeight.normal),
           ),
         ],
       ),
