@@ -20,7 +20,7 @@ class _TrendingCardState extends State<TrendingCard> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-        padding: const EdgeInsets.fromLTRB(0, 0, 20, 10),
+        padding: const EdgeInsets.fromLTRB(MainTheme.pagePadding, 0, 0, 10),
         child: ClipRRect(
           borderRadius: BorderRadius.circular(23),
           child: Card(

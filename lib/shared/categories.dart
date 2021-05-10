@@ -16,7 +16,7 @@ class _CategoryRadioButtonState extends State<CategoryRadioButton> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(right: 20),
+      padding: const EdgeInsets.only(left: MainTheme.pagePadding),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [

@@ -9,6 +9,7 @@ class MainTheme{
   static Color mainColor = Color(0xFF00B9FF);
   static Color secondaryColor = Color(0xFF3DD6EB);
   static Color heartColor = Color(0xFFff5959);
+  static const pagePadding = 20.0 ; 
   static ThemeData finalTheme = ThemeData(
     primaryColor: mainColor,
     accentColor: secondaryColor,

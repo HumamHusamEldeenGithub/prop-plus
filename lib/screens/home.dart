@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:prop_plus/constant/MainTheme.dart';
 import 'package:prop_plus/modules/property_module.dart';
 import 'package:prop_plus/modules/trending_module.dart';
 import 'package:prop_plus/shared/categories.dart';
@@ -12,20 +13,24 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
+
+
   List<CategoryModel> categoriesModules = <CategoryModel>[];
   List<TrendingModel> trendingModules = <TrendingModel>[];
   List<PropertyModel> propertyModules = <PropertyModel>[];
 
+
+
   // Mock Functions
   void createPropertyModules() {
-    propertyModules.add(new PropertyModel("Luxury hotel",
-        "Location - location ", "100", "assets/real-state.jpg", 4));
-    propertyModules.add(new PropertyModel("Luxury hotel",
-        "Location - location ", "100", "assets/banner1.jpg", 4));
+    propertyModules.add(new PropertyModel("Luxury hotel", "Location - location ",
+        "100", "assets/real-state.jpg", 4));
+    propertyModules.add(new PropertyModel("Luxury hotel", "Location - location ",
+        "100", "assets/banner1.jpg", 4));
     propertyModules.add(new PropertyModel(
         "Luxury hotel", "Location - location ", "100", "assets/img3.jpg", 4));
-    propertyModules.add(new PropertyModel("Luxury hotel",
-        "Location - location ", "100", "assets/real-state.jpg", 4));
+    propertyModules.add(new PropertyModel("Luxury hotel", "Location - location ",
+        "100", "assets/real-state.jpg", 4));
   }
 
   void createTrendingModules() {
@@ -61,81 +66,86 @@ class _HomeState extends State<Home> {
 
   @override
   Widget build(BuildContext context) {
+
+
     return SingleChildScrollView(
       scrollDirection: Axis.vertical,
-      child: Padding(
-        padding: const EdgeInsets.all(20),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+
+
+          // Categories
+          Padding(
+            padding: const EdgeInsets.all(MainTheme.pagePadding),
+            child: Text(
               "Categories",
               style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
             ),
-            SizedBox(
-              height: 15,
-            ),
-
-            SizedBox(
-              height: 80,
-              child: ListView.builder(
-                shrinkWrap: true,
-                scrollDirection: Axis.horizontal,
-                itemCount: categoriesModules.length,
-                itemBuilder: (context, index) {
-                  return InkWell(
-                    onTap: () {
-                      setState(() {
-                        categoriesModules.forEach((element) {
-                          element.isSelected = false;
-                        });
-                        categoriesModules[index].isSelected = true;
+          ),
+          SizedBox(
+            height: 80,
+            child: ListView.builder(
+              shrinkWrap: true,
+              scrollDirection: Axis.horizontal,
+              itemCount: categoriesModules.length,
+              itemBuilder: (context, index) {
+                return InkWell(
+                  onTap: () {
+                    setState(() {
+                      categoriesModules.forEach((element) {
+                        element.isSelected = false;
                       });
-                    },
-                    child: CategoryRadioButton(model: categoriesModules[index]),
-                  );
-                },
-              ),
+                      categoriesModules[index].isSelected = true;
+                    });
+                  },
+                  child: CategoryRadioButton(model: categoriesModules[index]),
+                );
+              },
             ),
-            SizedBox(
-              height: 15,
+          ),
+
+
+
+
+          Padding(
+            padding: const EdgeInsets.all(MainTheme.pagePadding
             ),
-            // Trending
-            Text(
+            child: Text(
               "Trending",
               style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
             ),
-            SizedBox(
-              height: 15,
-            ),
-
-            SingleChildScrollView(
-                scrollDirection: Axis.horizontal,
-                child: Row(
-                  children: trendingModules.map((card) {
-                    return TrendingCard(model: card);
-                  }).toList(),
-                )),
-            SizedBox(
-              height: 10,
-            ),
-
-            Text(
+          ),
+          SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              child: Row(
+                children: trendingModules.map((card) {
+                  return TrendingCard(model: card);
+                }).toList(),
+              )),
+          SizedBox(
+            height: 10,
+          ),
+          Padding(
+            padding: const EdgeInsets.only(left: MainTheme.pagePadding),
+            child: Text(
               "Recommended",
               style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
             ),
-
-            SizedBox(
-              height: 20,
-            ),
-            Column(
+          ),
+          SizedBox(
+            height: 20,
+          ),
+          Padding(
+            padding: const EdgeInsets.all(MainTheme.pagePadding),
+            child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: propertyModules.map((card) {
                 return PropertyCard(model: card);
               }).toList(),
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
