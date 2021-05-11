@@ -18,6 +18,7 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await initializeDefault();
   runApp(MaterialApp(
+    theme: MainTheme.finalTheme,
     title: "Prop+",
     initialRoute: '/',
     routes: {'/': (context) => MainWidget()},
@@ -30,7 +31,6 @@ class MainWidget extends StatefulWidget {
 }
 
 class _MainWidgetState extends State<MainWidget> {
-
 
 
   // ignore: non_constant_identifier_names
@@ -46,8 +46,6 @@ class _MainWidgetState extends State<MainWidget> {
   Widget build(BuildContext context) {
 
     Widget currentWidget = Screens[_selectedIndex] ;
-
-
     return Scaffold(
         appBar: AppBar(
           flexibleSpace: Container(

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:prop_plus/constant/CategoryTheme.dart';
 import 'package:prop_plus/constant/MainTheme.dart';
 import 'package:prop_plus/modules/property_module.dart';
 import 'package:prop_plus/modules/trending_module.dart';
@@ -80,11 +81,11 @@ class _HomeState extends State<Home> {
             padding: const EdgeInsets.all(MainTheme.pagePadding),
             child: Text(
               "Categories",
-              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+              style: TextStyle(fontSize: CategoryTheme.descriptionFontSize, fontWeight: FontWeight.bold),
             ),
           ),
           SizedBox(
-            height: 80,
+            height: CategoryTheme.allHeight,
             child: ListView.builder(
               shrinkWrap: true,
               scrollDirection: Axis.horizontal,
@@ -104,16 +105,13 @@ class _HomeState extends State<Home> {
               },
             ),
           ),
-
-
-
-
           Padding(
-            padding: const EdgeInsets.all(MainTheme.pagePadding
-            ),
-            child: Text(
-              "Trending",
-              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+            padding: const EdgeInsets.all(MainTheme.pagePadding),
+            child: Center(
+              child: Text(
+                "Trending",
+                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+              ),
             ),
           ),
           SingleChildScrollView(
@@ -122,22 +120,18 @@ class _HomeState extends State<Home> {
                 children: trendingModules.map((card) {
                   return TrendingCard(model: card);
                 }).toList(),
-              )),
-          SizedBox(
-            height: 10,
-          ),
-          Padding(
-            padding: const EdgeInsets.only(left: MainTheme.pagePadding),
-            child: Text(
-              "Recommended",
-              style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
-            ),
-          ),
-          SizedBox(
-            height: 20,
+              )
           ),
           Padding(
             padding: const EdgeInsets.all(MainTheme.pagePadding),
+            child: Center(
+              child: Text(
+                "Recommended",
+                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+              ),
+            ),
+          ),
+          Center(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: propertyModules.map((card) {

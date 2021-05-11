@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:prop_plus/constant/MainTheme.dart';
+import 'package:prop_plus/constant/RealStateTheme.dart';
 import 'package:prop_plus/modules/property_module.dart';
 
 class PropertyCard extends StatefulWidget {
@@ -22,84 +23,95 @@ class _PropertyCardState extends State<PropertyCard> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(bottom: 20),
+      padding: const EdgeInsets.all(RealStateTheme.cardPadding),
       child: Card(
-        elevation: 5,
         child: Stack(children: [
-          ClipRRect(
-            borderRadius: BorderRadius.circular(5),
+          Container(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                ClipRect(
-                    child: Align(
-                  child: Image.asset(widget.model.imgSrc),
-                  heightFactor: 0.65,
-                )),
-                Padding(
-                  padding: const EdgeInsets.all(10),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            widget.model.title,
-                            style: TextStyle(
-                                fontWeight: FontWeight.bold, fontSize: 20),
-                          ),
-                          SizedBox(
-                            height: 3,
-                          ),
-                          Text(
-                            widget.model.description,
-                            style: TextStyle(color: Colors.grey[600]),
-                          ),
-                          SizedBox(
-                            height: 4,
-                          ),
-                          Row(
-                            children: [
-                              RatingBar.builder(
-                                initialRating: widget.model.rating,
-                                minRating: 1,
-                                direction: Axis.horizontal,
-                                allowHalfRating: true,
-                                itemCount: 5,
-                                itemSize: 20,
-                                itemPadding:
-                                    EdgeInsets.symmetric(horizontal: 2),
-                                itemBuilder: (context, _) => Icon(
-                                  Icons.star,
-                                  color: Colors.amber,
-                                ),
-                                onRatingUpdate: (rating) {
-                                  print(rating);
-                                },
-                              ),
-                              Text(
-                                "${widget.model.rating} reviews",
-                                style: TextStyle(color: Colors.grey[600]),
-                              )
-                            ],
-                          )
-                        ],
-                      ),
-                      Column(
-                        children: [
-                          Text(
-                            "\$ ${widget.model.price}",
-                            style: TextStyle(
-                                fontSize: 20, fontWeight: FontWeight.bold),
-                          ),
-                          Text(
-                            "Per Night",
-                            style: TextStyle(color: Colors.grey[600]),
-                          ),
-                        ],
+                ClipRRect(
+                  borderRadius: BorderRadius.only(topLeft: RealStateTheme.borderRadius, topRight: RealStateTheme.borderRadius),
+                  child: Align(
+                    child: Image.asset(widget.model.imgSrc),
+                    heightFactor: 0.65,
+                  )
+                ),
+                Container(
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    boxShadow: [
+                      BoxShadow(
+                          blurRadius: MainTheme.shadowBlurRadius,
+                          offset: MainTheme.shadowOffest,
+                          color: MainTheme.shadowColor
                       )
                     ],
+                    borderRadius: BorderRadius.only(bottomLeft: RealStateTheme.borderRadius, bottomRight: RealStateTheme.borderRadius)
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.all(10),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              widget.model.title,
+                              style: RealStateTheme.titleTextStyle,
+                            ),
+                            SizedBox(
+                              height: 3,
+                            ),
+                            Text(
+                              widget.model.description,
+                              style: RealStateTheme.locationTextStyle,
+                            ),
+                            SizedBox(
+                              height: 4,
+                            ),
+                            Row(
+                              children: [
+                                RatingBar.builder(
+                                  initialRating: widget.model.rating,
+                                  minRating: 1,
+                                  direction: Axis.horizontal,
+                                  allowHalfRating: true,
+                                  itemCount: 5,
+                                  itemSize: 20,
+                                  itemPadding:
+                                      EdgeInsets.symmetric(horizontal: 2),
+                                  itemBuilder: (context, _) => Icon(
+                                    Icons.star,
+                                    color: Colors.amber,
+                                  ),
+                                  onRatingUpdate: (rating) {
+                                    print(rating);
+                                  },
+                                ),
+                                Text(
+                                  "${widget.model.rating} reviews",
+                                  style: RealStateTheme.reviewTextStyle,
+                                )
+                              ],
+                            )
+                          ],
+                        ),
+                        Column(
+                          children: [
+                            Text(
+                              "\$ ${widget.model.price}",
+                              style: RealStateTheme.priceTextStyle,
+                            ),
+                            Text(
+                              "per night",
+                              style: RealStateTheme.perNightTextStyle,
+                            ),
+                          ],
+                        )
+                      ],
+                    ),
                   ),
                 ),
               ],

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:prop_plus/constant/MainTheme.dart';
+import 'package:prop_plus/constant/TrendingTheme.dart';
 import 'package:prop_plus/modules/trending_module.dart';
 
 class TrendingCard extends StatefulWidget {
@@ -21,10 +22,9 @@ class _TrendingCardState extends State<TrendingCard> {
   Widget build(BuildContext context) {
     return Padding(
         padding: const EdgeInsets.fromLTRB(MainTheme.pagePadding, 0, 0, 10),
-        child: ClipRRect(
-          borderRadius: BorderRadius.circular(23),
+        child: Container(
           child: Card(
-            elevation: 3,
+            elevation: 4,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -36,9 +36,22 @@ class _TrendingCardState extends State<TrendingCard> {
                       image: AssetImage(widget.model.imgSrc),
                       fit: BoxFit.cover,
                     ),
+                  borderRadius: BorderRadius.only(topRight: TrendingTheme.borderRadius, topLeft: TrendingTheme.borderRadius)
                   ),
                 ),
                 Container(
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    boxShadow: [
+                      BoxShadow(
+                        blurRadius: MainTheme.shadowBlurRadius,
+                        offset: MainTheme.shadowOffest,
+                        color: MainTheme.shadowColor
+                      )
+                    ],
+                    borderRadius: BorderRadius.only(bottomRight: TrendingTheme.borderRadius, bottomLeft: TrendingTheme.borderRadius)
+
+                  ),
                   width: 150,
                   child: Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 8),
@@ -48,29 +61,37 @@ class _TrendingCardState extends State<TrendingCard> {
                         SizedBox(
                           height: 5,
                         ),
+
+
+                        SizedBox(
+                          height: 5,
+                        ),
+                        Text(
+                          widget.model.title,
+                          style: TrendingTheme.titleTextStyle,
+                        ),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Text(
-                              widget.model.title,
-                              style: TextStyle(
-                                  fontWeight: FontWeight.bold, fontSize: 16),
+                              "\$ ${widget.model.price}/night",
+                              style: TrendingTheme.priceTextStyle,
                             ),
                             SizedBox(
-                              height: 23,
+                              height: 30,
                               width: 35,
                               child: IconButton(
                                 color: MainTheme.mainColor,
                                 icon: favorite
                                     ? Icon(
-                                        Icons.favorite,
-                                        color: MainTheme.mainColor,
-                                        size: 20,
-                                      )
+                                  Icons.favorite,
+                                  color: MainTheme.mainColor,
+                                  size: 20,
+                                )
                                     : Icon(
-                                        Icons.favorite_border,
-                                        size: 20,
-                                      ),
+                                  Icons.favorite_border,
+                                  size: 20,
+                                ),
                                 onPressed: () {
                                   setState(() {
                                     favorite = !favorite;
@@ -80,20 +101,9 @@ class _TrendingCardState extends State<TrendingCard> {
                             )
                           ],
                         ),
-                        SizedBox(
-                          height: 5,
-                        ),
-                        Text(
-                          "\$ ${widget.model.price}/night",
-                          style: TextStyle(
-                              fontSize: 13, fontWeight: FontWeight.bold),
-                        ),
-                        SizedBox(
-                          height: 5,
-                        ),
                         Text(
                           widget.model.description,
-                          style: TextStyle(color: Colors.grey[600]),
+                          style: TrendingTheme.locationTextStyle,
                         ),
                         SizedBox(
                           height: 10,
