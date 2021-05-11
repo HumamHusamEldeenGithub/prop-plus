@@ -2,9 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:prop_plus/constant/CategoryTheme.dart';
 import 'package:prop_plus/constant/MainTheme.dart';
 import 'package:prop_plus/modules/property_module.dart';
-import 'package:prop_plus/modules/trending_module.dart';
 import 'package:prop_plus/shared/categories.dart';
-import 'package:prop_plus/shared/real_state_card_standerd.dart';
+import 'package:prop_plus/shared/property_card.dart';
 import 'package:prop_plus/shared/trending_card.dart';
 import 'package:prop_plus/modules/category_module.dart';
 
@@ -17,31 +16,31 @@ class _HomeState extends State<Home> {
 
 
   List<CategoryModel> categoriesModules = <CategoryModel>[];
-  List<TrendingModel> trendingModules = <TrendingModel>[];
-  List<PropertyModel> propertyModules = <PropertyModel>[];
+  List<PropertyModule> trendingModules = <PropertyModule>[];
+  List<PropertyModule> standaredPropertyModule = <PropertyModule>[];
 
 
 
   // Mock Functions
-  void createPropertyModules() {
-    propertyModules.add(new PropertyModel("Luxury hotel", "Location - location ",
+  void createstandaredPropertyModule() {
+    standaredPropertyModule.add(new PropertyModule("Luxury hotel", "Location - location ","Description",
         "100", "assets/real-state.jpg", 4));
-    propertyModules.add(new PropertyModel("Luxury hotel", "Location - location ",
+    standaredPropertyModule.add(new PropertyModule("Luxury hotel", "Location - location ","Description",
         "100", "assets/banner1.jpg", 4));
-    propertyModules.add(new PropertyModel(
-        "Luxury hotel", "Location - location ", "100", "assets/img3.jpg", 4));
-    propertyModules.add(new PropertyModel("Luxury hotel", "Location - location ",
+    standaredPropertyModule.add(new PropertyModule(
+        "Luxury hotel", "Location - location ","Description", "100", "assets/img3.jpg", 4));
+    standaredPropertyModule.add(new PropertyModule("Luxury hotel", "Location - location ","Description",
         "100", "assets/real-state.jpg", 4));
   }
 
   void createTrendingModules() {
-    trendingModules.add(new TrendingModel("Luxury hotel", "Location - location",
+    trendingModules.add(new PropertyModule("Luxury hotel", "Location - location ","Description",
         "100", "assets/real-state.jpg", 4));
-    trendingModules.add(new TrendingModel(
-        "Luxury hotel", "Location - location", "100", "assets/banner1.jpg", 5));
-    trendingModules.add(new TrendingModel(
-        "Luxury hotel", "Location - location", "100", "assets/img3.jpg", 3));
-    trendingModules.add(new TrendingModel("Luxury hotel", "Location - location",
+    trendingModules.add(new PropertyModule("Luxury hotel", "Location - location ","Description",
+        "100", "assets/banner1.jpg", 4));
+    trendingModules.add(new PropertyModule(
+        "Luxury hotel", "Location - location ","Description", "100", "assets/img3.jpg", 4));
+    trendingModules.add(new PropertyModule("Luxury hotel", "Location - location ","Description",
         "100", "assets/real-state.jpg", 4));
   }
 
@@ -61,7 +60,7 @@ class _HomeState extends State<Home> {
     // TODO: implement initState
     super.initState();
     createCategoriesModules();
-    createPropertyModules();
+    createstandaredPropertyModule();
     createTrendingModules();
   }
 
@@ -118,7 +117,7 @@ class _HomeState extends State<Home> {
               scrollDirection: Axis.horizontal,
               child: Row(
                 children: trendingModules.map((card) {
-                  return TrendingCard(model: card);
+                  return TrendingCard(module: card);
                 }).toList(),
               )
           ),
@@ -134,8 +133,8 @@ class _HomeState extends State<Home> {
           Center(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
-              children: propertyModules.map((card) {
-                return PropertyCard(model: card);
+              children: standaredPropertyModule.map((card) {
+                return PropertyCard(module: card);
               }).toList(),
             ),
           ),

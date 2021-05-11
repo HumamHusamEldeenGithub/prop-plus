@@ -1,8 +1,8 @@
-
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:prop_plus/constant/MainTheme.dart';
+import 'package:prop_plus/screens/description.dart';
 import 'package:prop_plus/screens/explore.dart';
 import 'package:prop_plus/screens/home.dart';
 import 'package:prop_plus/screens/notification.dart';
@@ -21,7 +21,9 @@ void main() async {
     theme: MainTheme.finalTheme,
     title: "Prop+",
     initialRoute: '/',
-    routes: {'/': (context) => MainWidget()},
+    routes: {'/': (context) => MainWidget(),
+      Description.path:(context)=> Description(),
+    },
   ));
 }
 
@@ -105,7 +107,6 @@ class _MainWidgetState extends State<MainWidget> {
                 onTabChange: (index) {
                   setState(() {
                     _selectedIndex = index;
-                    print(index) ;
                   });
                 },
               ),
