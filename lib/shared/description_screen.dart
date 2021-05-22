@@ -7,9 +7,10 @@ import 'package:prop_plus/modules/property_module.dart';
 import 'custom_image_view.dart';
 
 class DetailsScreen extends StatefulWidget {
-  final PropertyModel model;
+   PropertyModel model  = new PropertyModel("Luxury hotel", "Location - location ",
+       "100", "assets/real-state.jpg", 4);
 
-  const DetailsScreen({Key key ,this.model});
+
   @override
   _DetailsScreenState createState() => _DetailsScreenState();
 }
@@ -21,13 +22,13 @@ class _DetailsScreenState extends State<DetailsScreen> {
   void initState() {
     super.initState();
     _scrollController.addListener(() {
-      if (_scrollController.position.pixels>0) {
+      if (_scrollController.position.userScrollDirection == ScrollDirection.forward) {
         if (imageVisible) {
           setState(() {
             imageVisible = false;
           });
         }
-      } else {
+      } else if(_scrollController.position.userScrollDirection == ScrollDirection.reverse) {
         if (!imageVisible) {
           setState(() {
             imageVisible = true;

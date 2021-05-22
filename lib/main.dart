@@ -7,6 +7,7 @@ import 'package:prop_plus/screens/explore.dart';
 import 'package:prop_plus/screens/home.dart';
 import 'package:prop_plus/screens/notification.dart';
 import 'package:prop_plus/screens/profile.dart';
+import 'package:prop_plus/shared/description_screen.dart';
 
 Future<void> initializeDefault() async {
   FirebaseApp app = await Firebase.initializeApp();
@@ -21,6 +22,7 @@ void main() async {
     title: "Prop+",
     initialRoute: '/',
     routes: {'/': (context) => MainWidget()},
+
   ));
 }
 
