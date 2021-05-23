@@ -46,9 +46,9 @@ class WelcomeView extends StatelessWidget {
                       title:"Would you like to create a free account ?" ,
                       description:"" ,
                       primaryButtonText: "Create an account ",
-                      primaryButtonRoute: "/signUp",
+                      primaryButtonRoute: "",
                       secondaryButtonText: "Maybe Later",
-                      secondaryButtonRoute: "/anonymousSignIn",
+                      secondaryButtonRoute: "",
                     )
                 );
               },
@@ -74,8 +74,8 @@ class CustomDialog extends StatelessWidget {
       description,
       primaryButtonText,
       secondaryButtonText,
-      primaryButtonRoute,
-      secondaryButtonRoute;
+      primaryButtonRoute, // where the user should go if he click the primaryButton
+      secondaryButtonRoute; // where the user should go if he click the SecondaryButton
 
   CustomDialog({
     @required this.title,

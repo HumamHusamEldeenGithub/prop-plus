@@ -55,7 +55,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
     );
   }
 
-
+// using to make sure that all inputs  of the textfields are validate
   bool validate(){
     final  form =formKey.currentState;
     //form.save(); ////////////////////check
@@ -77,7 +77,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
     }
   }
 
-
+// to build all the textFields
   List<Widget> buildInputsFields(){
 
     List<Widget> textFields = [] ;
@@ -101,7 +101,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
   }
 
 
-
+//to build all the buttons
   List<Widget> buildButtons(){
     return [
       Container(

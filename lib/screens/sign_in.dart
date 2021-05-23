@@ -10,11 +10,12 @@ class SignInScreen extends StatefulWidget {
 
 class _SignInScreenState extends State<SignInScreen> {
   String _email,_password;
-  final formKey = GlobalKey<FormState>();
+  final formKey = GlobalKey<FormState>(); // used by validator && Form Widget
   final Color secondaryColor = Color(0xff232c51);
   final Color primaryColor = Color(0xff18203d);
   @override
   Widget build(BuildContext context) {
+    //get the screen size
     final _height = MediaQuery.of(context).size.height;
     final _width = MediaQuery.of(context).size.width;
 
@@ -49,7 +50,7 @@ class _SignInScreenState extends State<SignInScreen> {
       ),
     );
   }
-
+// to build all the textFields
   List<Widget> buildInputsFields(){
 
     List<Widget> textFields = [] ;
@@ -69,7 +70,7 @@ class _SignInScreenState extends State<SignInScreen> {
 
     return textFields;
   }
-
+//to build all the buttons
   List<Widget> buildButtons(){
     return [
       Container(
@@ -104,7 +105,7 @@ class _SignInScreenState extends State<SignInScreen> {
 
     ];
   }
-
+// build social buttons like Google Sign In button
   Widget buildSocialIcons(){
 
     return Column(
@@ -118,7 +119,7 @@ class _SignInScreenState extends State<SignInScreen> {
       ],
     );
   }
-
+// using to make sure that all inputs  of the textfields are validate 
   bool validate(){
     final  form =formKey.currentState;
     //form.save(); ////////////////////check
