@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 
 class ShowAlert extends StatefulWidget{
   final String _warning ;
-  ShowAlert(Key key , this._warning);
+  ShowAlert(this._warning);
 
   @override
   _ShowAlertState createState() => _ShowAlertState();

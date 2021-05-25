@@ -1,10 +1,9 @@
-
+import 'dart:developer' as developer;
 import 'package:auto_size_text/auto_size_text.dart';
 import'package:flutter/material.dart';
 import 'package:prop_plus/constant/Validator.dart';
+import 'package:prop_plus/services/provider.dart';
 import 'package:prop_plus/shared/custom_text_field.dart';
-
-
 
 class SignUpScreen extends StatefulWidget {
   @override
@@ -12,14 +11,12 @@ class SignUpScreen extends StatefulWidget {
 }
 
 class _SignUpScreenState extends State<SignUpScreen> {
-  String _email,_password,_name;
+  String _email,_password,_name ,_warning;
   final formKey = GlobalKey<FormState>();
-  String imageUrl = 'images/background.jpg';
   final Color primaryColor = Color(0xff18203d);
   final Color secondaryColor = Color(0xff232c51);
   @override
   Widget build(BuildContext context) {
-
     final _height = MediaQuery.of(context).size.height;
     final _width = MediaQuery.of(context).size.width;
     return Scaffold(
@@ -27,29 +24,32 @@ class _SignUpScreenState extends State<SignUpScreen> {
         height: _height,
         width: _width,
         color: primaryColor,
-        child: Column(
-          children: [
-            SizedBox(height: _height*0.1,),
-            AutoSizeText(
-              "Create An Account",
-              maxLines: 1,
-              minFontSize: 30,
-              style: TextStyle(
-                color: Colors.white,
-              ),
-            ),
-            SizedBox(height: _height*0.05,),
-            Padding(
-              padding: const EdgeInsets.all(12.0),
-              child: Form(
-                key: formKey,
-                child: Column(
-                  children: buildInputsFields() + buildButtons(),
+        child: SafeArea(
+          child: Column(
+            children: [
+              SizedBox(height: _height*0.025,),
+              showAlert(),
+              AutoSizeText(
+                "Create An Account",
+                maxLines: 1,
+                minFontSize: 30,
+                style: TextStyle(
+                  color: Colors.white,
                 ),
               ),
-            ),
+              SizedBox(height: _height*0.05,),
+              Padding(
+                padding: const EdgeInsets.all(12.0),
+                child: Form(
+                  key: formKey,
+                  child: Column(
+                    children: buildInputsFields() + buildButtons(),
+                  ),
+                ),
+              ),
 
-          ],
+            ],
+          ),
         ),
       ),
     );
@@ -69,11 +69,30 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
   }
 
-  void submit(){
+  void submit() async {
     if(validate()){
       //call the auth methods
       //SignIn
-      //catch the warning a use show alert
+      developer.log(_email);
+      developer.log(_password);
+      developer.log(_name);
+      try {
+
+        final auth = Provider
+            .of(context)
+            .auth;
+
+        await auth.createUserWithEmailAndPassword(_email, _password, _name);
+
+        Navigator.of(context).pushReplacementNamed('/home');
+
+      }
+      catch(e){
+        setState(() {
+          _warning=e.message;
+        });
+
+      }
     }
   }
 
@@ -81,23 +100,52 @@ class _SignUpScreenState extends State<SignUpScreen> {
   List<Widget> buildInputsFields(){
 
     List<Widget> textFields = [] ;
+
     textFields.add(
-        CustomTextField(secondaryColor: secondaryColor, validate: NameValidator.validate, icon: Icons.account_circle, hintText: "Name", saved: _name)
+        TextFormField(
+          validator: NameValidator.validate,
+          style: TextStyle(fontSize: 22.0),
+          decoration: buildSignUpInputDecoration("Name"),
+          onSaved: (value) => _name = value,
+        )
     );
     textFields.add(SizedBox(height: 20.0,));
 
     textFields.add(
-        CustomTextField(secondaryColor: secondaryColor, validate: EmailValidator.validate, icon: Icons.email, hintText: "Email", saved: _email)
+        TextFormField(
+          validator: EmailValidator.validate,
+          style: TextStyle(fontSize: 22.0),
+          decoration: buildSignUpInputDecoration("Email"),
+          onSaved: (value) => _email = value,
+        )
     );
     textFields.add(SizedBox(height: 20.0,));
-
     textFields.add(
-        CustomTextField(secondaryColor: secondaryColor, validate: PasswordValidator.validate, icon: Icons.vpn_key, hintText: "Password", saved: _password)
+        TextFormField(
+          validator: PasswordValidator.validate,
+          style: TextStyle(fontSize: 22.0),
+          decoration: buildSignUpInputDecoration("Password"),
+          obscureText: true,
+          onSaved: (value) => _password = value,
+        )
     );
     textFields.add(SizedBox(height: 20.0,));
 
 
     return textFields;
+  }
+
+  //design the textFields
+  InputDecoration buildSignUpInputDecoration(String hint) {
+    return InputDecoration(
+        hintText: hint,
+        filled: true,
+        fillColor: Colors.white,
+        focusColor: Colors.white,
+        enabledBorder: OutlineInputBorder(borderSide: BorderSide(color: Colors.white, width: 0.0)),
+        contentPadding: const EdgeInsets.only(left: 14.0, bottom: 10.0, top: 10.0)
+
+    );
   }
 
 
@@ -114,19 +162,55 @@ class _SignUpScreenState extends State<SignUpScreen> {
           color: Colors.white,
 
           onPressed: (){
-
+            submit();
           },
         ),
       ),
       FlatButton(
         child: Text("Already have an account ? SignIn", style:TextStyle(fontSize: 20.0 , color: Colors.white),),
         onPressed: (){
-
+            Navigator.of(context).pushReplacementNamed("/signIn");
         },
       ),
 
 
     ];
+  }
+
+  Widget showAlert(){
+    if(_warning !=null){
+      return Container(
+        color: Colors.amberAccent,
+        width: double.infinity,
+        padding: EdgeInsets.all(8),
+        child: Row(
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Icon(Icons.error_outline),
+            ),
+            Expanded(
+              child: AutoSizeText(
+                _warning,
+                maxLines: 3,
+              ),
+
+            ),
+            IconButton(
+              icon: Icon(Icons.close),
+              onPressed: (){
+                setState(() {
+                  _warning =null;
+                });
+              },
+            )
+
+          ],
+        ),
+      );
+    }
+    else
+      return SizedBox(height: 0,);
   }
 
 

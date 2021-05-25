@@ -11,10 +11,11 @@ class WelcomeView extends StatelessWidget {
     return Scaffold(
       body: Container(
         decoration: BoxDecoration(
-            image: DecorationImage(
+            /*image: DecorationImage(
               image:AssetImage("images/room3.jpg"),
               fit: BoxFit.cover,
-            )
+            )*/
+          color: Colors.lightBlue,
         ),
         child: Column(
           children: [
@@ -46,9 +47,9 @@ class WelcomeView extends StatelessWidget {
                       title:"Would you like to create a free account ?" ,
                       description:"" ,
                       primaryButtonText: "Create an account ",
-                      primaryButtonRoute: "",
+                      primaryButtonRoute: "/signUp",
                       secondaryButtonText: "Maybe Later",
-                      secondaryButtonRoute: "",
+                      secondaryButtonRoute: "/anonymousScreen",
                     )
                 );
               },
@@ -189,3 +190,5 @@ class CustomDialog extends StatelessWidget {
       return SizedBox(height: 24.0);
   }
 }
+
+

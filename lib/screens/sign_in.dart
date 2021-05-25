@@ -1,6 +1,10 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_auth_buttons/flutter_auth_buttons.dart';
 import 'package:prop_plus/constant/Validator.dart';
+import 'package:prop_plus/services/locater.dart';
+import 'package:prop_plus/services/provider.dart';
+import 'package:prop_plus/services/user_controller.dart';
 import 'package:prop_plus/shared/custom_text_field.dart';
 
 class SignInScreen extends StatefulWidget {
@@ -9,7 +13,7 @@ class SignInScreen extends StatefulWidget {
 }
 
 class _SignInScreenState extends State<SignInScreen> {
-  String _email,_password;
+  String _email,_password ,_warning;
   final formKey = GlobalKey<FormState>(); // used by validator && Form Widget
   final Color secondaryColor = Color(0xff232c51);
   final Color primaryColor = Color(0xff18203d);
@@ -34,6 +38,7 @@ class _SignInScreenState extends State<SignInScreen> {
                 color: Colors.white,
               ),
             ),
+            showAlert(),
             SizedBox(height: _height*0.05,),
             Padding(
               padding: const EdgeInsets.all(12.0),
@@ -58,13 +63,26 @@ class _SignInScreenState extends State<SignInScreen> {
     textFields.add(SizedBox(height: 20.0,));
 
     textFields.add(
-        CustomTextField(secondaryColor: secondaryColor, validate: EmailValidator.validate, icon: Icons.email, hintText: "Email", saved: _email)
+        TextFormField(
+          validator: EmailValidator.validate,
+          style: TextStyle(fontSize: 22.0),
+          decoration: buildInputDecoration("Email"),
+          onSaved: (value) => _email = value,
+        )
     );
+
     textFields.add(SizedBox(height: 20.0,));
 
     textFields.add(
-        CustomTextField(secondaryColor: secondaryColor, validate: PasswordValidator.validate, icon: Icons.vpn_key, hintText: "Password", saved: _password)
+        TextFormField(
+          validator: PasswordValidator.validate,
+          style: TextStyle(fontSize: 22.0),
+          decoration: buildInputDecoration("Password"),
+          obscureText: true,
+          onSaved: (value) => _password = value,
+        )
     );
+
     textFields.add(SizedBox(height: 20.0,));
 
 
@@ -83,7 +101,7 @@ class _SignInScreenState extends State<SignInScreen> {
           color: Colors.white,
 
           onPressed: (){
-
+            submit();
           },
         ),
       ),
@@ -97,7 +115,7 @@ class _SignInScreenState extends State<SignInScreen> {
       FlatButton(
         child: Text("Create a New Account ", style:TextStyle(fontSize: 20.0 , color: Colors.white),),
         onPressed: (){
-
+          Navigator.of(context).pushReplacementNamed('/signUp');
         },
       ),
       Divider(),
@@ -119,7 +137,9 @@ class _SignInScreenState extends State<SignInScreen> {
       ],
     );
   }
-// using to make sure that all inputs  of the textfields are validate 
+
+
+// using to make sure that all inputs  of the textfields are validate
   bool validate(){
     final  form =formKey.currentState;
     //form.save(); ////////////////////check
@@ -133,12 +153,71 @@ class _SignInScreenState extends State<SignInScreen> {
 
   }
 
-  void submit(){
+  void submit() async{
     if(validate()){
       //call the auth methods
       //SignIn
+      try{
+        final auth = Provider.of(context).auth;
+        auth.signInWithEmailAndPassword(_email, _password);
+        Navigator.of(context).pushReplacementNamed('/home');
+
+      }
+      catch(e){
+        setState(() {
+          _warning = e.message;
+        });
+      }
+
     }
   }
 
+  Widget showAlert(){
+    if(_warning !=null){
+      return Container(
+        color: Colors.amberAccent,
+        width: double.infinity,
+        padding: EdgeInsets.all(8),
+        child: Row(
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Icon(Icons.error_outline),
+            ),
+            Expanded(
+              child: AutoSizeText(
+                _warning,
+                maxLines: 3,
+              ),
+
+            ),
+            IconButton(
+              icon: Icon(Icons.close),
+              onPressed: (){
+                setState(() {
+                  _warning =null;
+                });
+              },
+            )
+
+          ],
+        ),
+      );
+    }
+    else
+      return SizedBox(height: 0,);
+  }
+// design the textFields
+  InputDecoration buildInputDecoration(String hint) {
+    return InputDecoration(
+        hintText: hint,
+        filled: true,
+        fillColor: Colors.white,
+        focusColor: Colors.white,
+        enabledBorder: OutlineInputBorder(borderSide: BorderSide(color: Colors.white, width: 0.0)),
+        contentPadding: const EdgeInsets.only(left: 14.0, bottom: 10.0, top: 10.0)
+
+    );
+  }
 
 }

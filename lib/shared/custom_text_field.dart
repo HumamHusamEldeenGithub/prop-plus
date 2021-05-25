@@ -25,6 +25,7 @@ class CustomTextField extends StatelessWidget {
       decoration: BoxDecoration(
           color: secondaryColor, border: Border.all(color: Colors.blue)),
       child:TextFormField(
+
         validator: validate,
         style: TextStyle(color: Colors.white),
         decoration: InputDecoration(
@@ -39,7 +40,8 @@ class CustomTextField extends StatelessWidget {
 
         ),
         onSaved: (value) => saved = value,
-        obscureText: true,
+        //obscureText: true, should be only for the password
+
       ),
 
     );
