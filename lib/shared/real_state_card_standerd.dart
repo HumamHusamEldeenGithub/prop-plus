@@ -5,7 +5,7 @@ import 'package:prop_plus/modules/property_module.dart';
 
 class PropertyCard extends StatefulWidget {
 
-  final PropertyModel model ;
+  final PropertyModule model ;
 
   const PropertyCard({Key key, this.model}) : super(key: key);
 

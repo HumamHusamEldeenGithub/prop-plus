@@ -6,7 +6,7 @@ import 'package:prop_plus/shared/categories.dart';
 import 'package:prop_plus/shared/real_state_card_standerd.dart';
 import 'package:prop_plus/shared/trending_card.dart';
 import 'package:prop_plus/modules/category_module.dart';
-
+import 'package:prop_plus/constant/CategoryTheme.dart';
 class   Home extends StatefulWidget {
   @override
   _HomeState createState() => _HomeState();
@@ -16,32 +16,32 @@ class _HomeState extends State<Home> {
 
 
   List<CategoryModel> categoriesModules = <CategoryModel>[];
-  List<TrendingModel> trendingModules = <TrendingModel>[];
-  List<PropertyModel> propertyModules = <PropertyModel>[];
+  List<TrendingModule> trendingModules = <TrendingModule>[];
+  List<PropertyModule> propertyModules = <PropertyModule>[];
 
 
 
   // Mock Functions
   void createPropertyModules() {
-    propertyModules.add(new PropertyModel("Luxury hotel", "Location - location ",
-        "100", "assets/real-state.jpg", 4));
-    propertyModules.add(new PropertyModel("Luxury hotel", "Location - location ",
-        "100", "assets/banner1.jpg", 4));
-    propertyModules.add(new PropertyModel(
-        "Luxury hotel", "Location - location ", "100", "assets/img3.jpg", 4));
-    propertyModules.add(new PropertyModel("Luxury hotel", "Location - location ",
-        "100", "assets/real-state.jpg", 4));
+    propertyModules.add(new PropertyModule("Luxury hotel", "Description - Description ",
+        "100", "assets/real-state.jpg", 4,"Location - location"));
+    propertyModules.add(new PropertyModule("Luxury hotel", "Description - Description ",
+        "100", "assets/banner1.jpg", 4,"Location - location"));
+    propertyModules.add(new PropertyModule(
+        "Luxury hotel", "Location - location ", "100", "assets/img3.jpg", 4,"Location - location"));
+    propertyModules.add(new PropertyModule("Luxury hotel", "Description - Description ",
+        "100", "assets/real-state.jpg", 4,"Location - location"));
   }
 
   void createTrendingModules() {
-    trendingModules.add(new TrendingModel("Luxury hotel", "Location - location",
-        "100", "assets/real-state.jpg", 4));
-    trendingModules.add(new TrendingModel(
-        "Luxury hotel", "Location - location", "100", "assets/banner1.jpg", 5));
-    trendingModules.add(new TrendingModel(
-        "Luxury hotel", "Location - location", "100", "assets/img3.jpg", 3));
-    trendingModules.add(new TrendingModel("Luxury hotel", "Location - location",
-        "100", "assets/real-state.jpg", 4));
+    trendingModules.add(new TrendingModule("Luxury hotel", "Location - location",
+        "100", "assets/real-state.jpg", 4,"Location - location"));
+    trendingModules.add(new TrendingModule(
+        "Luxury hotel", "Location - location", "100", "assets/banner1.jpg", 5,"Location - location"));
+    trendingModules.add(new TrendingModule(
+        "Luxury hotel", "Location - location", "100", "assets/img3.jpg", 3,"Location - location"));
+    trendingModules.add(new TrendingModule("Luxury hotel", "Location - location",
+        "100", "assets/real-state.jpg", 4,"Location - location"));
   }
 
   void createCategoriesModules() {
@@ -80,11 +80,11 @@ class _HomeState extends State<Home> {
             padding: const EdgeInsets.all(MainTheme.pagePadding),
             child: Text(
               "Categories",
-              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+              style: TextStyle(fontSize: CategoryTheme.descriptionFontSize, fontWeight: FontWeight.bold),
             ),
           ),
           SizedBox(
-            height: 80,
+            height: CategoryTheme.allHeight,
             child: ListView.builder(
               shrinkWrap: true,
               scrollDirection: Axis.horizontal,
@@ -104,40 +104,33 @@ class _HomeState extends State<Home> {
               },
             ),
           ),
-
-
-
-
           Padding(
-            padding: const EdgeInsets.all(MainTheme.pagePadding
-            ),
-            child: Text(
-              "Trending",
-              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+            padding: const EdgeInsets.all(MainTheme.pagePadding),
+            child: Center(
+              child: Text(
+                "Trending",
+                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+              ),
             ),
           ),
           SingleChildScrollView(
               scrollDirection: Axis.horizontal,
               child: Row(
                 children: trendingModules.map((card) {
-                  return TrendingCard(model: card);
+                  return TrendingCard(module: card);
                 }).toList(),
-              )),
-          SizedBox(
-            height: 10,
-          ),
-          Padding(
-            padding: const EdgeInsets.only(left: MainTheme.pagePadding),
-            child: Text(
-              "Recommended",
-              style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
-            ),
-          ),
-          SizedBox(
-            height: 20,
+              )
           ),
           Padding(
             padding: const EdgeInsets.all(MainTheme.pagePadding),
+            child: Center(
+              child: Text(
+                "Recommended",
+                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+              ),
+            ),
+          ),
+          Center(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: propertyModules.map((card) {

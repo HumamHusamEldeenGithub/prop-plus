@@ -36,6 +36,7 @@ class MyApp extends StatelessWidget{
     return Provider(
     auth: new AuthService(),
       child:MaterialApp(
+        theme: MainTheme.finalTheme,
         title: "Prop+",
         //initialRoute: '/',
         //routes: {'/': (context) => MainWidget()},
