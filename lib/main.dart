@@ -2,7 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:prop_plus/constant/MainTheme.dart';
+<<<<<<< HEAD
 import 'package:prop_plus/screens/anonymous_loading_screen.dart';
+=======
+import 'package:prop_plus/screens/description.dart';
+>>>>>>> 8734165121f68a8bbbd2236f953350a461ac8ee8
 import 'package:prop_plus/screens/explore.dart';
 import 'package:prop_plus/screens/home.dart';
 import 'package:prop_plus/screens/notification.dart';
@@ -25,6 +29,7 @@ import 'dart:developer' as developer;
 */
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+<<<<<<< HEAD
   await Firebase.initializeApp();
   setupServices();
   runApp(MyApp());
@@ -57,6 +62,17 @@ class MyApp extends StatelessWidget{
     );
   }
 
+=======
+  await initializeDefault();
+  runApp(MaterialApp(
+    theme: MainTheme.finalTheme,
+    title: "Prop+",
+    initialRoute: '/',
+    routes: {'/': (context) => MainWidget(),
+      Description.path:(context)=> Description(),
+    },
+  ));
+>>>>>>> 8734165121f68a8bbbd2236f953350a461ac8ee8
 }
 
 class MainWidget extends StatefulWidget {
@@ -65,7 +81,6 @@ class MainWidget extends StatefulWidget {
 }
 
 class _MainWidgetState extends State<MainWidget> {
-
 
 
   // ignore: non_constant_identifier_names
@@ -81,8 +96,6 @@ class _MainWidgetState extends State<MainWidget> {
   Widget build(BuildContext context) {
 
     Widget currentWidget = Screens[_selectedIndex] ;
-
-
     return Scaffold(
         appBar: AppBar(
           flexibleSpace: Container(
@@ -143,7 +156,6 @@ class _MainWidgetState extends State<MainWidget> {
                 onTabChange: (index) {
                   setState(() {
                     _selectedIndex = index;
-                    print(index) ;
                   });
                 },
               ),
