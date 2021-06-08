@@ -1,27 +1,62 @@
-
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:prop_plus/constant/MainTheme.dart';
+import 'package:prop_plus/screens/anonymous_loading_screen.dart';
 import 'package:prop_plus/screens/explore.dart';
 import 'package:prop_plus/screens/home.dart';
 import 'package:prop_plus/screens/notification.dart';
 import 'package:prop_plus/screens/profile.dart';
+import 'package:prop_plus/screens/sign_in.dart';
+import 'package:prop_plus/screens/sign_up.dart';
+import 'package:prop_plus/screens/welcome.dart';
+import 'package:prop_plus/services/auth_repo.dart';
+import 'package:prop_plus/services/locater.dart';
+import 'package:prop_plus/services/provider.dart';
+import 'package:prop_plus/shared/description_screen.dart';
+import 'dart:developer' as developer;
 
-Future<void> initializeDefault() async {
+
+/*Future<void> initializeDefault() async {
   FirebaseApp app = await Firebase.initializeApp();
   assert(app != null);
   print('Initialized default app $app');
 }
-
-void main() async {
+*/
+Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await initializeDefault();
-  runApp(MaterialApp(
-    title: "Prop+",
-    initialRoute: '/',
-    routes: {'/': (context) => MainWidget()},
-  ));
+  await Firebase.initializeApp();
+  setupServices();
+  runApp(MyApp());
+}
+
+class MyApp extends StatelessWidget{
+  @override
+  Widget build(BuildContext context) {
+    return Provider(
+    auth: new AuthService(),
+      child:MaterialApp(
+        title: "Prop+",
+        //initialRoute: '/',
+        //routes: {'/': (context) => MainWidget()},
+        home:HomeController(),
+
+
+        routes: <String,WidgetBuilder>{
+          //'/': (context) => MainWidget(),
+          '/home':(BuildContext context) =>HomeController(),
+          '/firstView':(BuildContext context) => WelcomeView(),
+          '/signUp':(BuildContext context) => SignUpScreen(),
+          '/signIn':(BuildContext context) => SignInScreen(),
+          '/homeScreen':(BuildContext context) =>MainWidget(),
+          '/anonymousScreen':(BuildContext context) =>AnonymousScreen(),
+        },
+
+
+      ) ,
+    );
+  }
+
 }
 
 class MainWidget extends StatefulWidget {
@@ -60,6 +95,7 @@ class _MainWidgetState extends State<MainWidget> {
             ),
           ),
           title: Text("Prop+"),
+
         ),
         bottomNavigationBar: Container(
           decoration: BoxDecoration(
@@ -117,6 +153,24 @@ class _MainWidgetState extends State<MainWidget> {
       body: Center(
         child: currentWidget,
       ),
+    );
+  }
+}
+
+class HomeController extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    final AuthService auth = Provider.of(context).auth;
+    return StreamBuilder <String>(
+      stream: auth.onAuthStateChanged,
+      builder: (context, AsyncSnapshot <String> snapshot){
+        if(snapshot.connectionState == ConnectionState.active){
+          final bool SignedIn = snapshot.hasData;
+          developer.log(SignedIn.toString());
+          return SignedIn ? MainWidget() : WelcomeView();
+        }
+        return CircularProgressIndicator();
+      },
     );
   }
 }

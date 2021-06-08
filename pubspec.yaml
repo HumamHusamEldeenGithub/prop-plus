@@ -33,6 +33,11 @@ dependencies:
   get_it: ^6.1.1
   google_nav_bar: ^5.0.5
   flutter_rating_bar: ^4.0.0
+  photo_view: ^0.11.1
+  auto_size_text: ^2.0.2
+  flutter_auth_buttons: ^0.5.0
+  snapshot: ^0.2.0
+  image_picker: ^0.7.5+2
 
 
   # The following adds the Cupertino Icons font to your application.
@@ -50,6 +55,7 @@ dev_dependencies:
 flutter:
   assets:
     - assets/
+
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in
   # the material Icons class.

@@ -7,7 +7,7 @@ import 'package:prop_plus/shared/real_state_card_standerd.dart';
 import 'package:prop_plus/shared/trending_card.dart';
 import 'package:prop_plus/modules/category_module.dart';
 
-class Home extends StatefulWidget {
+class   Home extends StatefulWidget {
   @override
   _HomeState createState() => _HomeState();
 }
