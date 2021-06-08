@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:prop_plus/constant/CategoryTheme.dart';
 import 'package:prop_plus/constant/MainTheme.dart';
 import 'package:prop_plus/modules/category_module.dart';
 
@@ -16,16 +17,18 @@ class _CategoryRadioButtonState extends State<CategoryRadioButton> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(left: MainTheme.pagePadding),
+      padding: const EdgeInsets.only(left: CategoryTheme.iconPadding, right: CategoryTheme.iconPadding),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Container(
+            width: CategoryTheme.iconWidth,
             decoration: BoxDecoration(
                 color: widget.model.isSelected
                     ? MainTheme.mainColor
                     : MainTheme.secondaryColor,
-                borderRadius: BorderRadius.circular(15)),
+                borderRadius: CategoryTheme.borderRadius,
+            ),
             child: IconButton(
               icon: Icon(
                 widget.model.icon,
@@ -38,10 +41,7 @@ class _CategoryRadioButtonState extends State<CategoryRadioButton> {
           ),
           Text(
             widget.model.title,
-            style: TextStyle(
-                fontWeight: widget.model.isSelected
-                    ? FontWeight.bold
-                    : FontWeight.normal),
+            style: CategoryTheme.textStyle,
           ),
         ],
       ),

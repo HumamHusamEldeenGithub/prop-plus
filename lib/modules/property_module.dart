@@ -1,6 +1,6 @@
-class PropertyModel {
-  final String title, description, price, imgSrc;
+class PropertyModule {
+  final String title, location, description, price, imgSrc;
   final double rating;
 
-  PropertyModel(this.title, this.description, this.price, this.imgSrc, this.rating);
+  PropertyModule(this.title, this.location, this.description, this.price, this.imgSrc, this.rating);
 }
