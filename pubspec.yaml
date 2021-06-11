@@ -38,6 +38,8 @@ dependencies:
   flutter_auth_buttons: ^0.5.0
   snapshot: ^0.2.0
   image_picker: ^0.7.5+2
+  http: ^0.13.3
+  http_client: ^1.5.1
 
 
   # The following adds the Cupertino Icons font to your application.

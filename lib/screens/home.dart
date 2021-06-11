@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:prop_plus/constant/MainTheme.dart';
 import 'package:prop_plus/modules/property_module.dart';
@@ -7,6 +8,11 @@ import 'package:prop_plus/shared/real_state_card_standerd.dart';
 import 'package:prop_plus/shared/trending_card.dart';
 import 'package:prop_plus/modules/category_module.dart';
 import 'package:prop_plus/constant/CategoryTheme.dart';
+import 'package:http/http.dart' as http ;
+
+
+
+
 class   Home extends StatefulWidget {
   @override
   _HomeState createState() => _HomeState();
@@ -21,16 +27,50 @@ class _HomeState extends State<Home> {
 
 
 
+  Future<void> getPropertiesFromDB() async{
+
+    http.Response response  ;
+    response = await http.get(Uri.parse("https://prop-plus.herokuapp.com/properties"));
+    String data = response.body;
+    print(jsonDecode(data));
+  }
+  Future<PropertyModule> sendPropertyToDB() async {
+    final response = await http.post(
+      Uri.parse('https://prop-plus.herokuapp.com/properties'),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: jsonEncode(<String, String>{
+        'name': 'Property title',
+        'user_id' : '954' ,
+        'phone' : '0954854618' ,
+        'description' : 'Description' ,
+        'rating' : '3.8'
+      }),
+    );
+
+    if (response.statusCode == 201 || response.statusCode == 200) {
+      // If the server did return a 201 CREATED response,
+      // then parse the JSON.
+      return PropertyModule.fromJson(jsonDecode(response.body));
+    } else {
+      // If the server did not return a 201 CREATED response,
+      // then throw an exception.
+      throw Exception('Failed to create album.');
+    }
+  }
+
+
   // Mock Functions
   void createPropertyModules() {
-    propertyModules.add(new PropertyModule("Luxury hotel", "Description - Description ",
-        "100", "assets/real-state.jpg", 4,"Location - location"));
-    propertyModules.add(new PropertyModule("Luxury hotel", "Description - Description ",
-        "100", "assets/banner1.jpg", 4,"Location - location"));
-    propertyModules.add(new PropertyModule(
-        "Luxury hotel", "Location - location ", "100", "assets/img3.jpg", 4,"Location - location"));
-    propertyModules.add(new PropertyModule("Luxury hotel", "Description - Description ",
-        "100", "assets/real-state.jpg", 4,"Location - location"));
+    propertyModules.add(new PropertyModule(id:0,title:"Luxury hotel",description: "Description - Description ",
+        price:"100", imgSrc:"assets/real-state.jpg", rating:4,location:"Location - location"));
+    propertyModules.add(new PropertyModule(id:0,title:"Luxury hotel",description: "Description - Description ",
+        price:"100", imgSrc:"assets/banner1.jpg", rating:4,location:"Location - location"));
+    propertyModules.add(new PropertyModule(id:0,title:"Luxury hotel",description: "Description - Description ",
+        price:"100", imgSrc:"assets/real-state.jpg", rating:4,location:"Location - location"));
+    propertyModules.add(new PropertyModule(id:0,title:"Luxury hotel",description: "Description - Description ",
+        price:"100", imgSrc:"assets/real-state.jpg", rating:4,location:"Location - location"));
   }
 
   void createTrendingModules() {
@@ -67,6 +107,7 @@ class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
 
+    getPropertiesFromDB() ;
 
     return SingleChildScrollView(
       scrollDirection: Axis.vertical,

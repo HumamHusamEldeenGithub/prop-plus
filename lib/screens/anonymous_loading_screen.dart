@@ -11,7 +11,7 @@ class _AnonymousScreenState extends State<AnonymousScreen> {
 
   Future submitAnonymous() async{
     final auth = Provider.of(context).auth;
-    await auth.signInAnonymously();
+     //auth.signInAnonymously();
     Navigator.of(context).pushReplacementNamed('/homeScreen');
   }
 

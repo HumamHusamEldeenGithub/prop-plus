@@ -7,8 +7,8 @@ import 'package:prop_plus/modules/property_module.dart';
 import 'custom_image_view.dart';
 
 class DetailsScreen extends StatefulWidget {
-   PropertyModule model  = new PropertyModule("Luxury hotel", "Location - location ",
-       "100", "assets/real-state.jpg", 4,"Location - location");
+   PropertyModule model  = new PropertyModule(id:0,title:"Luxury hotel",description: "Description - Description ",
+  price:"100", imgSrc:"assets/real-state.jpg", rating:4,location:"Location - location");
 
 
   @override
