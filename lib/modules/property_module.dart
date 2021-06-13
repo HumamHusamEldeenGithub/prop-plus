@@ -7,12 +7,12 @@ class PropertyModule {
       this.rating, this.location});
   factory PropertyModule.fromJson(Map<String, dynamic> json) {
     return PropertyModule(
-        id: int.parse(json['id']),
-        title: json['name'],
-        description: json['description'],
-        price: json['price'],
-        imgSrc: json['imgSrc'],
-        rating: double.parse(json['rating']),
-        location: json['location']);
+        id: int.parse(json['property_id'].toString()),
+        title: json['name'].toString(),
+        description: json['description'].toString(),
+        price: json['price_per_night'].toString(),
+        imgSrc: json['MIN(images.url)'].toString(),
+        rating: double.parse(json['rating'].toString()) ,
+        location: json['city'].toString()+' / '+json['street'].toString());
   }
 }

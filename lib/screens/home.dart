@@ -4,7 +4,7 @@ import 'package:prop_plus/constant/MainTheme.dart';
 import 'package:prop_plus/modules/property_module.dart';
 import 'package:prop_plus/modules/trending_module.dart';
 import 'package:prop_plus/shared/categories.dart';
-import 'package:prop_plus/shared/real_state_card_standerd.dart';
+import 'package:prop_plus/shared/property_card.dart';
 import 'package:prop_plus/shared/trending_card.dart';
 import 'package:prop_plus/modules/category_module.dart';
 import 'package:prop_plus/constant/CategoryTheme.dart';
@@ -28,11 +28,14 @@ class _HomeState extends State<Home> {
 
 
   Future<void> getPropertiesFromDB() async{
-
+    print("enter") ;
     http.Response response  ;
-    response = await http.get(Uri.parse("https://prop-plus.herokuapp.com/properties"));
-    String data = response.body;
-    print(jsonDecode(data));
+    response = await http.get(Uri.parse("https://prop-plus.herokuapp.com/services?full_details"));
+    var data = jsonDecode(response.body) as List;
+    print(data) ;
+    setState(() {
+      propertyModules =  data.map((json)  =>PropertyModule.fromJson(json)).toList() ;
+    });
   }
   Future<PropertyModule> sendPropertyToDB() async {
     final response = await http.post(
@@ -100,14 +103,13 @@ class _HomeState extends State<Home> {
     // TODO: implement initState
     super.initState();
     createCategoriesModules();
-    createPropertyModules();
+    //createPropertyModules();
     createTrendingModules();
+    getPropertiesFromDB() ;
   }
 
   @override
   Widget build(BuildContext context) {
-
-    getPropertiesFromDB() ;
 
     return SingleChildScrollView(
       scrollDirection: Axis.vertical,

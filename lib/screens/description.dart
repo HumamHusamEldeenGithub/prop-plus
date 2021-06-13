@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:prop_plus/modules/property_module.dart';
-import 'package:prop_plus/shared/property_card.dart';
+import 'package:prop_plus/shared/property_card_template.dart';
 import 'package:prop_plus/modules/property_module.dart';
 class Description extends StatefulWidget {
 
