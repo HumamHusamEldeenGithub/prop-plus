@@ -8,83 +8,141 @@ import 'package:prop_plus/shared/property_card.dart';
 import 'package:prop_plus/shared/trending_card.dart';
 import 'package:prop_plus/modules/category_module.dart';
 import 'package:prop_plus/constant/CategoryTheme.dart';
-import 'package:http/http.dart' as http ;
+import 'package:http/http.dart' as http;
 
-
-
-
-class   Home extends StatefulWidget {
+class Home extends StatefulWidget {
   @override
   _HomeState createState() => _HomeState();
 }
 
 class _HomeState extends State<Home> {
-
-
   List<CategoryModel> categoriesModules = <CategoryModel>[];
   List<TrendingModule> trendingModules = <TrendingModule>[];
   List<PropertyModule> propertyModules = <PropertyModule>[];
 
-
-
-  Future<void> getPropertiesFromDB() async{
-    print("enter") ;
-    http.Response response  ;
-    response = await http.get(Uri.parse("https://prop-plus.herokuapp.com/services?full_details"));
+  Future<void> getPropertiesFromDB() async {
+    http.Response response;
+    response = await http.get(
+        Uri.parse("https://prop-plus.herokuapp.com/services?full_details"));
     var data = jsonDecode(response.body) as List;
-    print(data) ;
+    print(data);
     setState(() {
-      propertyModules =  data.map((json)  =>PropertyModule.fromJson(json)).toList() ;
+      propertyModules =
+          data.map((json) => PropertyModule.fromJson(json)).toList();
     });
   }
-  Future<PropertyModule> sendPropertyToDB() async {
+  
+  Future<void> sendApprovalRequest() async {
+    //TODO Get the user uuid
+
     final response = await http.post(
-      Uri.parse('https://prop-plus.herokuapp.com/properties'),
+      Uri.parse(
+          'https://propplus-production.herokuapp.com/properties_to_approve'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },
       body: jsonEncode(<String, String>{
         'name': 'Property title',
-        'user_id' : '954' ,
-        'phone' : '0954854618' ,
-        'description' : 'Description' ,
-        'rating' : '3.8'
+        'user_id': '954',
+        'phone': '0954854618',
+        'description': 'Description',
       }),
     );
 
     if (response.statusCode == 201 || response.statusCode == 200) {
       // If the server did return a 201 CREATED response,
       // then parse the JSON.
-      return PropertyModule.fromJson(jsonDecode(response.body));
+
+      Map<String, dynamic> propToApprove = jsonDecode(response.body);
+      var propToApproveId = propToApprove['user_id'];
+
+      //TODO iterate over all images
+      final imageResponse = await http.post(
+        Uri.parse('https://propplus-production.herokuapp.com/approval_images'),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
+        body: jsonEncode(
+            <String, String>{'property_id': propToApproveId, 'url': '954'}),
+      );
+
+      if (imageResponse.statusCode == 201 || response.statusCode == 200) {
+      } else {
+        throw Exception('Failed to post to  approval_images table  .');
+      }
+      //TODO : return a flag to show succeeded widget
     } else {
       // If the server did not return a 201 CREATED response,
       // then throw an exception.
-      throw Exception('Failed to create album.');
+      throw Exception('Failed to post to  properties_to_approve table  .');
     }
   }
 
-
   // Mock Functions
   void createPropertyModules() {
-    propertyModules.add(new PropertyModule(id:0,title:"Luxury hotel",description: "Description - Description ",
-        price:"100", imgSrc:"assets/real-state.jpg", rating:4,location:"Location - location"));
-    propertyModules.add(new PropertyModule(id:0,title:"Luxury hotel",description: "Description - Description ",
-        price:"100", imgSrc:"assets/banner1.jpg", rating:4,location:"Location - location"));
-    propertyModules.add(new PropertyModule(id:0,title:"Luxury hotel",description: "Description - Description ",
-        price:"100", imgSrc:"assets/real-state.jpg", rating:4,location:"Location - location"));
-    propertyModules.add(new PropertyModule(id:0,title:"Luxury hotel",description: "Description - Description ",
-        price:"100", imgSrc:"assets/real-state.jpg", rating:4,location:"Location - location"));
+    propertyModules.add(new PropertyModule(
+        id: 0,
+        title: "Luxury hotel",
+        description: "Description - Description ",
+        price: "100",
+        imgSrc: "assets/real-state.jpg",
+        rating: 4,
+        location: "Location - location"));
+    propertyModules.add(new PropertyModule(
+        id: 0,
+        title: "Luxury hotel",
+        description: "Description - Description ",
+        price: "100",
+        imgSrc: "assets/banner1.jpg",
+        rating: 4,
+        location: "Location - location"));
+    propertyModules.add(new PropertyModule(
+        id: 0,
+        title: "Luxury hotel",
+        description: "Description - Description ",
+        price: "100",
+        imgSrc: "assets/real-state.jpg",
+        rating: 4,
+        location: "Location - location"));
+    propertyModules.add(new PropertyModule(
+        id: 0,
+        title: "Luxury hotel",
+        description: "Description - Description ",
+        price: "100",
+        imgSrc: "assets/real-state.jpg",
+        rating: 4,
+        location: "Location - location"));
   }
 
   void createTrendingModules() {
-    trendingModules.add(new TrendingModule("Luxury hotel", "Location - location",
-        "100", "assets/real-state.jpg", 4,"Location - location"));
     trendingModules.add(new TrendingModule(
-        "Luxury hotel", "Location - location", "100", "assets/banner1.jpg", 5,"Location - location"));
+        "Luxury hotel",
+        "Location - location",
+        "100",
+        "assets/real-state.jpg",
+        4,
+        "Location - location"));
     trendingModules.add(new TrendingModule(
-        "Luxury hotel", "Location - location", "100", "assets/img3.jpg", 3,"Location - location"));
-    trendingModules.add(new TrendingModule("Luxury hotel", "Location - location",
-        "100", "assets/real-state.jpg", 4,"Location - location"));
+        "Luxury hotel",
+        "Location - location",
+        "100",
+        "assets/banner1.jpg",
+        5,
+        "Location - location"));
+    trendingModules.add(new TrendingModule(
+        "Luxury hotel",
+        "Location - location",
+        "100",
+        "assets/img3.jpg",
+        3,
+        "Location - location"));
+    trendingModules.add(new TrendingModule(
+        "Luxury hotel",
+        "Location - location",
+        "100",
+        "assets/real-state.jpg",
+        4,
+        "Location - location"));
   }
 
   void createCategoriesModules() {
@@ -105,25 +163,24 @@ class _HomeState extends State<Home> {
     createCategoriesModules();
     //createPropertyModules();
     createTrendingModules();
-    getPropertiesFromDB() ;
+    getPropertiesFromDB();
   }
 
   @override
   Widget build(BuildContext context) {
-
     return SingleChildScrollView(
       scrollDirection: Axis.vertical,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-
-
           // Categories
           Padding(
             padding: const EdgeInsets.all(MainTheme.pagePadding),
             child: Text(
               "Categories",
-              style: TextStyle(fontSize: CategoryTheme.descriptionFontSize, fontWeight: FontWeight.bold),
+              style: TextStyle(
+                  fontSize: CategoryTheme.descriptionFontSize,
+                  fontWeight: FontWeight.bold),
             ),
           ),
           SizedBox(
@@ -162,8 +219,7 @@ class _HomeState extends State<Home> {
                 children: trendingModules.map((card) {
                   return TrendingCard(module: card);
                 }).toList(),
-              )
-          ),
+              )),
           Padding(
             padding: const EdgeInsets.all(MainTheme.pagePadding),
             child: Center(
