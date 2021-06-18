@@ -26,10 +26,11 @@ class AuthService{
     return await _firebaseAuth.currentUser.displayName;
   }
   //Email & Password SignUp
-  Future<String> createUserWithEmailAndPassword(String email , String password ,String userName) async{
+  Future<UserModule> createUserWithEmailAndPassword(String email , String password ,String userName) async{
     final authResult = await _firebaseAuth.createUserWithEmailAndPassword(email: email, password: password,);
     //Update the UserName
     updateUserName(userName,authResult.user);
+    return UserModule(uid: authResult.user.uid , userName: authResult.user.displayName);
   }
   //Add UserName to Account
   Future updateUserName(String name , firebaseAuth.User firebaseUser ) async {

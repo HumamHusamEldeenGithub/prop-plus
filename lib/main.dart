@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:prop_plus/constant/MainTheme.dart';
+import 'package:prop_plus/screens/adding_prop_form.dart';
 import 'package:prop_plus/screens/anonymous_loading_screen.dart';
 import 'package:prop_plus/screens/explore.dart';
 import 'package:prop_plus/screens/home.dart';
@@ -51,6 +52,7 @@ class MyApp extends StatelessWidget{
           '/signIn':(BuildContext context) => SignInScreen(),
           '/homeScreen':(BuildContext context) =>MainWidget(),
           '/anonymousScreen':(BuildContext context) =>AnonymousScreen(),
+          '/propInputForm':(BuildContext context) =>PropertyInputForm(),
         },
 
 
@@ -161,7 +163,7 @@ class _MainWidgetState extends State<MainWidget> {
 class HomeController extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final AuthService auth = Provider.of(context).auth;
+    final AuthService auth = locater.get<AuthService>();
     return StreamBuilder <String>(
       stream: auth.onAuthStateChanged,
       builder: (context, AsyncSnapshot <String> snapshot){

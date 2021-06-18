@@ -2,7 +2,9 @@ import 'dart:developer' as developer;
 import 'package:auto_size_text/auto_size_text.dart';
 import'package:flutter/material.dart';
 import 'package:prop_plus/constant/Validator.dart';
+import 'package:prop_plus/services/locater.dart';
 import 'package:prop_plus/services/provider.dart';
+import 'package:prop_plus/services/user_controller.dart';
 import 'package:prop_plus/shared/custom_text_field.dart';
 
 class SignUpScreen extends StatefulWidget {
@@ -78,11 +80,13 @@ class _SignUpScreenState extends State<SignUpScreen> {
       developer.log(_name);
       try {
 
-        final auth = Provider
+       /* final auth = Provider
             .of(context)
             .auth;
 
-        await auth.createUserWithEmailAndPassword(_email, _password, _name);
+        await auth.createUserWithEmailAndPassword(_email, _password, _name);*/
+
+        await locater.get<UserController>().createUserWithEmailAndPassword(_email, _password, _name);
 
         Navigator.of(context).pushReplacementNamed('/home');
 

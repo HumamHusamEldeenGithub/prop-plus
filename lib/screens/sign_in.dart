@@ -158,8 +158,9 @@ class _SignInScreenState extends State<SignInScreen> {
       //call the auth methods
       //SignIn
       try{
-        final auth = Provider.of(context).auth;
-        auth.signInWithEmailAndPassword(_email, _password);
+        /*final auth = Provider.of(context).auth;
+        auth.signInWithEmailAndPassword(_email, _password);*/
+        locater.get<UserController>().signInWithEmailAndPassword(_email, _password);
         Navigator.of(context).pushReplacementNamed('/home');
 
       }

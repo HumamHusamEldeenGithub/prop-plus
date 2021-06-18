@@ -34,6 +34,10 @@ class UserController{
     _currentUser.avatarURl = await getDownloadUrl();
   }
 
+  Future<void>createUserWithEmailAndPassword(String email ,String password , String userName) async{
+    _currentUser = await _authService.createUserWithEmailAndPassword(email, password, userName);
+  }
+
   signOut(){
     _authService.signOut();
   }
