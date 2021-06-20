@@ -163,7 +163,7 @@ class _HomeState extends State<Home> {
     createCategoriesModules();
     //createPropertyModules();
     createTrendingModules();
-    getPropertiesFromDB();
+    //getPropertiesFromDB();
   }
 
   @override

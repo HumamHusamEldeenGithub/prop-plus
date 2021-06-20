@@ -29,13 +29,16 @@ class UserController{
     await _storageRepo .getUserProfileImageDownloadUrl(_currentUser.uid);
   }
 
-  Future<void>signInWithEmailAndPassword (String email ,String password) async{
+  Future<String>signInWithEmailAndPassword (String email ,String password) async{
     _currentUser =await _authService.signInWithEmailAndPassword(email, password);
-    _currentUser.avatarURl = await getDownloadUrl();
+    return _currentUser.uid ;
+    //TODO : check if null
+   // _currentUser.avatarURl = await getDownloadUrl();
   }
 
-  Future<void>createUserWithEmailAndPassword(String email ,String password , String userName) async{
+  Future<String>createUserWithEmailAndPassword(String email ,String password , String userName) async{
     _currentUser = await _authService.createUserWithEmailAndPassword(email, password, userName);
+    return  _currentUser.uid ;
   }
 
   signOut(){

@@ -1,4 +1,5 @@
 class UserModule{
+  int  dbId ;
   String uid;
   String userName;
   String avatarURl;

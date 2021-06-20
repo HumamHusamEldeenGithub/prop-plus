@@ -40,11 +40,11 @@ class _ProfileState extends State<Profile> {
             }
           ),
 
-          AutoSizeText(
-            "${ currentUser.avatarURl }",
-            maxLines: 1,
-            style: TextStyle(fontSize: 18),
-          ),
+          // AutoSizeText(
+          //   "${ currentUser.avatarURl }",
+          //   maxLines: 1,
+          //   style: TextStyle(fontSize: 18),
+          // ),
 
           RaisedButton(
             child: Text("log Out "),
