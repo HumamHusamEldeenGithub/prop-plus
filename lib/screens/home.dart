@@ -23,7 +23,7 @@ class _HomeState extends State<Home> {
   Future<void> getPropertiesFromDB() async {
     http.Response response;
     response = await http.get(
-        Uri.parse("https://prop-plus.herokuapp.com/services?full_details"));
+        Uri.parse("https://propplus-production.herokuapp.com/services?full_details"));
     var data = jsonDecode(response.body) as List;
     print(data);
     setState(() {
