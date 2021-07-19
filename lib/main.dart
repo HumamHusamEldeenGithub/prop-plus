@@ -6,6 +6,7 @@ import 'package:prop_plus/screens/adding_prop_form.dart';
 import 'package:prop_plus/screens/anonymous_loading_screen.dart';
 import 'package:prop_plus/screens/explore.dart';
 import 'package:prop_plus/screens/home.dart';
+import 'package:prop_plus/screens/my_properties.dart';
 import 'package:prop_plus/screens/notification.dart';
 import 'package:prop_plus/screens/profile.dart';
 import 'package:prop_plus/screens/sign_in.dart';
@@ -14,6 +15,7 @@ import 'package:prop_plus/screens/welcome.dart';
 import 'package:prop_plus/services/auth_repo.dart';
 import 'package:prop_plus/services/locater.dart';
 import 'package:prop_plus/services/provider.dart';
+import 'package:flutter_search_bar/flutter_search_bar.dart';
 import 'package:prop_plus/shared/description_screen.dart';
 import 'dart:developer' as developer;
 
@@ -53,6 +55,7 @@ class MyApp extends StatelessWidget{
           '/homeScreen':(BuildContext context) =>MainWidget(),
           '/anonymousScreen':(BuildContext context) =>AnonymousScreen(),
           '/propInputForm':(BuildContext context) =>PropertyInputForm(),
+          '/explore':(BuildContext context) =>Explore(),
         },
 
 
@@ -70,14 +73,61 @@ class MainWidget extends StatefulWidget {
 class _MainWidgetState extends State<MainWidget> {
 
 
+  SearchBar searchBar;
+
+  AppBar buildAppBar(BuildContext context) {
+
+    return new AppBar(
+        flexibleSpace: Container(
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment.centerLeft,
+              end: Alignment.centerRight,
+              colors: [MainTheme.mainColor, MainTheme.secondaryColor,],
+            ),
+          ),
+        ),
+        title: Text("Prop+"),
+        actions: [searchBar.getSearchAction(context)]
+    );
+  }
+
+  void onSubmitted(String searchText){
+    Navigator.pushNamed(context, Explore.path,arguments: searchText) ;
+  }
+
+  _MyHomePageState() {
+    searchBar = new SearchBar(
+        inBar: false,
+        buildDefaultAppBar: buildAppBar,
+        setState: setState,
+        onSubmitted: onSubmitted,
+        onCleared: () {
+          print("cleared");
+        },
+        onClosed: () {
+          print("closed");
+        });
+  }
 
   // ignore: non_constant_identifier_names
   final List<Widget> Screens = [
     Home() ,
     Notifications(),
-    Explore() ,
+    MyProperties(),
     Profile()
   ] ;
+
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _MyHomePageState();
+  }
+
+
+
   int _selectedIndex = 0;
 
   @override
@@ -87,19 +137,7 @@ class _MainWidgetState extends State<MainWidget> {
 
 
     return Scaffold(
-        appBar: AppBar(
-          flexibleSpace: Container(
-            decoration: BoxDecoration(
-              gradient: LinearGradient(
-                begin: Alignment.centerLeft,
-                end: Alignment.centerRight,
-                colors: [MainTheme.mainColor, MainTheme.secondaryColor,],
-              ),
-            ),
-          ),
-          title: Text("Prop+"),
-
-        ),
+        appBar: searchBar.build(context),
         bottomNavigationBar: Container(
           decoration: BoxDecoration(
             color: Colors.white,
@@ -134,8 +172,8 @@ class _MainWidgetState extends State<MainWidget> {
                     text: 'Likes',
                   ),
                   GButton(
-                    icon: Icons.search,
-                    text: 'Search',
+                    icon: Icons.apartment_rounded,
+                    text: 'My Properties',
                   ),
                   GButton(
                     icon: Icons.person,
