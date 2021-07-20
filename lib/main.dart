@@ -5,9 +5,10 @@ import 'package:prop_plus/constant/MainTheme.dart';
 import 'package:prop_plus/screens/adding_prop_form.dart';
 import 'package:prop_plus/screens/anonymous_loading_screen.dart';
 import 'package:prop_plus/screens/explore.dart';
-import 'package:prop_plus/screens/home.dart';
 import 'package:prop_plus/screens/my_properties.dart';
-import 'package:prop_plus/screens/notification.dart';
+import 'package:prop_plus/screens/home.dart';
+import 'package:prop_plus/screens/bookings.dart';
+import 'package:prop_plus/screens/favourites.dart';
 import 'package:prop_plus/screens/profile.dart';
 import 'package:prop_plus/screens/sign_in.dart';
 import 'package:prop_plus/screens/sign_up.dart';
@@ -44,8 +45,6 @@ class MyApp extends StatelessWidget{
         //initialRoute: '/',
         //routes: {'/': (context) => MainWidget()},
         home:HomeController(),
-
-
         routes: <String,WidgetBuilder>{
           //'/': (context) => MainWidget(),
           '/home':(BuildContext context) =>HomeController(),
@@ -55,6 +54,7 @@ class MyApp extends StatelessWidget{
           '/homeScreen':(BuildContext context) =>MainWidget(),
           '/anonymousScreen':(BuildContext context) =>AnonymousScreen(),
           '/propInputForm':(BuildContext context) =>PropertyInputForm(),
+          '/myProperties':(BuildContext context) =>MyProperties(),
           '/explore':(BuildContext context) =>Explore(),
         },
 
@@ -114,7 +114,7 @@ class _MainWidgetState extends State<MainWidget> {
   final List<Widget> Screens = [
     Home() ,
     Notifications(),
-    MyProperties(),
+    Bookings(),
     Profile()
   ] ;
 
@@ -172,8 +172,8 @@ class _MainWidgetState extends State<MainWidget> {
                     text: 'Likes',
                   ),
                   GButton(
-                    icon: Icons.apartment_rounded,
-                    text: 'My Properties',
+                    icon: Icons.calendar_today,
+                    text: 'Bookings',
                   ),
                   GButton(
                     icon: Icons.person,

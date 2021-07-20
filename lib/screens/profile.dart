@@ -65,6 +65,9 @@ class _ProfileState extends State<Profile> {
             },
 
           ),
+          TextButton(onPressed: (){
+            Navigator.of(context).pushNamed('/myProperties');
+          }, child: Text("My Properties"))
 
 
 

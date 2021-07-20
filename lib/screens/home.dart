@@ -22,8 +22,8 @@ class _HomeState extends State<Home> {
 
   Future<void> getPropertiesFromDB() async {
     http.Response response;
-    response = await http.get(
-        Uri.parse("https://propplus-production.herokuapp.com/services?full_details"));
+    response = await http.get(Uri.parse(
+        "https://propplus-production.herokuapp.com/services?full_details"));
     var data = jsonDecode(response.body) as List;
     print(data);
     setState(() {
@@ -31,7 +31,7 @@ class _HomeState extends State<Home> {
           data.map((json) => PropertyModule.fromJson(json)).toList();
     });
   }
-  
+
   Future<void> sendApprovalRequest() async {
     //TODO Get the user uuid
 
@@ -85,7 +85,7 @@ class _HomeState extends State<Home> {
         title: "Luxury hotel",
         description: "Description - Description ",
         price: "100",
-        imgSrc: "assets/real-state.jpg",
+        imgSrc: "https://i.pinimg.com/originals/70/0b/65/700b65aa1565bbcb40b68b72ca2df192.jpg",
         rating: 4,
         location: "Location - location"));
     propertyModules.add(new PropertyModule(
@@ -93,7 +93,7 @@ class _HomeState extends State<Home> {
         title: "Luxury hotel",
         description: "Description - Description ",
         price: "100",
-        imgSrc: "assets/banner1.jpg",
+        imgSrc: "https://i.pinimg.com/originals/70/0b/65/700b65aa1565bbcb40b68b72ca2df192.jpg",
         rating: 4,
         location: "Location - location"));
     propertyModules.add(new PropertyModule(
@@ -101,7 +101,7 @@ class _HomeState extends State<Home> {
         title: "Luxury hotel",
         description: "Description - Description ",
         price: "100",
-        imgSrc: "assets/real-state.jpg",
+        imgSrc:  "https://i.pinimg.com/originals/70/0b/65/700b65aa1565bbcb40b68b72ca2df192.jpg",
         rating: 4,
         location: "Location - location"));
     propertyModules.add(new PropertyModule(
@@ -109,7 +109,7 @@ class _HomeState extends State<Home> {
         title: "Luxury hotel",
         description: "Description - Description ",
         price: "100",
-        imgSrc: "assets/real-state.jpg",
+        imgSrc: "https://i.pinimg.com/originals/70/0b/65/700b65aa1565bbcb40b68b72ca2df192.jpg",
         rating: 4,
         location: "Location - location"));
   }
@@ -161,7 +161,7 @@ class _HomeState extends State<Home> {
     // TODO: implement initState
     super.initState();
     createCategoriesModules();
-    //createPropertyModules();
+    createPropertyModules();
     createTrendingModules();
     //getPropertiesFromDB();
   }
