@@ -19,7 +19,8 @@ import 'package:prop_plus/services/provider.dart';
 import 'package:flutter_search_bar/flutter_search_bar.dart';
 import 'package:prop_plus/shared/description_screen.dart';
 import 'dart:developer' as developer;
-
+import 'dart:async';
+import 'package:prop_plus/shared/http_requests.dart';
 
 /*Future<void> initializeDefault() async {
   FirebaseApp app = await Firebase.initializeApp();
@@ -34,66 +35,63 @@ Future<void> main() async {
   runApp(MyApp());
 }
 
-class MyApp extends StatelessWidget{
+class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Provider(
-    auth: new AuthService(),
-      child:MaterialApp(
+      auth: new AuthService(),
+      child: MaterialApp(
         theme: MainTheme.finalTheme,
         title: "Prop+",
         //initialRoute: '/',
         //routes: {'/': (context) => MainWidget()},
-        home:HomeController(),
-        routes: <String,WidgetBuilder>{
+        home: HomeController(),
+        routes: <String, WidgetBuilder>{
           //'/': (context) => MainWidget(),
-          '/home':(BuildContext context) =>HomeController(),
-          '/firstView':(BuildContext context) => WelcomeView(),
-          '/signUp':(BuildContext context) => SignUpScreen(),
-          '/signIn':(BuildContext context) => SignInScreen(),
-          '/homeScreen':(BuildContext context) =>MainWidget(),
-          '/anonymousScreen':(BuildContext context) =>AnonymousScreen(),
-          '/propInputForm':(BuildContext context) =>PropertyInputForm(),
-          '/myProperties':(BuildContext context) =>MyProperties(),
-          '/explore':(BuildContext context) =>Explore(),
+          '/home': (BuildContext context) => HomeController(),
+          '/firstView': (BuildContext context) => WelcomeView(),
+          '/signUp': (BuildContext context) => SignUpScreen(),
+          '/signIn': (BuildContext context) => SignInScreen(),
+          '/homeScreen': (BuildContext context) => MainWidget(),
+          '/anonymousScreen': (BuildContext context) => AnonymousScreen(),
+          '/propInputForm': (BuildContext context) => PropertyInputForm(),
+          '/myProperties': (BuildContext context) => MyProperties(),
+          '/explore': (BuildContext context) => Explore(),
         },
-
-
-      ) ,
+      ),
     );
   }
-
 }
 
 class MainWidget extends StatefulWidget {
+  static var databaseData = new Map<String, List<dynamic>>();
   @override
   _MainWidgetState createState() => _MainWidgetState();
 }
 
 class _MainWidgetState extends State<MainWidget> {
-
-
   SearchBar searchBar;
 
   AppBar buildAppBar(BuildContext context) {
-
     return new AppBar(
         flexibleSpace: Container(
           decoration: BoxDecoration(
             gradient: LinearGradient(
               begin: Alignment.centerLeft,
               end: Alignment.centerRight,
-              colors: [MainTheme.mainColor, MainTheme.secondaryColor,],
+              colors: [
+                MainTheme.mainColor,
+                MainTheme.secondaryColor,
+              ],
             ),
           ),
         ),
         title: Text("Prop+"),
-        actions: [searchBar.getSearchAction(context)]
-    );
+        actions: [searchBar.getSearchAction(context)]);
   }
 
-  void onSubmitted(String searchText){
-    Navigator.pushNamed(context, Explore.path,arguments: searchText) ;
+  void onSubmitted(String searchText) {
+    Navigator.pushNamed(context, Explore.path, arguments: searchText);
   }
 
   _MyHomePageState() {
@@ -110,87 +108,103 @@ class _MainWidgetState extends State<MainWidget> {
         });
   }
 
-  // ignore: non_constant_identifier_names
-  final List<Widget> Screens = [
-    Home() ,
-    Notifications(),
-    Bookings(),
-    Profile()
-  ] ;
+  Future<void> _getDataFromDB() async {
+    MainWidget.databaseData['PropertyModules'] =
+        await HTTP_Requests.createPropertyModules();
+    MainWidget.databaseData['TrendingModules'] =
+        await HTTP_Requests.createTrendingModules();
+    MainWidget.databaseData['CategoriesModules'] =
+        await HTTP_Requests.createCategoriesModules();
 
+    _HomeGlobalKey.currentState?.refreshPage();
+    _FavouritesGlobalKey.currentState?.refreshPage();
+    _BookingsGlobalKey.currentState?.refreshPage();
+    _ProfileGlobalKey.currentState?.refreshPage();
+  }
+
+  // ignore: non_constant_identifier_names
+  List<Widget> Screens = [];
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     _MyHomePageState();
+    _getDataFromDB();
+    Screens = [
+      Home(
+        key: _HomeGlobalKey,
+      ),
+      Favourites(key: _FavouritesGlobalKey),
+      Bookings(key: _BookingsGlobalKey),
+      Profile(key: _ProfileGlobalKey)
+    ];
   }
 
-
-
   int _selectedIndex = 0;
+  GlobalKey<HomeState> _HomeGlobalKey = GlobalKey<HomeState>();
+  GlobalKey<FavouritesState> _FavouritesGlobalKey = GlobalKey<FavouritesState>();
+  GlobalKey<BookingsState> _BookingsGlobalKey = GlobalKey<BookingsState>();
+  GlobalKey<ProfileState> _ProfileGlobalKey = GlobalKey<ProfileState>();
 
   @override
   Widget build(BuildContext context) {
-
-    Widget currentWidget = Screens[_selectedIndex] ;
-
+    Widget currentWidget = Screens[_selectedIndex];
 
     return Scaffold(
-        appBar: searchBar.build(context),
-        bottomNavigationBar: Container(
-          decoration: BoxDecoration(
-            color: Colors.white,
-            boxShadow: [
-              BoxShadow(
-                blurRadius: 20,
-                color: Colors.black.withOpacity(.1),
-              )
-            ],
-          ),
-          child: SafeArea(
-            child: Padding(
-              padding:
-                  const EdgeInsets.symmetric(horizontal: 15.0, vertical: 8),
-              child: GNav(
-                rippleColor: Colors.grey[300],
-                hoverColor: Colors.grey[100],
-                gap: 8,
-                activeColor: Colors.black,
-                iconSize: 24,
-                padding: EdgeInsets.symmetric(horizontal: 20, vertical: 12),
-                duration: Duration(milliseconds: 400),
-                tabBackgroundColor: Colors.grey[100],
-                color: Colors.black,
-                tabs: [
-                  GButton(
-                    icon: Icons.home,
-                    text: 'Home',
-                  ),
-                  GButton(
-                    icon: Icons.favorite_border,
-                    text: 'Likes',
-                  ),
-                  GButton(
-                    icon: Icons.calendar_today,
-                    text: 'Bookings',
-                  ),
-                  GButton(
-                    icon: Icons.person,
-                    text: 'Profile',
-                  ),
-                ],
-                selectedIndex: _selectedIndex,
-                onTabChange: (index) {
-                  setState(() {
-                    _selectedIndex = index;
-                    print(index) ;
-                  });
-                },
-              ),
+      appBar: searchBar.build(context),
+      bottomNavigationBar: Container(
+        decoration: BoxDecoration(
+          color: Colors.white,
+          boxShadow: [
+            BoxShadow(
+              blurRadius: 20,
+              color: Colors.black.withOpacity(.1),
+            )
+          ],
+        ),
+        child: SafeArea(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 8),
+            child: GNav(
+              rippleColor: Colors.grey[300],
+              hoverColor: Colors.grey[100],
+              gap: 8,
+              activeColor: Colors.black,
+              iconSize: 24,
+              padding: EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+              duration: Duration(milliseconds: 400),
+              tabBackgroundColor: Colors.grey[100],
+              color: Colors.black,
+              tabs: [
+                GButton(
+                  icon: Icons.home,
+                  text: 'Home',
+                ),
+                GButton(
+                  icon: Icons.favorite_border,
+                  text: 'Likes',
+                ),
+                GButton(
+                  icon: Icons.calendar_today,
+                  text: 'Bookings',
+                ),
+                GButton(
+                  icon: Icons.person,
+                  text: 'Profile',
+                ),
+              ],
+              selectedIndex: _selectedIndex,
+              onTabChange: (index) {
+                setState(() {
+                  _selectedIndex = index;
+                  print(index);
+                });
+              },
             ),
           ),
         ),
+      ),
       body: Center(
         child: currentWidget,
       ),
@@ -202,10 +216,10 @@ class HomeController extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final AuthService auth = locater.get<AuthService>();
-    return StreamBuilder <String>(
+    return StreamBuilder<String>(
       stream: auth.onAuthStateChanged,
-      builder: (context, AsyncSnapshot <String> snapshot){
-        if(snapshot.connectionState == ConnectionState.active){
+      builder: (context, AsyncSnapshot<String> snapshot) {
+        if (snapshot.connectionState == ConnectionState.active) {
           final bool SignedIn = snapshot.hasData;
           developer.log(SignedIn.toString());
           return SignedIn ? MainWidget() : WelcomeView();

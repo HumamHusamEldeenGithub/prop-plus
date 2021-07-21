@@ -1,80 +1,126 @@
 import 'dart:io';
-import 'package:auto_size_text/auto_size_text.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:prop_plus/modules/user_module.dart';
 import 'package:prop_plus/services/locater.dart';
-import 'package:prop_plus/services/provider.dart';
 import 'package:prop_plus/services/user_controller.dart';
 import 'package:prop_plus/shared/custom_avatar.dart';
-import 'dart:developer' as developer;
+import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 
 class Profile extends StatefulWidget {
+  Profile({Key key}) : super(key: key);
   @override
-  _ProfileState createState() => _ProfileState();
+  ProfileState createState() => ProfileState();
 }
 
-class _ProfileState extends State<Profile> {
-  UserModule currentUser = locater
-      .get<UserController>()
-      .currentUser;
+class ProfileState extends State<Profile> {
+  UserModule currentUser = locater.get<UserController>().currentUser;
 
-  PickedFile image ;
+  PickedFile image;
+  RefreshController _refreshController =
+  RefreshController(initialRefresh: false);
+
+  void _onRefresh() async{
+    // monitor network fetch
+    await Future.delayed(Duration(milliseconds: 1000));
+    // if failed,use refreshFailed()
+    _refreshController.refreshCompleted();
+  }
+
+  void _onLoading() async{
+    // monitor network fetch
+    await Future.delayed(Duration(milliseconds: 1000));
+    // if failed,use loadFailed(),if no data return,use LoadNodata()
+    if(mounted)
+      setState(() {
+      });
+    _refreshController.loadComplete();
+  }
+  void refreshPage() {
+    setState(() {});
+  }
 
   @override
   Widget build(BuildContext context) {
     return Container(
-
-      child: ListView(
-        children: [
-
-          Avatar(
-            avatarURL: currentUser ?.avatarURl ,
-            onTap: () async {
-              //get the image from gallery using Image Picker
-              image = await ImagePicker.platform.pickImage(source: ImageSource.gallery);
-              // Upload the Image
-              await locater.get<UserController>().uploadProfilePicture(File(image.path));
-
+      child:SmartRefresher(
+        enablePullDown: true,
+        enablePullUp: true,
+        header: WaterDropHeader(),
+        footer: CustomFooter(
+          builder: (BuildContext context,LoadStatus mode){
+            Widget body ;
+            if(mode==LoadStatus.idle){
+              body =  Text("pull up load");
             }
-          ),
+            else if(mode==LoadStatus.loading){
+              body =  CupertinoActivityIndicator();
+            }
+            else if(mode == LoadStatus.failed){
+              body = Text("Load Failed!Click retry!");
+            }
+            else if(mode == LoadStatus.canLoading){
+              body = Text("release to load more");
+            }
+            else{
+              body = Text("No more Data");
+            }
+            return Container(
+              height: 55.0,
+              child: Center(child:body),
+            );
+          },
+        ),
+        controller: _refreshController,
+        onRefresh: _onRefresh,
+        onLoading: _onLoading,
+        child: ListView(
+          children: [
+            Avatar(
+                avatarURL: currentUser?.avatarURl,
+                onTap: () async {
+                  //get the image from gallery using Image Picker
+                  image = await ImagePicker.platform
+                      .pickImage(source: ImageSource.gallery);
+                  // Upload the Image
+                  await locater
+                      .get<UserController>()
+                      .uploadProfilePicture(File(image.path));
+                }),
 
-          // AutoSizeText(
-          //   "${ currentUser.avatarURl }",
-          //   maxLines: 1,
-          //   style: TextStyle(fontSize: 18),
-          // ),
+            // AutoSizeText(
+            //   "${ currentUser.avatarURl }",
+            //   maxLines: 1,
+            //   style: TextStyle(fontSize: 18),
+            // ),
 
-          RaisedButton(
-            child: Text("log Out "),
-            onPressed: () async{
-              try{
-                locater.get<UserController>().signOut();
-              }
-              catch(e){
-                print(e);
-              }
-            },
-          ),
+            RaisedButton(
+              child: Text("log Out "),
+              onPressed: () async {
+                try {
+                  locater.get<UserController>().signOut();
+                } catch (e) {
+                  print(e);
+                }
+              },
+            ),
 
-          RaisedButton(
-            child: Text("Adding prop "),
-            onPressed: (){
-              Navigator.of(context).pushNamed('/propInputForm');
-            },
-
-          ),
-          TextButton(onPressed: (){
-            Navigator.of(context).pushNamed('/myProperties');
-          }, child: Text("My Properties"))
-
-
-
-
-        ],
-      ),
+            RaisedButton(
+              child: Text("Adding prop "),
+              onPressed: () {
+                Navigator.of(context).pushNamed('/propInputForm');
+              },
+            ),
+            TextButton(
+                onPressed: () {
+                  Navigator.of(context).pushNamed('/myProperties');
+                },
+                child: Text("My Properties"))
+          ],
+        ),
+      ) ,
     );
   }
 }
-

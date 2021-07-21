@@ -1,244 +1,172 @@
-import 'dart:convert';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:prop_plus/constant/MainTheme.dart';
-import 'package:prop_plus/modules/property_module.dart';
-import 'package:prop_plus/modules/trending_module.dart';
 import 'package:prop_plus/shared/categories.dart';
 import 'package:prop_plus/shared/property_card.dart';
 import 'package:prop_plus/shared/trending_card.dart';
-import 'package:prop_plus/modules/category_module.dart';
 import 'package:prop_plus/constant/CategoryTheme.dart';
-import 'package:http/http.dart' as http;
+import 'package:prop_plus/main.dart';
+import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 class Home extends StatefulWidget {
+  Home({Key key}) : super(key: key);
   @override
-  _HomeState createState() => _HomeState();
+  HomeState createState() => HomeState();
 }
 
-class _HomeState extends State<Home> {
-  List<CategoryModel> categoriesModules = <CategoryModel>[];
-  List<TrendingModule> trendingModules = <TrendingModule>[];
-  List<PropertyModule> propertyModules = <PropertyModule>[];
+class HomeState extends State<Home> {
 
-  Future<void> getPropertiesFromDB() async {
-    http.Response response;
-    response = await http.get(Uri.parse(
-        "https://propplus-production.herokuapp.com/services?full_details"));
-    var data = jsonDecode(response.body) as List;
-    print(data);
-    setState(() {
-      propertyModules =
-          data.map((json) => PropertyModule.fromJson(json)).toList();
-    });
+  RefreshController _refreshController =
+  RefreshController(initialRefresh: false);
+
+  void _onRefresh() async{
+    // monitor network fetch
+    await Future.delayed(Duration(milliseconds: 1000));
+    // if failed,use refreshFailed()
+    _refreshController.refreshCompleted();
   }
 
-  Future<void> sendApprovalRequest() async {
-    //TODO Get the user uuid
-
-    final response = await http.post(
-      Uri.parse(
-          'https://propplus-production.herokuapp.com/properties_to_approve'),
-      headers: <String, String>{
-        'Content-Type': 'application/json; charset=UTF-8',
-      },
-      body: jsonEncode(<String, String>{
-        'name': 'Property title',
-        'user_id': '954',
-        'phone': '0954854618',
-        'description': 'Description',
-      }),
-    );
-
-    if (response.statusCode == 201 || response.statusCode == 200) {
-      // If the server did return a 201 CREATED response,
-      // then parse the JSON.
-
-      Map<String, dynamic> propToApprove = jsonDecode(response.body);
-      var propToApproveId = propToApprove['user_id'];
-
-      //TODO iterate over all images
-      final imageResponse = await http.post(
-        Uri.parse('https://propplus-production.herokuapp.com/approval_images'),
-        headers: <String, String>{
-          'Content-Type': 'application/json; charset=UTF-8',
-        },
-        body: jsonEncode(
-            <String, String>{'property_id': propToApproveId, 'url': '954'}),
-      );
-
-      if (imageResponse.statusCode == 201 || response.statusCode == 200) {
-      } else {
-        throw Exception('Failed to post to  approval_images table  .');
-      }
-      //TODO : return a flag to show succeeded widget
-    } else {
-      // If the server did not return a 201 CREATED response,
-      // then throw an exception.
-      throw Exception('Failed to post to  properties_to_approve table  .');
-    }
+  void _onLoading() async{
+    // monitor network fetch
+    await Future.delayed(Duration(milliseconds: 1000));
+    // if failed,use loadFailed(),if no data return,use LoadNodata()
+    if(mounted)
+      setState(() {
+      });
+    _refreshController.loadComplete();
   }
-
-  // Mock Functions
-  void createPropertyModules() {
-    propertyModules.add(new PropertyModule(
-        id: 0,
-        title: "Luxury hotel",
-        description: "Description - Description ",
-        price: "100",
-        imgSrc: "https://i.pinimg.com/originals/70/0b/65/700b65aa1565bbcb40b68b72ca2df192.jpg",
-        rating: 4,
-        location: "Location - location"));
-    propertyModules.add(new PropertyModule(
-        id: 0,
-        title: "Luxury hotel",
-        description: "Description - Description ",
-        price: "100",
-        imgSrc: "https://i.pinimg.com/originals/70/0b/65/700b65aa1565bbcb40b68b72ca2df192.jpg",
-        rating: 4,
-        location: "Location - location"));
-    propertyModules.add(new PropertyModule(
-        id: 0,
-        title: "Luxury hotel",
-        description: "Description - Description ",
-        price: "100",
-        imgSrc:  "https://i.pinimg.com/originals/70/0b/65/700b65aa1565bbcb40b68b72ca2df192.jpg",
-        rating: 4,
-        location: "Location - location"));
-    propertyModules.add(new PropertyModule(
-        id: 0,
-        title: "Luxury hotel",
-        description: "Description - Description ",
-        price: "100",
-        imgSrc: "https://i.pinimg.com/originals/70/0b/65/700b65aa1565bbcb40b68b72ca2df192.jpg",
-        rating: 4,
-        location: "Location - location"));
-  }
-
-  void createTrendingModules() {
-    trendingModules.add(new TrendingModule(
-        "Luxury hotel",
-        "Location - location",
-        "100",
-        "assets/real-state.jpg",
-        4,
-        "Location - location"));
-    trendingModules.add(new TrendingModule(
-        "Luxury hotel",
-        "Location - location",
-        "100",
-        "assets/banner1.jpg",
-        5,
-        "Location - location"));
-    trendingModules.add(new TrendingModule(
-        "Luxury hotel",
-        "Location - location",
-        "100",
-        "assets/img3.jpg",
-        3,
-        "Location - location"));
-    trendingModules.add(new TrendingModule(
-        "Luxury hotel",
-        "Location - location",
-        "100",
-        "assets/real-state.jpg",
-        4,
-        "Location - location"));
-  }
-
-  void createCategoriesModules() {
-    categoriesModules.add(new CategoryModel(Icons.hotel, "Hotel", false));
-    categoriesModules.add(new CategoryModel(Icons.hotel, "Hotel2", false));
-    categoriesModules.add(new CategoryModel(Icons.hotel, "Hotel3", false));
-    categoriesModules.add(new CategoryModel(Icons.hotel, "Hotel4", false));
-    categoriesModules.add(new CategoryModel(Icons.hotel, "Hotel4", false));
-    categoriesModules.add(new CategoryModel(Icons.hotel, "Hotel4", false));
-    categoriesModules.add(new CategoryModel(Icons.hotel, "Hotel4", false));
-    categoriesModules.add(new CategoryModel(Icons.hotel, "Hotel4", false));
+  void refreshPage() {
+    setState(() {});
   }
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    createCategoriesModules();
-    createPropertyModules();
-    createTrendingModules();
-    //getPropertiesFromDB();
   }
 
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      scrollDirection: Axis.vertical,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          // Categories
-          Padding(
-            padding: const EdgeInsets.all(MainTheme.pagePadding),
-            child: Text(
-              "Categories",
-              style: TextStyle(
-                  fontSize: CategoryTheme.descriptionFontSize,
-                  fontWeight: FontWeight.bold),
-            ),
-          ),
-          SizedBox(
-            height: CategoryTheme.allHeight,
-            child: ListView.builder(
-              shrinkWrap: true,
-              scrollDirection: Axis.horizontal,
-              itemCount: categoriesModules.length,
-              itemBuilder: (context, index) {
-                return InkWell(
-                  onTap: () {
-                    setState(() {
-                      categoriesModules.forEach((element) {
-                        element.isSelected = false;
-                      });
-                      categoriesModules[index].isSelected = true;
-                    });
-                  },
-                  child: CategoryRadioButton(model: categoriesModules[index]),
-                );
-              },
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(MainTheme.pagePadding),
-            child: Center(
-              child: Text(
-                "Trending",
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-              ),
-            ),
-          ),
-          SingleChildScrollView(
-              scrollDirection: Axis.horizontal,
-              child: Row(
-                children: trendingModules.map((card) {
-                  return TrendingCard(module: card);
-                }).toList(),
-              )),
-          Padding(
-            padding: const EdgeInsets.all(MainTheme.pagePadding),
-            child: Center(
-              child: Text(
-                "Recommended",
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-              ),
-            ),
-          ),
-          Center(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: propertyModules.map((card) {
-                return PropertyCard(model: card);
-              }).toList(),
-            ),
-          ),
-        ],
+
+
+
+    return SmartRefresher(
+      enablePullDown: true,
+      enablePullUp: true,
+      header: WaterDropHeader(),
+      footer: CustomFooter(
+        builder: (BuildContext context,LoadStatus mode){
+          Widget body ;
+          if(mode==LoadStatus.idle){
+            body =  Text("pull up load");
+          }
+          else if(mode==LoadStatus.loading){
+            body =  CupertinoActivityIndicator();
+          }
+          else if(mode == LoadStatus.failed){
+            body = Text("Load Failed!Click retry!");
+          }
+          else if(mode == LoadStatus.canLoading){
+            body = Text("release to load more");
+          }
+          else{
+            body = Text("No more Data");
+          }
+          return Container(
+            height: 55.0,
+            child: Center(child:body),
+          );
+        },
       ),
-    );
+      controller: _refreshController,
+      onRefresh: _onRefresh,
+      onLoading: _onLoading,
+      child: SingleChildScrollView(
+        scrollDirection: Axis.vertical,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            // Categories
+            Padding(
+              padding: const EdgeInsets.all(MainTheme.pagePadding),
+              child: Text(
+                "Categories",
+                style: TextStyle(
+                    fontSize: CategoryTheme.descriptionFontSize,
+                    fontWeight: FontWeight.bold),
+              ),
+            ),
+            MainWidget.databaseData['CategoriesModules'] != null
+                ? SizedBox(
+              height: CategoryTheme.allHeight,
+              child: ListView.builder(
+                shrinkWrap: true,
+                scrollDirection: Axis.horizontal,
+                itemCount:
+                MainWidget.databaseData['CategoriesModules']?.length,
+                itemBuilder: (context, index) {
+                  return InkWell(
+                    onTap: () {
+                      setState(() {
+                        MainWidget.databaseData['CategoriesModules']
+                            .forEach((element) {
+                          element.isSelected = false;
+                        });
+                        MainWidget.databaseData['CategoriesModules'][index]
+                            .isSelected = true;
+                      });
+                    },
+                    child: CategoryRadioButton(
+                        model: MainWidget.databaseData['CategoriesModules']
+                        [index]),
+                  );
+                },
+              ),
+            )
+                : SizedBox(),
+            Padding(
+              padding: const EdgeInsets.all(MainTheme.pagePadding),
+              child: Center(
+                child: Text(
+                  "Trending",
+                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                ),
+              ),
+            ),
+            MainWidget.databaseData['TrendingModules'] != null
+                ? SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: Row(
+                  children:
+                  MainWidget.databaseData['TrendingModules']?.map((card) {
+                    return TrendingCard(module: card);
+                  })?.toList(),
+                ))
+                : SizedBox(),
+            Padding(
+              padding: const EdgeInsets.all(MainTheme.pagePadding),
+              child: Center(
+                child: Text(
+                  "Recommended",
+                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                ),
+              ),
+            ),
+            MainWidget.databaseData['PropertyModules'] != null
+                ? Center(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children:
+                MainWidget.databaseData['PropertyModules'].map((card) {
+                  return PropertyCard(model: card);
+                }).toList(),
+              ),
+            )
+                : SizedBox(),
+          ],
+        ),
+      ),
+    )
+      ;
   }
 }

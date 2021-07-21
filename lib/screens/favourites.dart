@@ -1,6 +1,8 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:prop_plus/modules/favourite_module.dart';
 import 'package:prop_plus/shared/favourite_card.dart';
+import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 // new TrendingModule(
 // "Luxury hotel",
@@ -10,13 +12,36 @@ import 'package:prop_plus/shared/favourite_card.dart';
 // 4,
 // "Location - location"));
 
-class Notifications extends StatefulWidget {
+class Favourites extends StatefulWidget {
+  Favourites({Key key}) : super(key: key);
   @override
-  _NotificationsState createState() => _NotificationsState();
+  FavouritesState createState() => FavouritesState();
 }
 
-class _NotificationsState extends State<Notifications> {
+class FavouritesState extends State<Favourites> {
   List<FavouriteModule> favouriteModules = <FavouriteModule>[];
+  RefreshController _refreshController =
+  RefreshController(initialRefresh: false);
+
+  void _onRefresh() async{
+    // monitor network fetch
+    await Future.delayed(Duration(milliseconds: 1000));
+    // if failed,use refreshFailed()
+    _refreshController.refreshCompleted();
+  }
+
+  void _onLoading() async{
+    // monitor network fetch
+    await Future.delayed(Duration(milliseconds: 1000));
+    // if failed,use loadFailed(),if no data return,use LoadNodata()
+    if(mounted)
+      setState(() {
+      });
+    _refreshController.loadComplete();
+  }
+  void refreshPage() {
+    setState(() {});
+  }
 
   void createFavouriteModules() {
     favouriteModules.add(new FavouriteModule(
@@ -73,14 +98,46 @@ class _NotificationsState extends State<Notifications> {
   @override
   Widget build(BuildContext context) {
     return Center(
-      child: SingleChildScrollView(
-        scrollDirection: Axis.vertical,
-        child: Column(
-          children: favouriteModules.map((card) {
-            return FavouriteCard(module: card);
-          }).toList(),
+      child: SmartRefresher(
+        enablePullDown: true,
+        enablePullUp: true,
+        header: WaterDropHeader(),
+        footer: CustomFooter(
+          builder: (BuildContext context,LoadStatus mode){
+            Widget body ;
+            if(mode==LoadStatus.idle){
+              body =  Text("pull up load");
+            }
+            else if(mode==LoadStatus.loading){
+              body =  CupertinoActivityIndicator();
+            }
+            else if(mode == LoadStatus.failed){
+              body = Text("Load Failed!Click retry!");
+            }
+            else if(mode == LoadStatus.canLoading){
+              body = Text("release to load more");
+            }
+            else{
+              body = Text("No more Data");
+            }
+            return Container(
+              height: 55.0,
+              child: Center(child:body),
+            );
+          },
         ),
-      ),
+        controller: _refreshController,
+        onRefresh: _onRefresh,
+        onLoading: _onLoading,
+        child: SingleChildScrollView(
+          scrollDirection: Axis.vertical,
+          child: Column(
+            children: favouriteModules.map((card) {
+              return FavouriteCard(module: card);
+            }).toList(),
+          ),
+        ),
+      ) ,
     );
   }
 }
