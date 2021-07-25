@@ -47,7 +47,6 @@ class MyApp extends StatelessWidget {
         //routes: {'/': (context) => MainWidget()},
         home: HomeController(),
         routes: <String, WidgetBuilder>{
-          //'/': (context) => MainWidget(),
           '/home': (BuildContext context) => HomeController(),
           '/firstView': (BuildContext context) => WelcomeView(),
           '/signUp': (BuildContext context) => SignUpScreen(),
@@ -71,6 +70,13 @@ class MainWidget extends StatefulWidget {
 
 class _MainWidgetState extends State<MainWidget> {
   SearchBar searchBar;
+  List<Widget> Screens = [];
+  int _selectedIndex = 0;
+  GlobalKey<HomeState> _homeGlobalKey = GlobalKey<HomeState>();
+  GlobalKey<FavouritesState> _favouritesGlobalKey =
+  GlobalKey<FavouritesState>();
+  GlobalKey<BookingsState> _bookingsGlobalKey = GlobalKey<BookingsState>();
+  GlobalKey<ProfileState> _profileGlobalKey = GlobalKey<ProfileState>();
 
   AppBar buildAppBar(BuildContext context) {
     return new AppBar(
@@ -116,14 +122,11 @@ class _MainWidgetState extends State<MainWidget> {
     MainWidget.databaseData['CategoriesModules'] =
         await HTTP_Requests.createCategoriesModules();
 
-    _HomeGlobalKey.currentState?.refreshPage();
-    _FavouritesGlobalKey.currentState?.refreshPage();
-    _BookingsGlobalKey.currentState?.refreshPage();
-    _ProfileGlobalKey.currentState?.refreshPage();
+    _homeGlobalKey.currentState?.refreshPage();
+    _favouritesGlobalKey.currentState?.refreshPage();
+    _bookingsGlobalKey.currentState?.refreshPage();
+    _profileGlobalKey.currentState?.refreshPage();
   }
-
-  // ignore: non_constant_identifier_names
-  List<Widget> Screens = [];
 
   @override
   void initState() {
@@ -133,19 +136,13 @@ class _MainWidgetState extends State<MainWidget> {
     _getDataFromDB();
     Screens = [
       Home(
-        key: _HomeGlobalKey,
+        key: _homeGlobalKey,
       ),
-      Favourites(key: _FavouritesGlobalKey),
-      Bookings(key: _BookingsGlobalKey),
-      Profile(key: _ProfileGlobalKey)
+      Favourites(key: _favouritesGlobalKey),
+      Bookings(key: _bookingsGlobalKey),
+      Profile(key: _profileGlobalKey)
     ];
   }
-
-  int _selectedIndex = 0;
-  GlobalKey<HomeState> _HomeGlobalKey = GlobalKey<HomeState>();
-  GlobalKey<FavouritesState> _FavouritesGlobalKey = GlobalKey<FavouritesState>();
-  GlobalKey<BookingsState> _BookingsGlobalKey = GlobalKey<BookingsState>();
-  GlobalKey<ProfileState> _ProfileGlobalKey = GlobalKey<ProfileState>();
 
   @override
   Widget build(BuildContext context) {
