@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:prop_plus/constant/MainTheme.dart';
+import 'package:prop_plus/screens/add_new_service_screen.dart';
 import 'package:prop_plus/screens/adding_prop_form.dart';
 import 'package:prop_plus/screens/anonymous_loading_screen.dart';
+import 'package:prop_plus/screens/description.dart';
 import 'package:prop_plus/screens/explore.dart';
 import 'package:prop_plus/screens/my_properties.dart';
 import 'package:prop_plus/screens/home.dart';
@@ -12,6 +14,7 @@ import 'package:prop_plus/screens/favourites.dart';
 import 'package:prop_plus/screens/profile.dart';
 import 'package:prop_plus/screens/sign_in.dart';
 import 'package:prop_plus/screens/sign_up.dart';
+import 'package:prop_plus/screens/user_property_description_screen.dart';
 import 'package:prop_plus/screens/welcome.dart';
 import 'package:prop_plus/services/auth_repo.dart';
 import 'package:prop_plus/services/locater.dart';
@@ -56,6 +59,9 @@ class MyApp extends StatelessWidget {
           '/propInputForm': (BuildContext context) => PropertyInputForm(),
           '/myProperties': (BuildContext context) => MyProperties(),
           '/explore': (BuildContext context) => Explore(),
+          '/description' : (BuildContext context) => DetailsScreen(),
+          '/my_property_description' : (BuildContext context) => MyProperties_DetailsScreen(),
+          '/add_new_service' : (BuildContext context) => AddNewServiceScreen(),
         },
       ),
     );
