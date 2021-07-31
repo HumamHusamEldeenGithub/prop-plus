@@ -44,6 +44,9 @@ class _DetailsScreenState extends State<DetailsScreen> {
   @override
   Widget build(BuildContext context) {
     dynamic module = ModalRoute.of(context).settings.arguments  ;
+    double width = MediaQuery. of(context). size. width;
+    double height = MediaQuery. of(context). size. height;
+
     return Scaffold(
       bottomNavigationBar: RaisedButton(
 
@@ -70,8 +73,9 @@ class _DetailsScreenState extends State<DetailsScreen> {
                 module.imgSrc,
                 fit: BoxFit.cover,
               ),
-              height: imageVisible == true ? 300 : 0,
-              width: 600,
+              height: imageVisible == true ? height * 0.4 : 0,
+              width: width,
+
             ),
             onTap: (){
               Navigator.push(
@@ -110,7 +114,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                           ],
                         ),
                         SizedBox(
-                          width: 200,
+                          width: 0.45 * width ,
                         ),
                         IconButton(
                           icon: favorite
