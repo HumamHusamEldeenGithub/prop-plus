@@ -7,6 +7,7 @@ import 'package:prop_plus/modules/trending_module.dart';
 
 // ignore: camel_case_types
 class HTTP_Requests {
+
   static Future<List> getPropertiesFromDB() async {
     http.Response response;
     response = await http.get(Uri.parse(
@@ -58,6 +59,52 @@ class HTTP_Requests {
     } else {
       // If the server did not return a 201 CREATED response,
       // then throw an exception.
+      throw Exception('Failed to post to  properties_to_approve table  .');
+    }
+  }
+
+
+  static Future<void> addNewServiceToDB(propInfo) async {
+    final response = await http.post(
+      Uri.parse(
+          'https://propplus-production.herokuapp.com/services'),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: propInfo,
+    );
+
+    if (response.statusCode == 201 || response.statusCode == 200) {
+      // If the server did return a 201 CREATED response,
+      // then parse the JSON.
+
+      Map<String, dynamic> newService = jsonDecode(response.body);
+      dynamic newServiceId = newService['id'];
+      print("DONE");
+      print(newServiceId);
+
+      //TODO iterate over all images
+      // for (image in _imageUrl) {
+      //   final imageResponse = await http.post(
+      //     Uri.parse(
+      //         'https://propplus-production.herokuapp.com/approval_images'),
+      //     headers: <String, String>{
+      //       'Content-Type': 'application/json; charset=UTF-8',
+      //     },
+      //     body: jsonEncode(
+      //         <String, String>{'property_id': propToApproveId, 'url': image.path}),
+      //   );
+      //
+      //   if (imageResponse.statusCode == 201 ||
+      //       response.statusCode == 200) {} else {
+      //     throw Exception('Failed to post to  approval_images table  .');
+      //   }
+      // }
+      //TODO : return a flag to show succeeded widget
+    } else {
+      // If the server did not return a 201 CREATED response,
+      // then throw an exception.
+      print(response.statusCode);
       throw Exception('Failed to post to  properties_to_approve table  .');
     }
   }

@@ -16,7 +16,7 @@ class _DescriptionState extends State<Description> {
   @override
   Widget build(BuildContext context) {
 
-    PropertyModule module = ModalRoute.of(context).settings.arguments as PropertyModule ;
+    dynamic module = ModalRoute.of(context).settings.arguments  ;
 
 
     return Scaffold(

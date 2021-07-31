@@ -3,22 +3,20 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:prop_plus/constant/MainTheme.dart';
-import 'package:prop_plus/modules/property_module.dart';
-import 'custom_image_view.dart';
+import 'package:prop_plus/shared/custom_image_view.dart';
+import 'add_new_service_screen.dart';
 
-class DetailsScreen extends StatefulWidget {
+// ignore: camel_case_types
+class MyProperties_DetailsScreen extends StatefulWidget {
 
-  static String path = "/description" ;
-
-   PropertyModule model  = new PropertyModule(id:0,title:"Luxury hotel",description: "Description - Description ",
-  price:"100", imgSrc:"assets/real-state.jpg", rating:4,location:"Location - location");
-
+  static String path = "/my_property_description" ;
 
   @override
-  _DetailsScreenState createState() => _DetailsScreenState();
+  _MyProperties_DetailsScreen createState() => _MyProperties_DetailsScreen();
 }
 
-class _DetailsScreenState extends State<DetailsScreen> {
+// ignore: camel_case_types
+class _MyProperties_DetailsScreen extends State<MyProperties_DetailsScreen> {
   ScrollController _scrollController = ScrollController();
   bool imageVisible = true;
   bool favorite = false;
@@ -186,12 +184,17 @@ class _DetailsScreenState extends State<DetailsScreen> {
                               height: 5,
                             ),
                             Text(
-                              "Unknown"
+                                "Unknown"
                             )
                           ],
                         )
                       ],
                     ),
+                    Center(
+                      child: ElevatedButton(onPressed: ()=>{
+                      Navigator.pushNamed(context, AddNewServiceScreen.path,arguments: module)
+                      }, child: Text('Add a new Service')),
+                    )
                   ],
                 ),
               )
@@ -277,7 +280,7 @@ class CustomStarBar extends StatelessWidget {
           },
         ),
         Text(
-          "${rating} reviews",
+          "$rating reviews",
           style: TextStyle(color: Colors.grey[600]),
         )
       ],

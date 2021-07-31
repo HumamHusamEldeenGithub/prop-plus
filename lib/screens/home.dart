@@ -158,7 +158,7 @@ class HomeState extends State<Home> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children:
                 MainWidget.databaseData['PropertyModules'].map((card) {
-                  return PropertyCard(model: card);
+                  return PropertyCard(module: card);
                 }).toList(),
               ),
             )

@@ -3,6 +3,7 @@ import 'package:prop_plus/constant/FavouriteTheme.dart';
 import 'package:prop_plus/modules/user_properties_module.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:prop_plus/screens/description.dart';
+import 'package:prop_plus/screens/user_property_description_screen.dart';
 
 
 
@@ -22,7 +23,7 @@ class _UserPropertyCardState extends State<UserPropertyCard> {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: (){
-        Navigator.pushNamed(context, Description.path,arguments: widget.module) ;
+        Navigator.pushNamed(context, MyProperties_DetailsScreen.path,arguments: widget.module) ;
       },
       child: Container(
         child: Card(

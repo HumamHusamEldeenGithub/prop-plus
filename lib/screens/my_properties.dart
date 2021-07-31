@@ -19,6 +19,7 @@ class _MyPropertiesState extends State<MyProperties> {
 
   void createPropertyModules() {
     userPropertyModules.add(new UserPropertyModule(
+      1,
         "Luxury hotel",
         "Location - location",
         "100",
