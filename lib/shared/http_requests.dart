@@ -50,11 +50,9 @@ class HTTP_Requests {
       // then parse the JSON.
 
       Map<String, dynamic> propToApprove = jsonDecode(response.body);
-<<<<<<< HEAD
-      var propToApproveId = propToApprove['propetry_id'];
-=======
+
       var propToApproveId = propToApprove['property_id'];
->>>>>>> 75b87004eb65caad69dc40b35a6e570eeecdd05a
+
 
       //TODO iterate over all images
       final imageResponse = await http.post(
