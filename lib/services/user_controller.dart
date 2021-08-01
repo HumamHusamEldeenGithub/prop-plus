@@ -22,7 +22,7 @@ class UserController{
 
 
   Future<void> uploadProfilePicture(File image) async{
-    _currentUser.avatarURl = await _storageRepo.uploadFile(image);
+    _currentUser.avatarURl = await _storageRepo.uploadProfilePhoto(image);
   }
 
   Future<String>getDownloadUrl() async{
