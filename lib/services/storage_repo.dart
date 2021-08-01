@@ -22,5 +22,13 @@ class StorageRepo{
     return await storageRef.getDownloadURL();
   }
 
+  Future<String> uploadPropertyApprovalPhotos(File file ) async {
+    var userId = await _authService.getCurrentUID();
+    var storageRef = storage.ref().child("users/user_id:${userId}/approvalPhotos");
+    var uploadTask = await storageRef.putFile(file);
+    String downloadURL = await uploadTask.ref.getDownloadURL();
+    return downloadURL;
+  }
+
 
 }

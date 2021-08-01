@@ -27,14 +27,17 @@ class UserController{
     _currentUser.dbId = await HTTP_Requests.getUserId(_currentUser.uid);
   }
 
-  Future<void> uploadProfilePicture(File image) async{
+  Future<String> uploadProfilePicture(File image) async{
     _currentUser.avatarURl = await _storageRepo.uploadProfilePhoto(image);
+    return await _storageRepo.uploadProfilePhoto(image);
   }
 
   Future<String>getDownloadUrl() async{
     await _storageRepo .getUserProfileImageDownloadUrl(_currentUser.uid);
   }
-
+  Future<String> uploadPropertyApprovalPhoto(File image) async{
+    return await _storageRepo.uploadPropertyApprovalPhotos(image);
+  }
   Future<String>signInWithEmailAndPassword (String email ,String password) async{
     _currentUser =await _authService.signInWithEmailAndPassword(email, password);
     return _currentUser.uid ;
