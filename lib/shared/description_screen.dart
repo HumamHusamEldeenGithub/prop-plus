@@ -7,12 +7,16 @@ import 'package:prop_plus/modules/property_module.dart';
 import 'custom_image_view.dart';
 
 class DetailsScreen extends StatefulWidget {
+  static String path = "/description";
 
-  static String path = "/description" ;
-
-   PropertyModule model  = new PropertyModule(id:0,title:"Luxury hotel",description: "Description - Description ",
-  price:"100", imgSrc:"assets/real-state.jpg", rating:4,location:"Location - location");
-
+  PropertyModule model = new PropertyModule(
+      id: 0,
+      title: "Luxury hotel",
+      description: "Description - Description ",
+      price: "100",
+      imgSrc: "assets/real-state.jpg",
+      rating: 4,
+      location: "Location - location");
 
   @override
   _DetailsScreenState createState() => _DetailsScreenState();
@@ -25,13 +29,15 @@ class _DetailsScreenState extends State<DetailsScreen> {
   void initState() {
     super.initState();
     _scrollController.addListener(() {
-      if (_scrollController.position.userScrollDirection == ScrollDirection.forward) {
+      if (_scrollController.position.userScrollDirection ==
+          ScrollDirection.forward) {
         if (imageVisible) {
           setState(() {
             imageVisible = false;
           });
         }
-      } else if(_scrollController.position.userScrollDirection == ScrollDirection.reverse) {
+      } else if (_scrollController.position.userScrollDirection ==
+          ScrollDirection.reverse) {
         if (!imageVisible) {
           setState(() {
             imageVisible = true;
@@ -43,10 +49,11 @@ class _DetailsScreenState extends State<DetailsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    dynamic module = ModalRoute.of(context).settings.arguments  ;
+
+    dynamic module = ModalRoute.of(context).settings.arguments;
+
     return Scaffold(
       bottomNavigationBar: RaisedButton(
-
         color: MainTheme.mainColor,
         textColor: Colors.white,
         child: Text(
@@ -57,8 +64,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
           vertical: 16.0,
           horizontal: 32.0,
         ),
-        onPressed: () {
-        },
+        onPressed: () {},
       ),
       body: ListView(
         controller: _scrollController,
@@ -66,18 +72,20 @@ class _DetailsScreenState extends State<DetailsScreen> {
           GestureDetector(
             child: AnimatedContainer(
               duration: const Duration(seconds: 1),
-              child: Image.asset(
+              child: Image.network(
                 module.imgSrc,
                 fit: BoxFit.cover,
               ),
               height: imageVisible == true ? 300 : 0,
               width: 600,
             ),
-            onTap: (){
+            onTap: () {
               Navigator.push(
                   context,
-                  MaterialPageRoute(builder:(context) =>ViewImage(imageUrl: module.imgSrc ,))
-              );
+                  MaterialPageRoute(
+                      builder: (context) => ViewImage(
+                            imageUrl: module.imgSrc,
+                          )));
             },
           ),
           Column(
@@ -115,12 +123,12 @@ class _DetailsScreenState extends State<DetailsScreen> {
                         IconButton(
                           icon: favorite
                               ? Icon(
-                            Icons.favorite,
-                            color: MainTheme.mainColor,
-                          )
+                                  Icons.favorite,
+                                  color: MainTheme.mainColor,
+                                )
                               : Icon(
-                            Icons.favorite_border,
-                          ),
+                                  Icons.favorite_border,
+                                ),
                           onPressed: () {
                             setState(() {
                               favorite = !favorite;
@@ -145,15 +153,12 @@ class _DetailsScreenState extends State<DetailsScreen> {
                             Text(
                               "Price".toUpperCase(),
                               style: TextStyle(
-                                  fontWeight: FontWeight.w600,
-                                  fontSize: 14.0),
+                                  fontWeight: FontWeight.w600, fontSize: 14.0),
                             ),
                             SizedBox(
                               height: 5,
                             ),
-                            Text(
-                                module.price
-                            )
+                            Text(module.price)
                           ],
                         ),
                         Column(
@@ -161,8 +166,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                             Text(
                               "Rating".toUpperCase(),
                               style: TextStyle(
-                                  fontWeight: FontWeight.w600,
-                                  fontSize: 14.0),
+                                  fontWeight: FontWeight.w600, fontSize: 14.0),
                             ),
                             SizedBox(
                               height: 5,
@@ -179,15 +183,12 @@ class _DetailsScreenState extends State<DetailsScreen> {
                             Text(
                               "Location".toUpperCase(),
                               style: TextStyle(
-                                  fontWeight: FontWeight.w600,
-                                  fontSize: 14.0),
+                                  fontWeight: FontWeight.w600, fontSize: 14.0),
                             ),
                             SizedBox(
                               height: 5,
                             ),
-                            Text(
-                              "Unknown"
-                            )
+                            Text("Unknown")
                           ],
                         )
                       ],
@@ -217,9 +218,9 @@ class CustomAminitiesCard extends StatelessWidget {
             children: [
               Card(
                   child: Icon(
-                    icon,
-                    size: 30,
-                  )),
+                icon,
+                size: 30,
+              )),
               Text(
                 title,
                 style: TextStyle(fontSize: 12, color: Colors.black),
@@ -254,7 +255,7 @@ class CustomStarBar extends StatelessWidget {
   final double starPadding;
   final double rating;
 
-  CustomStarBar({this.starSize, this.starPadding,this.rating});
+  CustomStarBar({this.starSize, this.starPadding, this.rating});
 
   @override
   Widget build(BuildContext context) {

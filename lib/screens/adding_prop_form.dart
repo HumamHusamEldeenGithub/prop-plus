@@ -19,7 +19,7 @@ class _PropertyInputFormState extends State<PropertyInputForm> {
 
     //TODO : get user's database id and use it here
     //var userId = locater.get<UserController>().currentUser.uid;
-    var userId = 954;
+    var userId = 1;
     print(userId) ;
 
     final response = await http.post(

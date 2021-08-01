@@ -63,6 +63,13 @@ class _SignUpScreenState extends State<SignUpScreen> {
   }
 
   Future<void> createNewUserInDB(String userID) async {
+    print(jsonEncode(<String, String>{
+      'name': _name,
+      'phone': _phone,
+      'email': _email,
+      'firebase_id': userID,
+      'date_of_reg': DateTime.now().toString(),
+    }));
     final response = await http.post(
       Uri.parse('https://propplus-production.herokuapp.com/users'),
       headers: <String, String>{

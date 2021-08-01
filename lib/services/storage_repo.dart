@@ -13,6 +13,7 @@ class StorageRepo{
     var storageRef = storage.ref().child("user/profile/${userId}");
     var uploadTask = await storageRef.putFile(file);
     String downloadURL = await uploadTask.ref.getDownloadURL();
+    print(downloadURL);
     return downloadURL;
   }
 
