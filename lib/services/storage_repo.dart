@@ -2,6 +2,8 @@ import 'dart:io';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'auth_repo.dart';
 import 'locater.dart';
+import 'package:file_support/file_support.dart';
+import 'dart:developer' as developer;
 
 class StorageRepo{
   FirebaseStorage storage =FirebaseStorage.instanceFor(bucket: "gs://propplus-1613c.appspot.com") ;
@@ -13,7 +15,6 @@ class StorageRepo{
     var storageRef = storage.ref().child("users/user_id:${userId}/profile_pic");
     var uploadTask = await storageRef.putFile(file);
     String downloadURL = await uploadTask.ref.getDownloadURL();
-    print(downloadURL);
     return downloadURL;
   }
 
@@ -23,8 +24,9 @@ class StorageRepo{
   }
 
   Future<String> uploadPropertyApprovalPhotos(File file ) async {
+    developer.log(FileSupport().getFileNameWithoutExtension(file));
     var userId = await _authService.getCurrentUID();
-    var storageRef = storage.ref().child("users/user_id:${userId}/approvalPhotos");
+    var storageRef = storage.ref().child("users/user_id:${userId}/approvalPhotos/${FileSupport().getFileNameWithoutExtension(file)}");
     var uploadTask = await storageRef.putFile(file);
     String downloadURL = await uploadTask.ref.getDownloadURL();
     return downloadURL;

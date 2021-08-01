@@ -3,11 +3,12 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:prop_plus/constant/MainTheme.dart';
+import 'package:prop_plus/modules/property_to_approve_model.dart';
 import 'package:prop_plus/services/locater.dart';
 import 'package:prop_plus/services/user_controller.dart';
 import 'package:prop_plus/shared/custom_divider.dart';
 import 'package:http/http.dart' as http;
-
+import 'dart:developer' as developer;
 
 class PropertyInputForm extends StatefulWidget {
   @override
@@ -73,10 +74,10 @@ class _PropertyInputFormState extends State<PropertyInputForm> {
     }
   }
 
-  PropType _propType = PropType.Hotel;
+
   String _title, _description, _location, _phone;
   PickedFile image;
-  List<String>imagesUrls;
+  List<String>imagesUrls=List<String>();
   final formKey = GlobalKey<FormState>();
 
   List<Widget> buildInputTextField() {
@@ -99,6 +100,12 @@ class _PropertyInputFormState extends State<PropertyInputForm> {
     textFields.add(TextFormField(
       onSaved: (value) => _phone = value,
     ));
+    textFields.add(DividerWithText(
+      tag: "Add location ",
+    ));
+    textFields.add(TextFormField(
+      onSaved: (value) => _location = value,
+    ));
     return textFields;
   }
 
@@ -113,14 +120,6 @@ class _PropertyInputFormState extends State<PropertyInputForm> {
           child: Container(
             child: Column(
               children: [
-                Row(
-                  children: [
-                    Text(
-                      "Choose Your Prop Type",
-                      style: TextStyle(fontSize: MainTheme.fontMedium),
-                    ),
-                  ],
-                ),
                 Form(
                   key: formKey,
                   child: Column(
@@ -128,51 +127,42 @@ class _PropertyInputFormState extends State<PropertyInputForm> {
                   ),
                 ),
                 SizedBox(height: 5),
-                RadioListTile<PropType>(
-                  title: const Text('Hotel'),
-                  value: PropType.Hotel,
-                  groupValue: _propType,
-                  onChanged: (PropType value) {
-                    setState(() {
-                      _propType = value;
-                    });
-                  },
-                ),
-                RadioListTile<PropType>(
-                  title: const Text('Property'),
-                  value: PropType.Property,
-                  groupValue: _propType,
-                  onChanged: (PropType value) {
-                    setState(() {
-                      _propType = value;
-                    });
-                  },
-                ),
-                DividerWithText(tag: "Add Pic "),
+
+                DividerWithText(tag: "The Approval Images"),
                 RaisedButton(
                   child: Text("Pick the Images one by one :"),
                   onPressed:()async {
-                    print(imagesUrls.length);
+
                     image = await ImagePicker.platform
                         .pickImage(source: ImageSource.gallery);
                     String imageUrl=await locater
                         .get<UserController>()
                         .uploadPropertyApprovalPhoto(File(image.path));
+                    developer.log(imageUrl);
                     setState(() {
-                     imagesUrls.add(imageUrl);
+                      imagesUrls.add(imageUrl);
                     });
+
 
 
                   },
                 ),
 
                 DividerWithText(tag: ""),
+                ElevatedButton(
+                  child:Text("Check"),
+                  onPressed: (){
+                    developer.log(imagesUrls.length.toString());
+                  },
+                ),
                 RaisedButton(
                   child: Text("Submit"),
                   onPressed: () {
                     final form = formKey.currentState;
                     form.save();
-                    sendApprovalRequest();
+                    // TODO create a propertyToApprove model and send it to httpRequsets.sendApprovalRequest
+
+
                   },
                 )
               ],
@@ -188,4 +178,4 @@ class _PropertyInputFormState extends State<PropertyInputForm> {
 
 }
 
-enum PropType { Property, Hotel }
+
