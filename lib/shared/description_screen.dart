@@ -11,7 +11,7 @@ class DetailsScreen extends StatefulWidget {
   static String path = "/description" ;
 
    PropertyModule model  = new PropertyModule(id:0,title:"Luxury hotel",description: "Description - Description ",
-  price:"100", imgSrc:"assets/real-state.jpg", rating:4,location:"Location - location");
+    price:"100", imgSrc:"assets/real-state.jpg", rating:4,location:"Location - location");
 
 
   @override
@@ -69,7 +69,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
           GestureDetector(
             child: AnimatedContainer(
               duration: const Duration(seconds: 1),
-              child: Image.asset(
+              child: Image.network(
                 module.imgSrc,
                 fit: BoxFit.cover,
               ),
