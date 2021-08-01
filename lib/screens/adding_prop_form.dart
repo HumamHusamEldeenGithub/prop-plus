@@ -8,12 +8,14 @@ import 'package:prop_plus/services/user_controller.dart';
 import 'package:prop_plus/shared/custom_divider.dart';
 import 'package:http/http.dart' as http;
 
+
 class PropertyInputForm extends StatefulWidget {
   @override
   _PropertyInputFormState createState() => _PropertyInputFormState();
 }
 
 class _PropertyInputFormState extends State<PropertyInputForm> {
+
   Future<void> sendApprovalRequest() async {
     print(_title);
 
@@ -72,8 +74,9 @@ class _PropertyInputFormState extends State<PropertyInputForm> {
   }
 
   PropType _propType = PropType.Hotel;
-  String _title, _description, _location, _imageUrl, _phone;
+  String _title, _description, _location, _phone;
   PickedFile image;
+  List<String>imagesUrls;
   final formKey = GlobalKey<FormState>();
 
   List<Widget> buildInputTextField() {
@@ -147,19 +150,22 @@ class _PropertyInputFormState extends State<PropertyInputForm> {
                 ),
                 DividerWithText(tag: "Add Pic "),
                 RaisedButton(
-                  child: Text("Pick Image "),
-                  onPressed: () async {
+                  child: Text("Pick the Images one by one :"),
+                  onPressed:()async {
+                    print(imagesUrls.length);
                     image = await ImagePicker.platform
                         .pickImage(source: ImageSource.gallery);
-                    await locater
+                    String imageUrl=await locater
                         .get<UserController>()
-                        .uploadProfilePicture(File(image.path));
+                        .uploadPropertyApprovalPhoto(File(image.path));
                     setState(() {
-                      _imageUrl =
-                          locater.get<UserController>().currentUser.avatarURl;
+                     imagesUrls.add(imageUrl);
                     });
+
+
                   },
                 ),
+
                 DividerWithText(tag: ""),
                 RaisedButton(
                   child: Text("Submit"),
@@ -176,6 +182,10 @@ class _PropertyInputFormState extends State<PropertyInputForm> {
       ),
     );
   }
+
+
+
+
 }
 
 enum PropType { Property, Hotel }
