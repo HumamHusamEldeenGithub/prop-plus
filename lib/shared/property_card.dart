@@ -5,13 +5,9 @@ import 'package:prop_plus/modules/property_module.dart';
 import 'package:prop_plus/screens/description.dart';
 
 class PropertyCard extends StatefulWidget {
-
-  final PropertyModule module ;
+  final PropertyModule module;
 
   const PropertyCard({Key key, this.module}) : super(key: key);
-
-
-
 
   @override
   _PropertyCardState createState() => _PropertyCardState();
@@ -25,9 +21,10 @@ class _PropertyCardState extends State<PropertyCard> {
     return Padding(
       padding: const EdgeInsets.only(bottom: 20),
       child: GestureDetector(
-      onTap: (){
-      Navigator.pushNamed(context, Description.path,arguments: widget.module) ;
-      },
+        onTap: () {
+          Navigator.pushNamed(context, Description.path,
+              arguments: widget.module);
+        },
         child: Card(
           elevation: 5,
           child: Stack(children: [
@@ -38,7 +35,9 @@ class _PropertyCardState extends State<PropertyCard> {
                 children: [
                   ClipRect(
                       child: Align(
-                    child: Image.network(widget.module.imgSrc),
+                    child: widget.module.imgSrc != null
+                        ? Image.network(widget.module.imgSrc)
+                        : Text("Image"),
                     heightFactor: 0.65,
                   )),
                   Padding(
@@ -58,7 +57,9 @@ class _PropertyCardState extends State<PropertyCard> {
                               height: 3,
                             ),
                             Text(
-                              widget.module.location,
+                              widget.module.location != null
+                                  ? widget.module.location
+                                  : "Location",
                               style: TextStyle(color: Colors.grey[600]),
                             ),
                             SizedBox(

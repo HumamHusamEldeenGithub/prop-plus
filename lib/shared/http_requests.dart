@@ -7,14 +7,22 @@ import 'package:prop_plus/modules/trending_module.dart';
 
 // ignore: camel_case_types
 class HTTP_Requests {
-
   static Future<List> getPropertiesFromDB() async {
     http.Response response;
     response = await http.get(Uri.parse(
-        "https://propplus-production.herokuapp.com/services?full_details"));
+        "https://propplus-production.herokuapp.com/properties/home"));
     var data = jsonDecode(response.body) as List;
     print(data);
-    return data.map((json) => {PropertyModule.fromJson(json)}).toList();
+    List<PropertyModule> list=<PropertyModule>[];
+    for (var i = 0; i < data.length; i++) {
+      var item = PropertyModule.fromJson(data[i]);
+      try {
+        if (item != null) list.add(item);
+      } catch (e) {
+        print(e);
+      }
+    }
+    return list;
   }
 
   static Future<void> sendApprovalRequest() async {
@@ -48,7 +56,7 @@ class HTTP_Requests {
           'Content-Type': 'application/json; charset=UTF-8',
         },
         body: jsonEncode(
-            <String, String>{'property_id': propToApproveId, 'url': '954'}),
+            <String, dynamic>{'property_id': propToApproveId, 'url': ['1','2','3']}),
       );
 
       if (imageResponse.statusCode == 201 || response.statusCode == 200) {
@@ -63,11 +71,9 @@ class HTTP_Requests {
     }
   }
 
-
   static Future<void> addNewServiceToDB(propInfo) async {
     final response = await http.post(
-      Uri.parse(
-          'https://propplus-production.herokuapp.com/services'),
+      Uri.parse('https://propplus-production.herokuapp.com/services'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },
@@ -109,17 +115,16 @@ class HTTP_Requests {
     }
   }
 
-
   // Mock Functions
   static List createPropertyModules() {
-
     List<PropertyModule> propertyModules = <PropertyModule>[];
     propertyModules.add(new PropertyModule(
         id: 0,
         title: "Luxury hotel",
         description: "Description - Description ",
         price: "100",
-        imgSrc: "https://i.pinimg.com/originals/70/0b/65/700b65aa1565bbcb40b68b72ca2df192.jpg",
+        imgSrc:
+            "https://i.pinimg.com/originals/70/0b/65/700b65aa1565bbcb40b68b72ca2df192.jpg",
         rating: 4,
         location: "Location - location"));
     propertyModules.add(new PropertyModule(
@@ -127,7 +132,8 @@ class HTTP_Requests {
         title: "Luxury hotel",
         description: "Description - Description ",
         price: "100",
-        imgSrc: "https://i.pinimg.com/originals/70/0b/65/700b65aa1565bbcb40b68b72ca2df192.jpg",
+        imgSrc:
+            "https://i.pinimg.com/originals/70/0b/65/700b65aa1565bbcb40b68b72ca2df192.jpg",
         rating: 4,
         location: "Location - location"));
     propertyModules.add(new PropertyModule(
@@ -135,7 +141,8 @@ class HTTP_Requests {
         title: "Luxury hotel",
         description: "Description - Description ",
         price: "100",
-        imgSrc:  "https://i.pinimg.com/originals/70/0b/65/700b65aa1565bbcb40b68b72ca2df192.jpg",
+        imgSrc:
+            "https://i.pinimg.com/originals/70/0b/65/700b65aa1565bbcb40b68b72ca2df192.jpg",
         rating: 4,
         location: "Location - location"));
     propertyModules.add(new PropertyModule(
@@ -143,10 +150,11 @@ class HTTP_Requests {
         title: "Luxury hotel",
         description: "Description - Description ",
         price: "100",
-        imgSrc: "https://i.pinimg.com/originals/70/0b/65/700b65aa1565bbcb40b68b72ca2df192.jpg",
+        imgSrc:
+            "https://i.pinimg.com/originals/70/0b/65/700b65aa1565bbcb40b68b72ca2df192.jpg",
         rating: 4,
         location: "Location - location"));
-    return propertyModules ;
+    return propertyModules;
   }
 
   static List createTrendingModules() {
@@ -179,7 +187,7 @@ class HTTP_Requests {
         "assets/real-state.jpg",
         4,
         "Location - location"));
-    return trendingModules ;
+    return trendingModules;
   }
 
   static List createCategoriesModules() {
@@ -192,9 +200,6 @@ class HTTP_Requests {
     categoriesModules.add(new CategoryModel(Icons.hotel, "Hotel4", false));
     categoriesModules.add(new CategoryModel(Icons.hotel, "Hotel4", false));
     categoriesModules.add(new CategoryModel(Icons.hotel, "Hotel4", false));
-    return categoriesModules ;
+    return categoriesModules;
   }
-
-
-
 }
