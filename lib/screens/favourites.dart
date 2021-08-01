@@ -1,6 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:prop_plus/modules/favourite_module.dart';
+import 'package:prop_plus/services/locater.dart';
+import 'package:prop_plus/services/user_controller.dart';
 import 'package:prop_plus/shared/favourite_card.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 

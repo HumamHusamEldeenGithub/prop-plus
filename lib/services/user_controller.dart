@@ -4,6 +4,7 @@ import 'package:prop_plus/modules/user_module.dart';
 import 'package:prop_plus/services/auth_repo.dart';
 import 'package:prop_plus/services/locater.dart';
 import 'package:prop_plus/services/storage_repo.dart';
+import 'package:prop_plus/shared/http_requests.dart';
 
 class UserController{
   UserModule _currentUser;
@@ -13,13 +14,18 @@ class UserController{
 
   UserController(){
     init = InitializeUser();
+    //getUserDBId() ;
   }
 
   Future<UserModule>InitializeUser() async{
      _currentUser = await _authService.getUserModule();
+     _currentUser.dbId = await HTTP_Requests.getUserId(_currentUser.uid);
      return _currentUser;
   }
 
+  Future<void>getUserDBId() async{
+    _currentUser.dbId = await HTTP_Requests.getUserId(_currentUser.uid);
+  }
 
   Future<void> uploadProfilePicture(File image) async{
     _currentUser.avatarURl = await _storageRepo.uploadProfilePhoto(image);

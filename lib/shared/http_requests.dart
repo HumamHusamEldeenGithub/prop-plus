@@ -1,19 +1,22 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:prop_plus/modules/booking_module.dart';
 import 'package:prop_plus/modules/category_module.dart';
 import 'package:prop_plus/modules/property_module.dart';
 import 'package:prop_plus/modules/trending_module.dart';
+import 'package:prop_plus/services/locater.dart';
+import 'package:prop_plus/services/user_controller.dart';
 
 // ignore: camel_case_types
 class HTTP_Requests {
   static Future<List> getPropertiesFromDB() async {
     http.Response response;
-    response = await http.get(Uri.parse(
-        "https://propplus-production.herokuapp.com/properties/home"));
+    response = await http.get(
+        Uri.parse("https://propplus-production.herokuapp.com/properties/home"));
     var data = jsonDecode(response.body) as List;
     print(data);
-    List<PropertyModule> list=<PropertyModule>[];
+    List<PropertyModule> list = <PropertyModule>[];
     for (var i = 0; i < data.length; i++) {
       var item = PropertyModule.fromJson(data[i]);
       try {
@@ -25,9 +28,9 @@ class HTTP_Requests {
     return list;
   }
 
-  static Future<void> sendApprovalRequest() async {
+  static Future<void> sendApprovalRequest(String title,String phone , String description) async {
     //TODO Get the user uuid
-
+    var userId=locater.get<UserController>().currentUser.dbId.toString();
     final response = await http.post(
       Uri.parse(
           'https://propplus-production.herokuapp.com/properties_to_approve'),
@@ -35,10 +38,10 @@ class HTTP_Requests {
         'Content-Type': 'application/json; charset=UTF-8',
       },
       body: jsonEncode(<String, String>{
-        'name': 'Property title',
-        'user_id': '954',
-        'phone': '0954854618',
-        'description': 'Description',
+        'name': title,
+        'user_id': userId,
+        'phone': phone,
+        'description': description,
       }),
     );
 
@@ -47,7 +50,7 @@ class HTTP_Requests {
       // then parse the JSON.
 
       Map<String, dynamic> propToApprove = jsonDecode(response.body);
-      var propToApproveId = propToApprove['user_id'];
+      var propToApproveId = propToApprove['property_id'];
 
       //TODO iterate over all images
       final imageResponse = await http.post(
@@ -56,13 +59,41 @@ class HTTP_Requests {
           'Content-Type': 'application/json; charset=UTF-8',
         },
         body: jsonEncode(
-            <String, dynamic>{'property_id': propToApproveId, 'url': ['1','2','3']}),
+            <String, dynamic>{'property_id': propToApproveId, 'url': "URLS"}),
       );
 
       if (imageResponse.statusCode == 201 || response.statusCode == 200) {
       } else {
         throw Exception('Failed to post to  approval_images table  .');
       }
+      //TODO : return a flag to show succeeded widget
+    } else {
+      // If the server did not return a 201 CREATED response,
+      // then throw an exception.
+      throw Exception('Failed to post to  properties_to_approve table  .');
+    }
+  }
+
+  static Future<void> sendBookRequest(
+      String serviceId, String fromDate, String toDate) async {
+    //TODO : get user's database id
+    String userId = locater.get<UserController>().currentUser.dbId.toString();
+
+    final response = await http.post(
+      Uri.parse('https://propplus-production.herokuapp.com/bookings'),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: jsonEncode(<String, String>{
+        'service_id': serviceId,
+        'user_id': userId,
+        'start_date': fromDate,
+        'end_date': toDate,
+      }),
+    );
+    if (response.statusCode == 201 || response.statusCode == 200) {
+      // If the server did return a 201 CREATED response,
+      // then parse the JSON.
       //TODO : return a flag to show succeeded widget
     } else {
       // If the server did not return a 201 CREATED response,
@@ -87,25 +118,20 @@ class HTTP_Requests {
       Map<String, dynamic> newService = jsonDecode(response.body);
       dynamic newServiceId = newService['id'];
       print("DONE");
-      print(newServiceId);
 
       //TODO iterate over all images
-      // for (image in _imageUrl) {
-      //   final imageResponse = await http.post(
-      //     Uri.parse(
-      //         'https://propplus-production.herokuapp.com/approval_images'),
-      //     headers: <String, String>{
-      //       'Content-Type': 'application/json; charset=UTF-8',
-      //     },
-      //     body: jsonEncode(
-      //         <String, String>{'property_id': propToApproveId, 'url': image.path}),
-      //   );
-      //
-      //   if (imageResponse.statusCode == 201 ||
-      //       response.statusCode == 200) {} else {
-      //     throw Exception('Failed to post to  approval_images table  .');
-      //   }
-      // }
+      final imageResponse = await http.post(
+        Uri.parse('https://propplus-production.herokuapp.com/images'),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
+        body: jsonEncode(
+            <String, dynamic>{'service_id': newServiceId, 'url': "URLS"}),
+      );
+      if (imageResponse.statusCode == 201 || response.statusCode == 200) {
+      } else {
+        throw Exception('Failed to post to  images table  .');
+      }
       //TODO : return a flag to show succeeded widget
     } else {
       // If the server did not return a 201 CREATED response,
@@ -113,6 +139,14 @@ class HTTP_Requests {
       print(response.statusCode);
       throw Exception('Failed to post to  properties_to_approve table  .');
     }
+  }
+  static Future<int> getUserId(String firebaseId) async {
+    http.Response response;
+    response = await http.get(
+        Uri.parse("https://propplus-production.herokuapp.com/users/ByFirebase/"+firebaseId));
+    var data = jsonDecode(response.body) ;
+    print(data);
+    return data['id'];
   }
 
   // Mock Functions
