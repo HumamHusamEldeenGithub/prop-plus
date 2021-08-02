@@ -79,7 +79,6 @@ class _BookingCardState extends State<BookingCard> {
                               style: FavouriteTheme.locationTextStyle,
                             ),
                             RatingBar.builder(
-                              initialRating: widget.module.rating,
                               minRating: 1,
                               direction: Axis.horizontal,
                               allowHalfRating: true,
@@ -101,8 +100,8 @@ class _BookingCardState extends State<BookingCard> {
                           mainAxisAlignment: MainAxisAlignment.center,
                           crossAxisAlignment: CrossAxisAlignment.end,
                           children: [
-                            Text("FROM : "+widget.module.fromDate ,style: FavouriteTheme.locationTextStyle),
-                            Text("TO : "+widget.module.toDate, style: FavouriteTheme.locationTextStyle)
+                            Text("FROM : "+widget.module.fromDate.toString() ,style: FavouriteTheme.locationTextStyle),
+                            Text("TO : "+widget.module.toDate.toString(), style: FavouriteTheme.locationTextStyle)
                           ],
                         ),
                       ],

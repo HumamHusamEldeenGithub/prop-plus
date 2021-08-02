@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:prop_plus/constant/MainTheme.dart';
 import 'package:prop_plus/shared/categories.dart';
-import 'package:prop_plus/shared/property_card.dart';
+import 'package:prop_plus/shared/recommended_card.dart';
 import 'package:prop_plus/shared/trending_card.dart';
 import 'package:prop_plus/constant/CategoryTheme.dart';
 import 'package:prop_plus/main.dart';
@@ -158,7 +158,7 @@ class HomeState extends State<Home> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children:
                 MainWidget.databaseData['PropertyModules'].map((card) {print("hi");print(card.toString());
-                  return PropertyCard(module: card);
+                  return RecommendedCard(module: card);
                 }).toList(),
               ),
             )

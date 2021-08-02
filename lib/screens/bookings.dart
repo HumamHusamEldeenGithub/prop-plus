@@ -37,59 +37,67 @@ class BookingsState extends State<Bookings> {
 
   void createBookingModules() {
     bookingsModules.add(new BookingModule(
-        "Luxury hotel",
-        "Location - location",
-        "100",
-        "assets/real-state.jpg",
-        4,
-        "Location - location",
-        "1/1/2021",
-        "5/1/2021"));
+        id: 1,
+        title: "Luxury hotel",
+        description: "Description - description",
+        price: 100,
+        imgSrc: "assets/real-state.jpg",
+        location: "Location - location",
+        fromDate: DateTime.parse("1/1/2021"),
+        toDate: DateTime.parse("5/1/2021")
+      )
+    );bookingsModules.add(new BookingModule(
+        id: 1,
+        title: "Luxury hotel",
+        description: "Description - description",
+        price: 100,
+        imgSrc: "assets/real-state.jpg",
+        location: "Location - location",
+        fromDate: DateTime.parse("1/1/2021"),
+        toDate: DateTime.parse("5/1/2021")
+      )
+    );bookingsModules.add(new BookingModule(
+        id: 1,
+        title: "Luxury hotel",
+        description: "Description - description",
+        price: 100,
+        imgSrc: "assets/real-state.jpg",
+        location: "Location - location",
+        fromDate: DateTime.parse("1/1/2021"),
+        toDate: DateTime.parse("5/1/2021")
+      )
+    );bookingsModules.add(new BookingModule(
+        id: 1,
+        title: "Luxury hotel",
+        description: "Description - description",
+        price: 100,
+        imgSrc: "assets/real-state.jpg",
+        location: "Location - location",
+        fromDate: DateTime.parse("1/1/2021"),
+        toDate: DateTime.parse("5/1/2021")
+      )
+    );bookingsModules.add(new BookingModule(
+        id: 1,
+        title: "Luxury hotel",
+        description: "Description - description",
+        price: 100,
+        imgSrc: "assets/real-state.jpg",
+        location: "Location - location",
+        fromDate: DateTime.parse("1/1/2021"),
+        toDate: DateTime.parse("5/1/2021")
+      )
+    );
     bookingsModules.add(new BookingModule(
-        "Luxury hotel",
-        "Location - location",
-        "100",
-        "assets/real-state.jpg",
-        4,
-        "Location - location",
-        "1/1/2021",
-        "5/1/2021"));
-    bookingsModules.add(new BookingModule(
-        "Luxury hotel",
-        "Location - location",
-        "100",
-        "assets/real-state.jpg",
-        4,
-        "Location - location",
-        "1/1/2021",
-        "5/1/2021"));
-    bookingsModules.add(new BookingModule(
-        "Luxury hotel",
-        "Location - location",
-        "100",
-        "assets/real-state.jpg",
-        4,
-        "Location - location",
-        "1/1/2021",
-        "5/1/2021"));
-    bookingsModules.add(new BookingModule(
-        "Luxury hotel",
-        "Location - location",
-        "100",
-        "assets/real-state.jpg",
-        4,
-        "Location - location",
-        "1/1/2021",
-        "5/1/2021"));
-    bookingsModules.add(new BookingModule(
-        "Luxury hotel",
-        "Location - location",
-        "100",
-        "assets/real-state.jpg",
-        4,
-        "Location - location",
-        "1/1/2021",
-        "5/1/2021"));
+        id: 1,
+        title: "Luxury hotel",
+        description: "Description - description",
+        price: 100,
+        imgSrc: "assets/real-state.jpg",
+        location: "Location - location",
+        fromDate: DateTime.parse("1/1/2021"),
+        toDate: DateTime.parse("5/1/2021")
+      )
+    );
   }
 
   @override
@@ -141,7 +149,7 @@ class BookingsState extends State<Bookings> {
             }).toList(),
           ),
         ),
-      ) ,
+      ),
     );
   }
 }

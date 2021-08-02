@@ -3,9 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:prop_plus/modules/booking_module.dart';
 import 'package:prop_plus/modules/category_module.dart';
+import 'package:prop_plus/modules/main_module.dart';
 import 'package:prop_plus/modules/property_module.dart';
 import 'package:prop_plus/modules/property_to_approve_model.dart';
-import 'package:prop_plus/modules/trending_module.dart';
+import 'package:prop_plus/modules/service_module.dart';
 import 'package:prop_plus/services/locater.dart';
 import 'package:prop_plus/services/user_controller.dart';
 import 'dart:developer' as developer;
@@ -18,9 +19,11 @@ class HTTP_Requests {
         Uri.parse("https://propplus-production.herokuapp.com/properties/home"));
     var data = jsonDecode(response.body) as List;
     print(data);
-    List<PropertyModule> list = <PropertyModule>[];
+    List<MainModule> list = <MainModule>[];
     for (var i = 0; i < data.length; i++) {
-      var item = PropertyModule.fromJson(data[i]);
+
+      var property = PropertyModule.fromJson(data[i]);
+      var item = MainModule.fromJson(property,data[i]);
       try {
         if (item != null) list.add(item);
       } catch (e) {
@@ -107,6 +110,39 @@ class HTTP_Requests {
     }
   }
 
+  static Future<List> getAllBookingForService(String serviceId) async {
+    http.Response response;
+    response = await http.get(
+        Uri.parse("https://propplus-production.herokuapp.com/bookings/service_id%22"));
+            var data = jsonDecode(response.body) as List;
+        print(data);
+    List<BookingModule> list = <BookingModule>[];
+    for (var i = 0; i < data.length; i++) {
+      var item = BookingModule.fromJson(data[i]);
+      try {
+        if (item != null) list.add(item);
+      } catch (e) {
+        print(e);
+      }
+    }
+    return list;
+  }
+
+
+
+
+  static Future<ServiceModule> getService(int serviceId,PropertyModule propertyModule) async {
+    http.Response response;
+    response = await http.get(
+        Uri.parse("https://propplus-production.herokuapp.com/services/" + serviceId.toString()));
+    var data = jsonDecode(response.body) as List;
+    print(data);
+    ServiceModule module;
+      var item = ServiceModule.fromJson(data[0],propertyModule);
+    return item;
+  }
+
+
   static Future<void> addNewServiceToDB(propInfo) async {
     final response = await http.post(
       Uri.parse('https://propplus-production.herokuapp.com/services'),
@@ -154,7 +190,10 @@ class HTTP_Requests {
     return data['id'];
   }
 
+
+
   // Mock Functions
+  /*
   static List createPropertyModules() {
     List<PropertyModule> propertyModules = <PropertyModule>[];
     propertyModules.add(new PropertyModule(
@@ -229,6 +268,7 @@ class HTTP_Requests {
     return trendingModules;
   }
 
+  */
   static List createCategoriesModules() {
     List<CategoryModel> categoriesModules = <CategoryModel>[];
     categoriesModules.add(new CategoryModel(Icons.hotel, "Hotel", false));
