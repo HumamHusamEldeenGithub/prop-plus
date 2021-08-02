@@ -5,7 +5,7 @@ import 'package:prop_plus/constant/MainTheme.dart';
 import 'package:prop_plus/screens/add_new_service_screen.dart';
 import 'package:prop_plus/screens/adding_prop_form.dart';
 import 'package:prop_plus/screens/anonymous_loading_screen.dart';
-import 'package:prop_plus/screens/description.dart';
+import 'package:prop_plus/screens/booking_calender_screen.dart';
 import 'package:prop_plus/screens/explore.dart';
 import 'package:prop_plus/screens/my_properties.dart';
 import 'package:prop_plus/screens/home.dart';
@@ -62,6 +62,8 @@ class MyApp extends StatelessWidget {
           '/description' : (BuildContext context) => DetailsScreen(),
           '/my_property_description' : (BuildContext context) => MyProperties_DetailsScreen(),
           '/add_new_service' : (BuildContext context) => AddNewServiceScreen(),
+
+          '/booking_calender_screen' : (BuildContext context) => BookingCalenderScreen(),
         },
       ),
     );
@@ -123,8 +125,11 @@ class _MainWidgetState extends State<MainWidget> {
   Future<void> _getDataFromDB() async {
     MainWidget.databaseData['PropertyModules'] =
         await HTTP_Requests.getPropertiesFromDB();
+    /*
     MainWidget.databaseData['TrendingModules'] =
         await HTTP_Requests.createTrendingModules();
+
+     */
     MainWidget.databaseData['CategoriesModules'] =
         await HTTP_Requests.createCategoriesModules();
 
@@ -196,6 +201,7 @@ class _MainWidgetState extends State<MainWidget> {
                   icon: Icons.person,
                   text: 'Profile',
                 ),
+
               ],
               selectedIndex: _selectedIndex,
               onTabChange: (index) {

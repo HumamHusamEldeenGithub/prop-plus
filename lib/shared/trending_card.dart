@@ -1,14 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:prop_plus/constant/MainTheme.dart';
 import 'package:prop_plus/constant/TrendingTheme.dart';
-import 'package:prop_plus/modules/property_module.dart';
-import 'package:prop_plus/modules/trending_module.dart';
+import 'package:prop_plus/modules/main_module.dart';
 import 'package:prop_plus/screens/description.dart';
 
 
 class TrendingCard extends StatefulWidget {
 
-  final TrendingModule module ;
+  final MainModule module ;
 
   const TrendingCard({Key key, this.module}) : super(key: key);
 
@@ -74,7 +73,7 @@ class _TrendingCardState extends State<TrendingCard> {
                             height: 5,
                           ),
                           Text(
-                            widget.module.title,
+                            widget.module.propertyModule.title,
                             style: TrendingTheme.titleTextStyle,
                           ),
                           Row(
@@ -109,7 +108,7 @@ class _TrendingCardState extends State<TrendingCard> {
                             ],
                           ),
                           Text(
-                            widget.module.location,
+                            widget.module.propertyModule.location,
                             style: TrendingTheme.locationTextStyle,
                           ),
                           SizedBox(

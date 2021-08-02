@@ -3,16 +3,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:prop_plus/constant/MainTheme.dart';
-import 'package:prop_plus/modules/property_module.dart';
+import 'package:prop_plus/modules/service_module.dart';
+import 'package:prop_plus/screens/booking_calender_screen.dart';
 import 'custom_image_view.dart';
+import 'http_requests.dart';
 
 class DetailsScreen extends StatefulWidget {
 
   static String path = "/description" ;
-
-   PropertyModule model  = new PropertyModule(id:0,title:"Luxury hotel",description: "Description - Description ",
-    price:"100", imgSrc:"assets/real-state.jpg", rating:4,location:"Location - location");
-
 
   @override
   _DetailsScreenState createState() => _DetailsScreenState();
@@ -20,8 +18,16 @@ class DetailsScreen extends StatefulWidget {
 
 class _DetailsScreenState extends State<DetailsScreen> {
   ScrollController _scrollController = ScrollController();
+  ServiceModule serviceModule;
   bool imageVisible = true;
   bool favorite = false;
+  bool initialized = false;
+  Future<void> loadService(dynamic prevModule) async{
+    serviceModule = await HTTP_Requests.getService(prevModule.service_id,prevModule.propertyModule);
+    initialized = true;
+    setState(() {});
+  }
+
   void initState() {
     super.initState();
     _scrollController.addListener(() {
@@ -43,24 +49,28 @@ class _DetailsScreenState extends State<DetailsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    dynamic module = ModalRoute.of(context).settings.arguments  ;
+    dynamic prevModule = ModalRoute.of(context).settings.arguments  ;
+    if(!initialized)
+      loadService(prevModule);
     double width = MediaQuery. of(context). size. width;
     double height = MediaQuery. of(context). size. height;
 
     return Scaffold(
-      bottomNavigationBar: RaisedButton(
-
-        color: MainTheme.mainColor,
-        textColor: Colors.white,
+      bottomNavigationBar: ElevatedButton(
+        style: ButtonStyle(
+          backgroundColor: MaterialStateProperty.all<Color>(MainTheme.mainColor),
+          textStyle: MaterialStateProperty.all<TextStyle>(TextStyle(
+            color: Colors.white,
+            )
+          ),
+        ),
         child: Text(
           "Book Now",
           style: TextStyle(fontWeight: FontWeight.normal),
         ),
-        padding: const EdgeInsets.symmetric(
-          vertical: 16.0,
-          horizontal: 32.0,
-        ),
         onPressed: () {
+          Navigator.pushNamed(context, BookingCalenderScreen.path,
+              arguments: serviceModule);
         },
       ),
       body: ListView(
@@ -70,7 +80,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
             child: AnimatedContainer(
               duration: const Duration(seconds: 1),
               child: Image.network(
-                module.imgSrc,
+                prevModule.imgSrc,
                 fit: BoxFit.cover,
               ),
               height: imageVisible == true ? height * 0.4 : 0,
@@ -80,7 +90,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
             onTap: (){
               Navigator.push(
                   context,
-                  MaterialPageRoute(builder:(context) =>ViewImage(imageUrl: module.imgSrc ,))
+                  MaterialPageRoute(builder:(context) =>ViewImage(imageUrl: prevModule.imgSrc ,))
               );
             },
           ),
@@ -104,7 +114,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                             Padding(
                               padding: const EdgeInsets.only(left: 5),
                               child: Text(
-                                module.title,
+                                prevModule.propertyModule.title,
                                 style: TextStyle(
                                     color: Colors.black,
                                     fontSize: 20.0,
@@ -135,7 +145,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                     ),
                     const SizedBox(height: 10.0),
                     Text(
-                      module.description,
+                      serviceModule!=null? serviceModule.description: "",
                       textAlign: TextAlign.justify,
                       style: TextStyle(
                           fontWeight: FontWeight.w300, fontSize: 14.0),
@@ -156,7 +166,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                               height: 5,
                             ),
                             Text(
-                                module.price
+                                prevModule.price.toString()
                             )
                           ],
                         ),
@@ -174,7 +184,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                             CustomStarBar(
                               starSize: 12,
                               starPadding: 0.6,
-                              rating: module.rating,
+                              rating: prevModule.propertyModule.rating,
                             ),
                           ],
                         ),

@@ -2,18 +2,19 @@ import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:prop_plus/constant/MainTheme.dart';
 import 'package:prop_plus/modules/property_module.dart';
+import 'package:prop_plus/modules/main_module.dart';
 import 'package:prop_plus/screens/description.dart';
 
-class PropertyCard extends StatefulWidget {
-  final PropertyModule module;
+class RecommendedCard extends StatefulWidget {
+  final MainModule module;
 
-  const PropertyCard({Key key, this.module}) : super(key: key);
+  const RecommendedCard({Key key, this.module}) : super(key: key);
 
   @override
-  _PropertyCardState createState() => _PropertyCardState();
+  _RecommendedCardState createState() => _RecommendedCardState();
 }
 
-class _PropertyCardState extends State<PropertyCard> {
+class _RecommendedCardState extends State<RecommendedCard> {
   bool favorite = false;
 
   @override
@@ -49,7 +50,7 @@ class _PropertyCardState extends State<PropertyCard> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              widget.module.title,
+                              widget.module.propertyModule.title,
                               style: TextStyle(
                                   fontWeight: FontWeight.bold, fontSize: 20),
                             ),
@@ -57,8 +58,8 @@ class _PropertyCardState extends State<PropertyCard> {
                               height: 3,
                             ),
                             Text(
-                              widget.module.location != null
-                                  ? widget.module.location
+                              widget.module.propertyModule.location != null
+                                  ? widget.module.propertyModule.location
                                   : "Location",
                               style: TextStyle(color: Colors.grey[600]),
                             ),
@@ -68,7 +69,7 @@ class _PropertyCardState extends State<PropertyCard> {
                             Row(
                               children: [
                                 RatingBar.builder(
-                                  initialRating: widget.module.rating,
+                                  initialRating: widget.module.propertyModule.rating,
                                   minRating: 1,
                                   direction: Axis.horizontal,
                                   allowHalfRating: true,
@@ -85,7 +86,7 @@ class _PropertyCardState extends State<PropertyCard> {
                                   },
                                 ),
                                 Text(
-                                  "${widget.module.rating} reviews",
+                                  "${widget.module.propertyModule.rating} reviews",
                                   style: TextStyle(color: Colors.grey[600]),
                                 )
                               ],

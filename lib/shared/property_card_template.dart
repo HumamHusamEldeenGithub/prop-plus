@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:prop_plus/constant/MainTheme.dart';
 import 'package:prop_plus/constant/RealStateTheme.dart';
-import 'package:prop_plus/modules/property_module.dart';
+import 'package:prop_plus/modules/main_module.dart';
 import 'package:prop_plus/screens/description.dart';
 
 class PropertyCard extends StatefulWidget {
 
-  final PropertyModule module ;
+  final MainModule module ;
 
   const PropertyCard({Key key, this.module}) : super(key: key);
 
@@ -65,14 +65,14 @@ class _PropertyCardState extends State<PropertyCard> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                widget.module.title,
+                                widget.module.propertyModule.title,
                                 style: RealStateTheme.titleTextStyle,
                               ),
                               SizedBox(
                                 height: 3,
                               ),
                               Text(
-                                widget.module.location,
+                                widget.module.propertyModule.location,
                                 style: RealStateTheme.locationTextStyle,
                               ),
                               SizedBox(
@@ -82,7 +82,7 @@ class _PropertyCardState extends State<PropertyCard> {
                                 children: [
                                   RatingBar.builder(
                                     ignoreGestures: true,
-                                    initialRating: widget.module.rating,
+                                    initialRating: widget.module.propertyModule.rating,
                                     minRating: 1,
                                     direction: Axis.horizontal,
                                     allowHalfRating: true,
@@ -99,7 +99,7 @@ class _PropertyCardState extends State<PropertyCard> {
                                     },
                                   ),
                                   Text(
-                                    "${widget.module.rating} reviews",
+                                    "${widget.module.propertyModule.rating} reviews",
                                     style: RealStateTheme.reviewTextStyle,
                                   )
                                 ],
