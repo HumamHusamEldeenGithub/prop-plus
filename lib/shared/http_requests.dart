@@ -4,9 +4,11 @@ import 'package:http/http.dart' as http;
 import 'package:prop_plus/modules/booking_module.dart';
 import 'package:prop_plus/modules/category_module.dart';
 import 'package:prop_plus/modules/property_module.dart';
+import 'package:prop_plus/modules/property_to_approve_model.dart';
 import 'package:prop_plus/modules/trending_module.dart';
 import 'package:prop_plus/services/locater.dart';
 import 'package:prop_plus/services/user_controller.dart';
+import 'dart:developer' as developer;
 
 // ignore: camel_case_types
 class HTTP_Requests {
@@ -28,9 +30,10 @@ class HTTP_Requests {
     return list;
   }
 
-  static Future<void> sendApprovalRequest(String title,String phone , String description) async {
+  static Future<void> sendApprovalRequest(PropertyToApprove model) async {
     //TODO Get the user uuid
-    var userId=locater.get<UserController>().currentUser.dbId.toString();
+   // var userId=locater.get<UserController>().currentUser.dbId.toString();
+    developer.log(model.approvalImagesUrls.toString());
     final response = await http.post(
       Uri.parse(
           'https://propplus-production.herokuapp.com/properties_to_approve'),
@@ -38,10 +41,10 @@ class HTTP_Requests {
         'Content-Type': 'application/json; charset=UTF-8',
       },
       body: jsonEncode(<String, String>{
-        'name': title,
-        'user_id': userId,
-        'phone': phone,
-        'description': description,
+        'name': model.title,
+        'user_id': model.user_id.toString(),
+        'phone': model.phone,
+        'description': model.description,
       }),
     );
 
@@ -61,7 +64,7 @@ class HTTP_Requests {
           'Content-Type': 'application/json; charset=UTF-8',
         },
         body: jsonEncode(
-            <String, dynamic>{'property_id': propToApproveId, 'url': "URLS"}),
+            <String, dynamic>{'property_id': propToApproveId, 'url': model.approvalImagesUrls.toString()}),
       );
 
       if (imageResponse.statusCode == 201 || response.statusCode == 200) {

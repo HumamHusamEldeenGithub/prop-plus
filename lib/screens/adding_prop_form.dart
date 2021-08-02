@@ -9,6 +9,9 @@ import 'package:prop_plus/services/user_controller.dart';
 import 'package:prop_plus/shared/custom_divider.dart';
 import 'package:http/http.dart' as http;
 import 'dart:developer' as developer;
+import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:prop_plus/shared/http_requests.dart';
+import 'package:prop_plus/shared/loading_widget.dart';
 
 class PropertyInputForm extends StatefulWidget {
   @override
@@ -16,14 +19,13 @@ class PropertyInputForm extends StatefulWidget {
 }
 
 class _PropertyInputFormState extends State<PropertyInputForm> {
-
-  Future<void> sendApprovalRequest() async {
+  /*Future<void> sendApprovalRequest() async {
     print(_title);
 
     //TODO : get user's database id and use it here
     //var userId = locater.get<UserController>().currentUser.uid;
     var userId = 1;
-    print(userId) ;
+    print(userId);
 
     final response = await http.post(
       Uri.parse(
@@ -72,12 +74,12 @@ class _PropertyInputFormState extends State<PropertyInputForm> {
       print(response.statusCode);
       throw Exception('Failed to post to  properties_to_approve table  .');
     }
-  }
-
+  }*/
 
   String _title, _description, _location, _phone;
   PickedFile image;
-  List<String>imagesUrls=List<String>();
+  List<String> imagesUrls = List<String>();
+  bool loading = false;
   final formKey = GlobalKey<FormState>();
 
   List<Widget> buildInputTextField() {
@@ -111,71 +113,78 @@ class _PropertyInputFormState extends State<PropertyInputForm> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text("Add the information of your Prop"),
-      ),
-      body: SingleChildScrollView(
-        child: SafeArea(
-          child: Container(
-            child: Column(
-              children: [
-                Form(
-                  key: formKey,
+    return loading
+        ? Loading()
+        : Scaffold(
+            appBar: AppBar(
+              title: Text("Add the information of your Prop"),
+            ),
+            body: SingleChildScrollView(
+              child: SafeArea(
+                child: Container(
                   child: Column(
-                    children: buildInputTextField(),
+                    children: [
+                      Form(
+                        key: formKey,
+                        child: Column(
+                          children: buildInputTextField(),
+                        ),
+                      ),
+                      SizedBox(height: 5),
+                      DividerWithText(tag: "The Approval Images"),
+                      RaisedButton(
+                        child: Text("Pick the Images one by one :"),
+                        onPressed: () async {
+                          image = await ImagePicker.platform
+                              .pickImage(source: ImageSource.gallery);
+                          setState(() {
+                            loading = true;
+                          });
+                          String imageUrl = await locater
+                              .get<UserController>()
+                              .uploadPropertyApprovalPhoto(File(image.path));
+                          developer.log(imageUrl);
+                          setState(() {
+                            imagesUrls.add(imageUrl);
+                            loading = false;
+                          });
+                        },
+                      ),
+                      DividerWithText(tag: ""),
+                      ElevatedButton(
+                        child: Text("Check"),
+                        onPressed: () {
+                          developer.log(imagesUrls.length.toString());
+                        },
+                      ),
+                      RaisedButton(
+                        child: Text("Submit"),
+                        onPressed: () {
+                          final form = formKey.currentState;
+                          form.save();
+                          // TODO create a propertyToApprove model and send it to httpRequsets.sendApprovalRequest
+
+                          PropertyToApprove model =
+                              new PropertyToApprove(
+                                  user_id: locater<UserController>()
+                                      .currentUser
+                                      .dbId,
+                                  title: _title,
+                                  phone: _phone,
+                                  location: _location,
+                                  description: _description,
+                                  approvalImagesUrls: imagesUrls);
+                          HTTP_Requests.sendApprovalRequest(model);
+
+                          
+                        },
+                        
+                      )
+                    ],
                   ),
                 ),
-                SizedBox(height: 5),
-
-                DividerWithText(tag: "The Approval Images"),
-                RaisedButton(
-                  child: Text("Pick the Images one by one :"),
-                  onPressed:()async {
-
-                    image = await ImagePicker.platform
-                        .pickImage(source: ImageSource.gallery);
-                    String imageUrl=await locater
-                        .get<UserController>()
-                        .uploadPropertyApprovalPhoto(File(image.path));
-                    developer.log(imageUrl);
-                    setState(() {
-                      imagesUrls.add(imageUrl);
-                    });
-
-
-
-                  },
-                ),
-
-                DividerWithText(tag: ""),
-                ElevatedButton(
-                  child:Text("Check"),
-                  onPressed: (){
-                    developer.log(imagesUrls.length.toString());
-                  },
-                ),
-                RaisedButton(
-                  child: Text("Submit"),
-                  onPressed: () {
-                    final form = formKey.currentState;
-                    form.save();
-                    // TODO create a propertyToApprove model and send it to httpRequsets.sendApprovalRequest
-
-
-                  },
-                )
-              ],
+              ),
             ),
-          ),
-        ),
-      ),
-    );
+          );
   }
-
-
-
-
 }
-
-
