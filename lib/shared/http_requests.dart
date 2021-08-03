@@ -34,9 +34,7 @@ class HTTP_Requests {
   }
 
   static Future<void> sendApprovalRequest(PropertyToApprove model) async {
-    //TODO Get the user uuid
-   // var userId=locater.get<UserController>().currentUser.dbId.toString();
-    developer.log(model.approvalImagesUrls.toString());
+
     final response = await http.post(
       Uri.parse(
           'https://propplus-production.herokuapp.com/properties_to_approve'),
@@ -54,12 +52,22 @@ class HTTP_Requests {
     if (response.statusCode == 201 || response.statusCode == 200) {
       // If the server did return a 201 CREATED response,
       // then parse the JSON.
-
+      developer.log("1");
       Map<String, dynamic> propToApprove = jsonDecode(response.body);
 
-      var propToApproveId = propToApprove['property_id'];
+      var propToApproveId = propToApprove['id'];
 
-
+      ///////////////////////
+      //Template
+      //iterate over all photos url and create a string of urls to send it 
+      String jsonUrls = "";
+      for(int i=0;i<model.approvalImagesUrls.length;i++){
+        jsonUrls+=model.approvalImagesUrls.elementAt(i);
+        if(i+1!=model.approvalImagesUrls.length)
+        jsonUrls+=",";
+      }
+      developer.log(jsonUrls);
+      //////////////////////
       //TODO iterate over all images
       final imageResponse = await http.post(
         Uri.parse('https://propplus-production.herokuapp.com/approval_images'),
@@ -67,10 +75,11 @@ class HTTP_Requests {
           'Content-Type': 'application/json; charset=UTF-8',
         },
         body: jsonEncode(
-            <String, dynamic>{'property_id': propToApproveId, 'url': model.approvalImagesUrls.toString()}),
+            <String, dynamic>{'property_to_approve_id': propToApproveId.toString(), 'url':jsonUrls }),
       );
 
       if (imageResponse.statusCode == 201 || response.statusCode == 200) {
+        developer.log("2");
       } else {
         throw Exception('Failed to post to  approval_images table  .');
       }
