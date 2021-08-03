@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:prop_plus/constant/MainTheme.dart';
 import 'package:prop_plus/modules/booking_module.dart';
 import 'package:prop_plus/modules/service_module.dart';
 import 'package:prop_plus/shared/http_requests.dart';
@@ -14,18 +15,25 @@ class BookingCalender extends StatefulWidget {
 
 class _BookingCalenderState extends State<BookingCalender> {
 
-  List<DateTime> blackOutDates;
+  List<DateTime> blackOutDates = <DateTime>[];
   List<BookingModule> bookingModules;
 
-  void initailizeBlackOuts() async{
-    bookingModules = await HTTP_Requests.getAllBookingForService(widget.serviceModule.id.toString());
+  Future<List<DateTime>> initailizeBlackOuts() async{
+    List<DateTime> curBlackOutDates = <DateTime>[];
+    bookingModules = await HTTP_Requests.getAllBookingForService(3.toString());
+    debugPrint(bookingModules.length.toString());
     for(int i = 0;i < bookingModules.length;i++) {
       for (int j = 0; j <= bookingModules[i].toDate
           .difference(bookingModules[i].fromDate)
           .inDays; j++) {
-        blackOutDates.add(bookingModules[i].fromDate.add(Duration(days: j)));
+        curBlackOutDates.add(bookingModules[i].fromDate.add(Duration(days: j)));
       }
     }
+    debugPrint(curBlackOutDates.length.toString());
+    for(int i = 0;i < curBlackOutDates.length;i++){
+      debugPrint(curBlackOutDates[i].toString());
+    }
+    return curBlackOutDates;
   }
 
 
@@ -34,9 +42,32 @@ class _BookingCalenderState extends State<BookingCalender> {
   }
 
   @override
+  void initState() {
+    super.initState();
+    initailizeBlackOuts().then((value) {
+      setState(() {
+        blackOutDates.addAll(value);
+      });
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
-    //initailizeBlackOuts();
-    return BookingCalender(serviceModule: widget.serviceModule,
+    return Scaffold(
+        body: SfDateRangePicker(
+          monthCellStyle: DateRangePickerMonthCellStyle(
+            cellDecoration: BoxDecoration(
+              color: Colors.white
+            ),
+            blackoutDateTextStyle: TextStyle(
+              color: MainTheme.greyFontColor
+            )
+          ),
+          monthViewSettings: DateRangePickerMonthViewSettings(
+            blackoutDates: blackOutDates,
+          ),
+          onSelectionChanged: onSelectionChanged,
+        )
     );
   }
 }

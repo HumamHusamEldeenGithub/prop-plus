@@ -110,7 +110,7 @@ class HTTP_Requests {
   static Future<List> getAllBookingForService(String serviceId) async {
     http.Response response;
     response = await http.get(
-        Uri.parse("https://propplus-production.herokuapp.com/bookings/service_id%22"));
+        Uri.parse("https://propplus-production.herokuapp.com/bookings/service_id/" + serviceId));
             var data = jsonDecode(response.body) as List;
         print(data);
     List<BookingModule> list = <BookingModule>[];
@@ -132,10 +132,10 @@ class HTTP_Requests {
     http.Response response;
     response = await http.get(
         Uri.parse("https://propplus-production.herokuapp.com/services/" + serviceId.toString()));
-    var data = jsonDecode(response.body) as List;
+    var data = jsonDecode(response.body);
     print(data);
     ServiceModule module;
-      var item = ServiceModule.fromJson(data[0],propertyModule);
+      var item = ServiceModule.fromJson(data,propertyModule);
     return item;
   }
 
