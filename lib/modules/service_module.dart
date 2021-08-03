@@ -14,7 +14,7 @@ class ServiceModule {
           propertyModule: propertyModule,
           id: int.parse(json['id']?.toString()),
           description: json['description']?.toString(),
-          price: double.parse(json['price']?.toString()));
+          price: double.parse(json['price_per_night']?.toString()));
     } catch (e) {
       return null;
     }
