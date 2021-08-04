@@ -10,7 +10,7 @@ import 'package:prop_plus/screens/description.dart';
 
 
 class BookingCard extends StatefulWidget {
-  final BookingModule module ;
+  final dynamic module ;
   const BookingCard({Key key,this.module}) : super(key: key);
 
   @override

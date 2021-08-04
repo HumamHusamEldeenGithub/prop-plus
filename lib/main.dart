@@ -4,6 +4,7 @@ import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:prop_plus/constant/MainTheme.dart';
 import 'package:prop_plus/screens/add_new_service_screen.dart';
 import 'package:prop_plus/screens/adding_prop_form.dart';
+import 'package:prop_plus/screens/all_services.dart';
 import 'package:prop_plus/screens/anonymous_loading_screen.dart';
 import 'package:prop_plus/screens/booking_calender_screen.dart';
 import 'package:prop_plus/screens/explore.dart';
@@ -62,8 +63,8 @@ class MyApp extends StatelessWidget {
           '/description' : (BuildContext context) => DetailsScreen(),
           '/my_property_description' : (BuildContext context) => MyProperties_DetailsScreen(),
           '/add_new_service' : (BuildContext context) => AddNewServiceScreen(),
-
           '/booking_calender_screen' : (BuildContext context) => BookingCalenderScreen(),
+          '/all_services' : (BuildContext context) => AllServices(),
         },
       ),
     );

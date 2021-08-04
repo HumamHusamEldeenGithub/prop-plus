@@ -6,13 +6,6 @@ import 'package:prop_plus/services/user_controller.dart';
 import 'package:prop_plus/shared/favourite_card.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
-// new TrendingModule(
-// "Luxury hotel",
-// "Location - location",
-// "100",
-// "assets/real-state.jpg",
-// 4,
-// "Location - location"));
 
 class Favourites extends StatefulWidget {
   Favourites({Key key}) : super(key: key);

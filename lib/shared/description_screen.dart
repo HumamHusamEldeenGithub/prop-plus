@@ -4,13 +4,13 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:prop_plus/constant/MainTheme.dart';
 import 'package:prop_plus/modules/service_module.dart';
+import 'package:prop_plus/screens/all_services.dart';
 import 'package:prop_plus/screens/booking_calender_screen.dart';
 import 'custom_image_view.dart';
 import 'http_requests.dart';
 
 class DetailsScreen extends StatefulWidget {
-
-  static String path = "/description" ;
+  static String path = "/description";
 
   @override
   _DetailsScreenState createState() => _DetailsScreenState();
@@ -22,22 +22,24 @@ class _DetailsScreenState extends State<DetailsScreen> {
   bool imageVisible = true;
   bool favorite = false;
   bool initialized = false;
-  Future<void> loadService(dynamic prevModule) async{
-    serviceModule = await HTTP_Requests.getService(prevModule.service_id,prevModule.propertyModule);
-    initialized = true;
-    setState(() {});
+  Future<ServiceModule> loadService(dynamic prevModule) async {
+    serviceModule = await HTTP_Requests.getService(
+        prevModule.service_id, prevModule.propertyModule);
+    return serviceModule;
   }
 
   void initState() {
     super.initState();
     _scrollController.addListener(() {
-      if (_scrollController.position.userScrollDirection == ScrollDirection.forward) {
+      if (_scrollController.position.userScrollDirection ==
+          ScrollDirection.forward) {
         if (imageVisible) {
           setState(() {
             imageVisible = false;
           });
         }
-      } else if(_scrollController.position.userScrollDirection == ScrollDirection.reverse) {
+      } else if (_scrollController.position.userScrollDirection ==
+          ScrollDirection.reverse) {
         if (!imageVisible) {
           setState(() {
             imageVisible = true;
@@ -49,170 +51,186 @@ class _DetailsScreenState extends State<DetailsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    dynamic prevModule = ModalRoute.of(context).settings.arguments  ;
-    if(!initialized)
-      loadService(prevModule);
-    double width = MediaQuery. of(context). size. width;
-    double height = MediaQuery. of(context). size. height;
+    dynamic prevModule = ModalRoute.of(context).settings.arguments;
+    if (!initialized) loadService(prevModule);
+    double width = MediaQuery.of(context).size.width;
+    double height = MediaQuery.of(context).size.height;
 
-    return Scaffold(
-      bottomNavigationBar: ElevatedButton(
-        style: ButtonStyle(
-          backgroundColor: MaterialStateProperty.all<Color>(MainTheme.mainColor),
-          textStyle: MaterialStateProperty.all<TextStyle>(TextStyle(
-            color: Colors.white,
-            )
-          ),
-        ),
-        child: Text(
-          "Book Now",
-          style: TextStyle(fontWeight: FontWeight.normal),
-        ),
-        onPressed: () {
-          Navigator.pushNamed(context, BookingCalenderScreen.path,
-              arguments: serviceModule);
-        },
-      ),
-      body: ListView(
-        controller: _scrollController,
-        children: [
-          GestureDetector(
-            child: AnimatedContainer(
-              duration: const Duration(seconds: 1),
-              child: Image.network(
-                prevModule.imgSrc,
-                fit: BoxFit.cover,
-              ),
-              height: imageVisible == true ? height * 0.4 : 0,
-              width: width,
-
+    return FutureBuilder(
+      future: loadService(prevModule),
+      builder: (context, snapshot) {
+        print(snapshot);
+        if (snapshot.data == null) {
+          return Scaffold(body: Center(child: CircularProgressIndicator()));
+        }
+        return Scaffold(
+          bottomNavigationBar: ElevatedButton(
+            style: ButtonStyle(
+              backgroundColor:
+                  MaterialStateProperty.all<Color>(MainTheme.mainColor),
+              textStyle: MaterialStateProperty.all<TextStyle>(TextStyle(
+                color: Colors.white,
+              )),
             ),
-            onTap: (){
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(builder:(context) =>ViewImage(imageUrl: prevModule.imgSrc ,))
-              );
+            child: Text(
+              "Book Now",
+              style: TextStyle(fontWeight: FontWeight.normal),
+            ),
+            onPressed: () {
+              Navigator.pushNamed(context, BookingCalenderScreen.path,
+                  arguments: serviceModule);
             },
           ),
-          Column(
-            mainAxisAlignment: MainAxisAlignment.start,
+          body: ListView(
+            controller: _scrollController,
             children: [
-              Container(
-                padding: const EdgeInsets.all(10),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(20),
-                  color: Colors.white,
+              GestureDetector(
+                child: AnimatedContainer(
+                  duration: const Duration(seconds: 1),
+                  child: Image.network(
+                    prevModule.imgSrc,
+                    fit: BoxFit.cover,
+                  ),
+                  height: imageVisible == true ? height * 0.4 : 0,
+                  width: width,
                 ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Row(
-                      children: [
-                        Column(
-                          children: [
-                            Padding(
-                              padding: const EdgeInsets.only(left: 5),
-                              child: Text(
-                                prevModule.propertyModule.title,
-                                style: TextStyle(
-                                    color: Colors.black,
-                                    fontSize: 20.0,
-                                    fontWeight: FontWeight.bold),
-                              ),
-                            ),
-                          ],
-                        ),
-                        SizedBox(
-                          width: 0.45 * width ,
-                        ),
-                        IconButton(
-                          icon: favorite
-                              ? Icon(
-                            Icons.favorite,
-                            color: MainTheme.mainColor,
-                          )
-                              : Icon(
-                            Icons.favorite_border,
-                          ),
-                          onPressed: () {
-                            setState(() {
-                              favorite = !favorite;
-                            });
-                          },
-                        )
-                      ],
+                onTap: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => ViewImage(
+                                imageUrl: prevModule.imgSrc,
+                              )));
+                },
+              ),
+              Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Container(
+                    padding: const EdgeInsets.all(10),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(20),
+                      color: Colors.white,
                     ),
-                    const SizedBox(height: 10.0),
-                    Text(
-                      serviceModule!=null? serviceModule.description: "",
-                      textAlign: TextAlign.justify,
-                      style: TextStyle(
-                          fontWeight: FontWeight.w300, fontSize: 14.0),
-                    ),
-                    const SizedBox(height: 15),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisSize: MainAxisSize.min,
                       children: [
-                        Column(
+                        Row(
                           children: [
-                            Text(
-                              "Price".toUpperCase(),
-                              style: TextStyle(
-                                  fontWeight: FontWeight.w600,
-                                  fontSize: 14.0),
+                            Column(
+                              children: [
+                                Padding(
+                                  padding: const EdgeInsets.only(left: 5),
+                                  child: Text(
+                                    prevModule.propertyModule.title,
+                                    style: TextStyle(
+                                        color: Colors.black,
+                                        fontSize: 20.0,
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                ),
+                              ],
                             ),
                             SizedBox(
-                              height: 5,
+                              width: 0.45 * width,
                             ),
-                            Text(
-                                prevModule.price.toString()
+                            IconButton(
+                              icon: favorite
+                                  ? Icon(
+                                      Icons.favorite,
+                                      color: MainTheme.mainColor,
+                                    )
+                                  : Icon(
+                                      Icons.favorite_border,
+                                    ),
+                              onPressed: () {
+                                setState(() {
+                                  favorite = !favorite;
+                                });
+                              },
                             )
                           ],
                         ),
-                        Column(
+                        const SizedBox(height: 10.0),
+                        Text(
+                          serviceModule != null
+                              ? serviceModule.description
+                              : "",
+                          textAlign: TextAlign.justify,
+                          style: TextStyle(
+                              fontWeight: FontWeight.w300, fontSize: 14.0),
+                        ),
+                        const SizedBox(height: 15),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: [
-                            Text(
-                              "Rating".toUpperCase(),
-                              style: TextStyle(
-                                  fontWeight: FontWeight.w600,
-                                  fontSize: 14.0),
+                            Column(
+                              children: [
+                                Text(
+                                  "Price".toUpperCase(),
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.w600,
+                                      fontSize: 14.0),
+                                ),
+                                SizedBox(
+                                  height: 5,
+                                ),
+                                Text(prevModule.price.toString())
+                              ],
                             ),
-                            SizedBox(
-                              height: 5,
+                            Column(
+                              children: [
+                                Text(
+                                  "Rating".toUpperCase(),
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.w600,
+                                      fontSize: 14.0),
+                                ),
+                                SizedBox(
+                                  height: 5,
+                                ),
+                                CustomStarBar(
+                                  starSize: 12,
+                                  starPadding: 0.6,
+                                  rating: prevModule.propertyModule.rating,
+                                ),
+                              ],
                             ),
-                            CustomStarBar(
-                              starSize: 12,
-                              starPadding: 0.6,
-                              rating: prevModule.propertyModule.rating,
+                            Column(
+                              children: [
+                                Text(
+                                  "Location".toUpperCase(),
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.w600,
+                                      fontSize: 14.0),
+                                ),
+                                SizedBox(
+                                  height: 5,
+                                ),
+                                Text("Unknown"),
+                              ],
                             ),
                           ],
                         ),
-                        Column(
-                          children: [
-                            Text(
-                              "Location".toUpperCase(),
-                              style: TextStyle(
-                                  fontWeight: FontWeight.w600,
-                                  fontSize: 14.0),
-                            ),
-                            SizedBox(
-                              height: 5,
-                            ),
-                            Text(
-                              "Unknown"
-                            )
-                          ],
+                        Center(
+                          child: ElevatedButton(
+                              onPressed: () => {
+                                    Navigator.pushNamed(
+                                        context, AllServices.path,
+                                        arguments: serviceModule.propertyModule)
+                                  },
+                              child: Text('Show all services ')),
                         )
                       ],
                     ),
-                  ],
-                ),
+                  )
+                ],
               )
             ],
-          )
-        ],
-      ),
+          ),
+        );
+      },
     );
   }
 }
@@ -231,9 +249,9 @@ class CustomAminitiesCard extends StatelessWidget {
             children: [
               Card(
                   child: Icon(
-                    icon,
-                    size: 30,
-                  )),
+                icon,
+                size: 30,
+              )),
               Text(
                 title,
                 style: TextStyle(fontSize: 12, color: Colors.black),
@@ -268,7 +286,7 @@ class CustomStarBar extends StatelessWidget {
   final double starPadding;
   final double rating;
 
-  CustomStarBar({this.starSize, this.starPadding,this.rating});
+  CustomStarBar({this.starSize, this.starPadding, this.rating});
 
   @override
   Widget build(BuildContext context) {

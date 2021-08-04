@@ -1,8 +1,10 @@
 import 'dart:convert';
+import 'dart:ffi';
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:prop_plus/constant/MainTheme.dart';
+import 'package:prop_plus/modules/service_module.dart';
 import 'package:prop_plus/services/locater.dart';
 import 'package:prop_plus/services/user_controller.dart';
 import 'package:prop_plus/shared/custom_divider.dart';
@@ -10,17 +12,12 @@ import 'package:http/http.dart' as http;
 import 'package:prop_plus/shared/http_requests.dart';
 
 class AddNewServiceScreen extends StatefulWidget {
-
-  static String path = "/add_new_service" ;
+  static String path = "/add_new_service";
   @override
   _AddNewServiceScreen createState() => _AddNewServiceScreen();
 }
 
 class _AddNewServiceScreen extends State<AddNewServiceScreen> {
-
-
-
-
   String _title, _description, _location, _imageUrl, _price;
   PickedFile image;
   final formKey = GlobalKey<FormState>();
@@ -44,7 +41,7 @@ class _AddNewServiceScreen extends State<AddNewServiceScreen> {
 
   @override
   Widget build(BuildContext context) {
-    dynamic module = ModalRoute.of(context).settings.arguments  ;
+    dynamic module = ModalRoute.of(context).settings.arguments;
     return Scaffold(
       appBar: AppBar(
         title: Text("New Service"),
@@ -93,12 +90,14 @@ class _AddNewServiceScreen extends State<AddNewServiceScreen> {
                   onPressed: () {
                     final form = formKey.currentState;
                     form.save();
-                    HTTP_Requests.addNewServiceToDB(jsonEncode(<String, String>{
-                      'property_id': module.id.toString(),
-                      'description': _description,
-                      'price': _price,
-
-                    }));
+                    HTTP_Requests.addNewServiceToDB(
+                        ServiceModule(
+                            propertyModule: module.propertyModule,
+                            price: double.parse(_price),
+                            description: _description,
+                            imageUrls: [])
+                        // }
+                        );
                   },
                 )
               ],

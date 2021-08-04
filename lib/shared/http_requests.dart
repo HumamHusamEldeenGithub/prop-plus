@@ -21,9 +21,8 @@ class HTTP_Requests {
     print(data);
     List<MainModule> list = <MainModule>[];
     for (var i = 0; i < data.length; i++) {
-
       var property = PropertyModule.fromJson(data[i]);
-      var item = MainModule.fromJson(property,data[i]);
+      var item = MainModule.fromJson(property, data[i]);
       try {
         if (item != null) list.add(item);
       } catch (e) {
@@ -33,8 +32,7 @@ class HTTP_Requests {
     return list;
   }
 
-  static Future<void> sendApprovalRequest(PropertyToApprove model) async {
-
+  static Future<bool> sendApprovalRequest(PropertyToApprove module) async {
     final response = await http.post(
       Uri.parse(
           'https://propplus-production.herokuapp.com/properties_to_approve'),
@@ -42,48 +40,42 @@ class HTTP_Requests {
         'Content-Type': 'application/json; charset=UTF-8',
       },
       body: jsonEncode(<String, String>{
-        'name': model.title,
-        'user_id': model.user_id.toString(),
-        'phone': model.phone,
-        'description': model.description,
+        'name': module.title,
+        'user_id': module.user_id.toString(),
+        'phone': module.phone,
+        'description': module.description,
       }),
     );
 
     if (response.statusCode == 201 || response.statusCode == 200) {
       // If the server did return a 201 CREATED response,
       // then parse the JSON.
-      developer.log("1");
       Map<String, dynamic> propToApprove = jsonDecode(response.body);
-
       var propToApproveId = propToApprove['id'];
 
-      ///////////////////////
-      //Template
-      //iterate over all photos url and create a string of urls to send it 
+      //iterate over all photos url and create a string of urls to send it
       String jsonUrls = "";
-      for(int i=0;i<model.approvalImagesUrls.length;i++){
-        jsonUrls+=model.approvalImagesUrls.elementAt(i);
-        if(i+1!=model.approvalImagesUrls.length)
-        jsonUrls+=",";
+      for (int i = 0; i < module.approvalImagesUrls.length; i++) {
+        jsonUrls += module.approvalImagesUrls.elementAt(i);
+        if (i + 1 != module.approvalImagesUrls.length) jsonUrls += ",";
       }
-      developer.log(jsonUrls);
-      //////////////////////
-      //TODO iterate over all images
       final imageResponse = await http.post(
         Uri.parse('https://propplus-production.herokuapp.com/approval_images'),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
         },
-        body: jsonEncode(
-            <String, dynamic>{'property_to_approve_id': propToApproveId.toString(), 'url':jsonUrls }),
+        body: jsonEncode(<String, dynamic>{
+          'property_to_approve_id': propToApproveId.toString(),
+          'url': jsonUrls
+        }),
       );
 
       if (imageResponse.statusCode == 201 || response.statusCode == 200) {
-        developer.log("2");
+        print("Send Successfully");
+        return true;
       } else {
         throw Exception('Failed to post to  approval_images table  .');
       }
-      //TODO : return a flag to show succeeded widget
     } else {
       // If the server did not return a 201 CREATED response,
       // then throw an exception.
@@ -121,10 +113,11 @@ class HTTP_Requests {
 
   static Future<List> getAllBookingForService(String serviceId) async {
     http.Response response;
-    response = await http.get(
-        Uri.parse("https://propplus-production.herokuapp.com/bookings/service_id/" + serviceId));
-            var data = jsonDecode(response.body) as List;
-        print(data);
+    response = await http.get(Uri.parse(
+        "https://propplus-production.herokuapp.com/bookings/service_id/" +
+            serviceId));
+    var data = jsonDecode(response.body) as List;
+    print(data);
     List<BookingModule> list = <BookingModule>[];
     for (var i = 0; i < data.length; i++) {
       var item = BookingModule.fromJson(data[i]);
@@ -137,28 +130,50 @@ class HTTP_Requests {
     return list;
   }
 
-
-
-
-  static Future<ServiceModule> getService(int serviceId,PropertyModule propertyModule) async {
+  static Future<ServiceModule> getService(
+      int serviceId, PropertyModule propertyModule) async {
     http.Response response;
-    response = await http.get(
-        Uri.parse("https://propplus-production.herokuapp.com/services/" + serviceId.toString()));
+    response = await http.get(Uri.parse(
+        "https://propplus-production.herokuapp.com/services/" +
+            serviceId.toString()));
     var data = jsonDecode(response.body);
     print(data);
     ServiceModule module;
-      var item = ServiceModule.fromJson(data,propertyModule);
+    var item = ServiceModule.fromJson(data, propertyModule);
     return item;
   }
 
+  static Future<List<ServiceModule>> getAllService(PropertyModule propertyModule) async {
+    print(propertyModule.id);
+    http.Response response;
+    response = await http.get(Uri.parse(
+        "https://propplus-production.herokuapp.com/services/ByPropertyId/" +
+            propertyModule.id.toString()));
+    var data = jsonDecode(response.body) as List;
+    print(data);
+    List<ServiceModule> list = <ServiceModule>[];
+    for (var i = 0; i < data.length; i++) {
+      var item = ServiceModule.fromJson(data[i], propertyModule);
+      try {
+        if (item != null) list.add(item);
+      } catch (e) {
+        print(e);
+      }
+    }
+    return list;
+  }
 
-  static Future<void> addNewServiceToDB(propInfo) async {
+  static Future<void> addNewServiceToDB(ServiceModule module) async {
     final response = await http.post(
       Uri.parse('https://propplus-production.herokuapp.com/services'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },
-      body: propInfo,
+      body: <String,String>{
+        "property_id":module.propertyModule.id.toString(),
+        "description":module.description,
+        "price":module.price.toString(),
+      },
     );
 
     if (response.statusCode == 201 || response.statusCode == 200) {
@@ -167,7 +182,12 @@ class HTTP_Requests {
 
       Map<String, dynamic> newService = jsonDecode(response.body);
       dynamic newServiceId = newService['id'];
-      print("DONE");
+
+      String jsonUrls = "";
+      for (int i = 0; i < module.imageUrls.length; i++) {
+        jsonUrls += module.imageUrls.elementAt(i);
+        if (i + 1 != module.imageUrls.length) jsonUrls += ",";
+      }
 
       //TODO iterate over all images
       final imageResponse = await http.post(
@@ -176,7 +196,7 @@ class HTTP_Requests {
           'Content-Type': 'application/json; charset=UTF-8',
         },
         body: jsonEncode(
-            <String, dynamic>{'service_id': newServiceId, 'url': "URLS"}),
+            <String, dynamic>{'service_id': newServiceId, 'url': jsonUrls,'main_url':module.imageUrls[0]}),
       );
       if (imageResponse.statusCode == 201 || response.statusCode == 200) {
       } else {
@@ -190,16 +210,16 @@ class HTTP_Requests {
       throw Exception('Failed to post to  properties_to_approve table  .');
     }
   }
+
   static Future<int> getUserId(String firebaseId) async {
     http.Response response;
-    response = await http.get(
-        Uri.parse("https://propplus-production.herokuapp.com/users/ByFirebase/"+firebaseId));
-    var data = jsonDecode(response.body) ;
+    response = await http.get(Uri.parse(
+        "https://propplus-production.herokuapp.com/users/ByFirebase/" +
+            firebaseId));
+    var data = jsonDecode(response.body);
     print(data);
     return data['id'];
   }
-
-
 
   // Mock Functions
   /*

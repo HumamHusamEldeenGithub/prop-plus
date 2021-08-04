@@ -18,14 +18,14 @@ class _MyPropertiesState extends State<MyProperties> {
   List<UserPropertyModule> userPropertyModules = <UserPropertyModule>[];
 
   void createPropertyModules() {
-    userPropertyModules.add(new UserPropertyModule(
-      1,
-        "Luxury hotel",
-        "Location - location",
-        "100",
-        "assets/real-state.jpg",
-        4,
-        "Location - location"));
+    // userPropertyModules.add(new UserPropertyModule(
+    //   1,
+    //     "Luxury hotel",
+    //     "Location - location",
+    //     "100",
+    //     "assets/real-state.jpg",
+    //     4,
+    //     "Location - location"));
   }
 
   @override

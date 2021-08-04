@@ -65,7 +65,7 @@ class _UserPropertyCardState extends State<UserPropertyCard> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              widget.module.title,
+                              widget.module.propertyModule.title,
                               style: FavouriteTheme.titleTextStyle,
                             ),
                             Text(
@@ -73,11 +73,11 @@ class _UserPropertyCardState extends State<UserPropertyCard> {
                               style: FavouriteTheme.priceTextStyle,
                             ),
                             Text(
-                              widget.module.location,
+                              widget.module.propertyModule.location,
                               style: FavouriteTheme.locationTextStyle,
                             ),
                             RatingBar.builder(
-                              initialRating: widget.module.rating,
+                              initialRating: widget.module.propertyModule.rating,
                               minRating: 1,
                               direction: Axis.horizontal,
                               allowHalfRating: true,
