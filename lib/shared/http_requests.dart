@@ -163,6 +163,24 @@ class HTTP_Requests {
     return list;
   }
 
+  static Future<List<String>> getAllImagesForService(int id) async {
+    http.Response response;
+    response = await http.get(Uri.parse(
+        "https://propplus-production.herokuapp.com/images/ByServiceId/" +
+            id.toString()));
+    var data = jsonDecode(response.body) as List;
+    List<String> list = <String>[];
+    for (var i = 0; i < data.length; i++) {
+      var item = data[i]['url'];
+      try {
+        if (item != null) list.add(item);
+      } catch (e) {
+        print(e);
+      }
+    }
+    return list;
+  }
+
   static Future<void> addNewServiceToDB(ServiceModule module) async {
     final response = await http.post(
       Uri.parse('https://propplus-production.herokuapp.com/services'),

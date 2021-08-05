@@ -4,7 +4,7 @@ class ServiceModule {
   final PropertyModule propertyModule;
   final String description;
   final double price;
-  final List<String> imageUrls;
+  List<String> imageUrls;
   ServiceModule({this.id, this.propertyModule, this.description, this.price, this.imageUrls});
   factory ServiceModule.fromJson(
       Map<String, dynamic> json, PropertyModule propertyModule) {

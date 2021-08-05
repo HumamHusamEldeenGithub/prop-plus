@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:prop_plus/constant/MainTheme.dart';
+import 'package:prop_plus/constant/MainTheme.dart';
 import 'package:prop_plus/modules/service_module.dart';
 import 'package:prop_plus/screens/all_services.dart';
 import 'package:prop_plus/screens/booking_calender_screen.dart';
@@ -25,6 +26,9 @@ class _DetailsScreenState extends State<DetailsScreen> {
   Future<ServiceModule> loadService(dynamic prevModule) async {
     serviceModule = await HTTP_Requests.getService(
         prevModule.service_id, prevModule.propertyModule);
+    var urls =
+        await HTTP_Requests.getAllImagesForService(prevModule.service_id);
+    serviceModule.imageUrls = urls;
     return serviceModule;
   }
 
@@ -59,7 +63,6 @@ class _DetailsScreenState extends State<DetailsScreen> {
     return FutureBuilder(
       future: loadService(prevModule),
       builder: (context, snapshot) {
-        print(snapshot);
         if (snapshot.data == null) {
           return Scaffold(body: Center(child: CircularProgressIndicator()));
         }
