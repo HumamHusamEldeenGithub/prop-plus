@@ -23,6 +23,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
   bool imageVisible = true;
   bool favorite = false;
   bool initialized = false;
+  dynamic prevModule ;
   Future<ServiceModule> loadService(dynamic prevModule) async {
     serviceModule = await HTTP_Requests.getService(
         prevModule.service_id, prevModule.propertyModule);
@@ -55,8 +56,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    dynamic prevModule = ModalRoute.of(context).settings.arguments;
-    if (!initialized) loadService(prevModule);
+    prevModule = ModalRoute.of(context).settings.arguments;
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
 
@@ -91,7 +91,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                 child: AnimatedContainer(
                   duration: const Duration(seconds: 1),
                   child: Image.network(
-                    prevModule.imgSrc,
+                    "",
                     fit: BoxFit.cover,
                   ),
                   height: imageVisible == true ? height * 0.4 : 0,
@@ -102,7 +102,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                       context,
                       MaterialPageRoute(
                           builder: (context) => ViewImage(
-                                imageUrl: prevModule.imgSrc,
+                                imageUrl: "",
                               )));
                 },
               ),

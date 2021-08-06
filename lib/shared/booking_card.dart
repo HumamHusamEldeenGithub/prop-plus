@@ -6,6 +6,7 @@ import 'package:prop_plus/modules/booking_module.dart';
 import 'package:prop_plus/modules/booking_module.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:prop_plus/screens/description.dart';
+import 'package:intl/intl.dart';
 
 
 
@@ -100,8 +101,8 @@ class _BookingCardState extends State<BookingCard> {
                           mainAxisAlignment: MainAxisAlignment.center,
                           crossAxisAlignment: CrossAxisAlignment.end,
                           children: [
-                            Text("FROM : "+widget.module.fromDate.toString() ,style: FavouriteTheme.locationTextStyle),
-                            Text("TO : "+widget.module.toDate.toString(), style: FavouriteTheme.locationTextStyle)
+                            Text("FROM : "+DateFormat('yyyy-MM-dd').format(widget.module.fromDate).toString() ,style: FavouriteTheme.locationTextStyle),
+                            Text("TO : "+DateFormat('yyyy-MM-dd').format(widget.module.toDate).toString(), style: FavouriteTheme.locationTextStyle)
                           ],
                         ),
                       ],
