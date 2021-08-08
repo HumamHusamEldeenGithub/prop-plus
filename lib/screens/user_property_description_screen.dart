@@ -4,6 +4,7 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:prop_plus/constant/MainTheme.dart';
 import 'package:prop_plus/shared/custom_image_view.dart';
+import 'package:prop_plus/shared/photos_slider_show.dart';
 import 'add_new_service_screen.dart';
 
 // ignore: camel_case_types
@@ -74,7 +75,7 @@ class _MyProperties_DetailsScreen extends State<MyProperties_DetailsScreen> {
             onTap: (){
               Navigator.push(
                   context,
-                  MaterialPageRoute(builder:(context) =>ViewImage(imageUrl: module.imgSrc ,))
+                  MaterialPageRoute(builder:(context) =>PhotosSlider(imagesUrls: module.imageUrls ,))
               );
             },
           ),
