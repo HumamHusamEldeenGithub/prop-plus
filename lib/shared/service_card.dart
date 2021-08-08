@@ -38,9 +38,9 @@ class _ServiceCardState extends State<ServiceCard> {
                   ClipRect(
                       child: Align(
                         //TODO FIX THIS
-                        child: null != null
-                            ? Image.network(widget.module.description)
-                            : Text("Image"),
+                        child:
+                             Image.network(widget.module.imageUrls[0])
+                            ,
                         heightFactor: 0.65,
                       )),
                   Padding(

@@ -41,9 +41,11 @@ class AllServicesState extends State<AllServices> {
   }
 
   Future<List<ServiceModule>> getAllServicesFromDB() async {
-    print("ENTETR DB");
     dynamic prevModule = ModalRoute.of(context).settings.arguments;
     var modules = await HTTP_Requests.getAllService(prevModule);
+    for (var i =0 ; i< modules.length ; i++){
+      modules[i].imageUrls = await HTTP_Requests.getAllImagesForService(modules[i].service_id);
+    }
     return modules;
   }
 

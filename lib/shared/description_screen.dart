@@ -91,7 +91,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                 child: AnimatedContainer(
                   duration: const Duration(seconds: 1),
                   child: Image.network(
-                    "",
+                    serviceModule.imageUrls[0],
                     fit: BoxFit.cover,
                   ),
                   height: imageVisible == true ? height * 0.4 : 0,
@@ -102,7 +102,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                       context,
                       MaterialPageRoute(
                           builder: (context) => ViewImage(
-                                imageUrl: "",
+                                imageUrl: serviceModule.imageUrls[0],
                               )));
                 },
               ),
