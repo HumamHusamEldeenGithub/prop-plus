@@ -27,7 +27,7 @@ class _PropertyCardState extends State<PropertyCard> {
       padding: const EdgeInsets.all(RealStateTheme.cardPadding),
       child: GestureDetector(
         onTap: (){
-          Navigator.pushNamed(context, Description.path,arguments: widget.module) ;
+          Navigator.pushNamed(context, DetailsScreen.path,arguments: widget.module) ;
         },
         child: Card(
           child: Stack(children: [

@@ -26,7 +26,7 @@ class _TrendingCardState extends State<TrendingCard> {
         padding: const EdgeInsets.fromLTRB(TrendingTheme.trendingPadding, 0, 0, 10),
         child: GestureDetector(
           onTap: (){
-            Navigator.pushNamed(context, Description.path,arguments: widget.module) ;
+            Navigator.pushNamed(context, DetailsScreen.path,arguments: widget.module) ;
           },
           child: Container(
             child: Card(

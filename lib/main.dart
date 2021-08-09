@@ -21,7 +21,7 @@ import 'package:prop_plus/services/auth_repo.dart';
 import 'package:prop_plus/services/locater.dart';
 import 'package:prop_plus/services/provider.dart';
 import 'package:flutter_search_bar/flutter_search_bar.dart';
-import 'package:prop_plus/shared/description_screen.dart';
+import 'package:prop_plus/screens/description.dart';
 import 'dart:developer' as developer;
 import 'dart:async';
 import 'package:prop_plus/shared/http_requests.dart';

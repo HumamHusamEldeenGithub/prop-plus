@@ -23,7 +23,7 @@ class _RecommendedCardState extends State<RecommendedCard> {
       padding: const EdgeInsets.only(bottom: 20),
       child: GestureDetector(
         onTap: () {
-          Navigator.pushNamed(context, Description.path,
+          Navigator.pushNamed(context, DetailsScreen.path,
               arguments: widget.module);
         },
         child: Card(

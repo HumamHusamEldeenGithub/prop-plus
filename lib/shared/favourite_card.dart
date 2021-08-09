@@ -24,7 +24,7 @@ class _FavouriteCardState extends State<FavouriteCard> {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: (){
-        Navigator.pushNamed(context, Description.path,arguments: widget.module) ;
+        Navigator.pushNamed(context, DetailsScreen.path,arguments: widget.module) ;
       },
       child: Container(
         child: Card(

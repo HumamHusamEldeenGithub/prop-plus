@@ -7,6 +7,7 @@ import 'package:prop_plus/modules/booking_module.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:prop_plus/screens/description.dart';
 import 'package:intl/intl.dart';
+import 'package:prop_plus/screens/description.dart';
 
 
 
@@ -26,7 +27,7 @@ class _BookingCardState extends State<BookingCard> {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: (){
-        Navigator.pushNamed(context, Description.path,arguments: widget.module) ;
+        Navigator.pushNamed(context, DetailsScreen.path,arguments: widget.module) ;
       },
       child: Container(
         child: Card(
