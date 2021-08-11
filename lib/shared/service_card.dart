@@ -25,7 +25,7 @@ class _ServiceCardState extends State<ServiceCard> {
       child: GestureDetector(
         onTap: () {
           Navigator.pushNamed(context, DetailsScreen.path,
-              arguments: widget.module);
+              arguments: {'module':widget.module,'showAllServices': false} ,);
         },
         child: Card(
           elevation: 5,

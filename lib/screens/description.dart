@@ -58,7 +58,8 @@ class _DetailsScreenState extends State<DetailsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    prevModule = ModalRoute.of(context).settings.arguments;
+    var args = ModalRoute.of(context).settings.arguments as Map ;
+    prevModule =args['module'] ;
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
 
@@ -216,7 +217,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                             ),
                           ],
                         ),
-                        Center(
+                        args['showAllServices']!=false ?  Center(
                           child: ElevatedButton(
                               onPressed: () => {
                                     Navigator.pushNamed(
@@ -224,7 +225,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                                         arguments: serviceModule.propertyModule)
                                   },
                               child: Text('Show all services ')),
-                        )
+                        ):SizedBox()
                       ],
                     ),
                   )

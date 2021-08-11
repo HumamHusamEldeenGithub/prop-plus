@@ -65,7 +65,7 @@ class _MyProperties_DetailsScreen extends State<MyProperties_DetailsScreen> {
           GestureDetector(
             child: AnimatedContainer(
               duration: const Duration(seconds: 1),
-              child: Image.asset(
+              child: Image.network(
                 module.imgSrc,
                 fit: BoxFit.cover,
               ),
@@ -99,7 +99,7 @@ class _MyProperties_DetailsScreen extends State<MyProperties_DetailsScreen> {
                             Padding(
                               padding: const EdgeInsets.only(left: 5),
                               child: Text(
-                                module.title,
+                                module.propertyModule.title,
                                 style: TextStyle(
                                     color: Colors.black,
                                     fontSize: 20.0,
@@ -130,7 +130,7 @@ class _MyProperties_DetailsScreen extends State<MyProperties_DetailsScreen> {
                     ),
                     const SizedBox(height: 10.0),
                     Text(
-                      module.description,
+                      module.propertyModule.description,
                       textAlign: TextAlign.justify,
                       style: TextStyle(
                           fontWeight: FontWeight.w300, fontSize: 14.0),
@@ -151,7 +151,7 @@ class _MyProperties_DetailsScreen extends State<MyProperties_DetailsScreen> {
                               height: 5,
                             ),
                             Text(
-                                module.price
+                                module.price.toString()
                             )
                           ],
                         ),
@@ -169,7 +169,7 @@ class _MyProperties_DetailsScreen extends State<MyProperties_DetailsScreen> {
                             CustomStarBar(
                               starSize: 12,
                               starPadding: 0.6,
-                              rating: module.rating,
+                              rating: module.propertyModule.rating,
                             ),
                           ],
                         ),
@@ -185,7 +185,7 @@ class _MyProperties_DetailsScreen extends State<MyProperties_DetailsScreen> {
                               height: 5,
                             ),
                             Text(
-                                "Unknown"
+                                module.propertyModule.location
                             )
                           ],
                         )

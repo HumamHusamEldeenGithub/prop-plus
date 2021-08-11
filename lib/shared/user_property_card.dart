@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:prop_plus/constant/FavouriteTheme.dart';
+import 'package:prop_plus/modules/main_module.dart';
 import 'package:prop_plus/modules/user_properties_module.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:prop_plus/screens/description.dart';
@@ -8,7 +9,7 @@ import 'package:prop_plus/screens/user_property_description_screen.dart';
 
 
 class UserPropertyCard extends StatefulWidget {
-  final UserPropertyModule module ;
+  final MainModule module ;
   const UserPropertyCard({Key key,this.module}) : super(key: key);
 
   @override
@@ -40,7 +41,7 @@ class _UserPropertyCardState extends State<UserPropertyCard> {
                   height: 100,
                   decoration: BoxDecoration(
                       image: DecorationImage(
-                        image: AssetImage(widget.module.imgSrc),
+                        image: NetworkImage(widget.module.imgSrc),
                         fit: BoxFit.cover,
                       ),
                       borderRadius: BorderRadius.only(

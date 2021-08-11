@@ -24,7 +24,7 @@ class _RecommendedCardState extends State<RecommendedCard> {
       child: GestureDetector(
         onTap: () {
           Navigator.pushNamed(context, DetailsScreen.path,
-              arguments: widget.module);
+              arguments: {'module':widget.module});
         },
         child: Card(
           elevation: 5,

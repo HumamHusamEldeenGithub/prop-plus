@@ -95,7 +95,7 @@ class _AddNewServiceScreen extends State<AddNewServiceScreen> {
                             propertyModule: module.propertyModule,
                             price: double.parse(_price),
                             description: _description,
-                            imageUrls: [])
+                            imageUrls: ["https://images.pexels.com/photos/3288104/pexels-photo-3288104.png?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260"])
                         // }
                         );
                   },
