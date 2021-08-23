@@ -29,35 +29,106 @@ class _PropertyInputFormState extends State<PropertyInputForm> {
 
   List<Widget> buildInputTextField() {
     List<Widget> textFields = [];
-    textFields.add(DividerWithText(
-      tag: "Add title ",
+    textFields.add(SizedBox(
+      height: 15,
     ));
     textFields.add(TextFormField(
+      decoration: InputDecoration(
+        labelText: "Title ",
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(5),
+          borderSide: BorderSide(
+            color: Colors.black,
+            width: 0.5,
+          ),
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(15),
+          borderSide: BorderSide(
+            color: Color(0xFF00B9FF),
+            width: 2.0,
+          ),
+        ),
+      ),
       onSaved: (value) => _title = value,
     ));
-    textFields.add(DividerWithText(
-      tag: "Add Description ",
+    textFields.add(SizedBox(
+      height: 15,
     ));
     textFields.add(TextFormField(
+      decoration: InputDecoration(
+        labelText: "Description",
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(5),
+          borderSide: BorderSide(
+            color: Colors.black,
+            width: 0.5,
+          ),
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(15),
+          borderSide: BorderSide(
+            color: Color(0xFF00B9FF),
+            width: 2.0,
+          ),
+        ),
+      ),
       onSaved: (value) => _description = value,
     ));
-    textFields.add(DividerWithText(
-      tag: "Add Phone ",
+    textFields.add(SizedBox(
+      height: 15,
     ));
     textFields.add(TextFormField(
+      decoration: InputDecoration(
+        labelText: "Phone number",
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(5),
+          borderSide: BorderSide(
+            color: Colors.black,
+            width: 0.5,
+          ),
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(15),
+          borderSide: BorderSide(
+            color: Color(0xFF00B9FF),
+            width: 2.0,
+          ),
+        ),
+      ),
       onSaved: (value) => _phone = value,
     ));
-    textFields.add(DividerWithText(
-      tag: "Add location ",
+    textFields.add(SizedBox(
+      height: 15,
     ));
     textFields.add(TextFormField(
+      decoration: InputDecoration(
+        labelText: "Location",
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(5),
+          borderSide: BorderSide(
+            color: Colors.black,
+            width: 0.5,
+          ),
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(15),
+          borderSide: BorderSide(
+            color: Color(0xFF00B9FF),
+            width: 2.0,
+          ),
+        ),
+      ),
       onSaved: (value) => _location = value,
+    ));
+    textFields.add(SizedBox(
+      height: 15,
     ));
     return textFields;
   }
 
   //TODO loading bar to upload the photo
-  Future showProgressBar(ProgressDialog pr)async{
+  Future showProgressBar(ProgressDialog pr) async {
     double percentage = 0.0;
     await pr.show();
 
@@ -69,30 +140,24 @@ class _PropertyInputFormState extends State<PropertyInputForm> {
         progress: percentage,
         message: "Please wait...",
         progressWidget: Container(
-            padding: EdgeInsets.all(8.0),
-            child: CircularProgressIndicator()),
+            padding: EdgeInsets.all(8.0), child: CircularProgressIndicator()),
         maxProgress: 100.0,
         progressTextStyle: TextStyle(
-            color: Colors.black,
-            fontSize: 13.0,
-            fontWeight: FontWeight.w400),
+            color: Colors.black, fontSize: 13.0, fontWeight: FontWeight.w400),
         messageTextStyle: TextStyle(
-            color: Colors.black,
-            fontSize: 19.0,
-            fontWeight: FontWeight.w600),
+            color: Colors.black, fontSize: 19.0, fontWeight: FontWeight.w600),
       );
 
-       Future.delayed(Duration(seconds: 2)).then((value) {
+      Future.delayed(Duration(seconds: 2)).then((value) {
         percentage = percentage + 30.0;
-        pr.update(
-            progress: percentage, message: "Few more seconds...");
+        pr.update(progress: percentage, message: "Few more seconds...");
         print(percentage);
-          Future.delayed(Duration(seconds: 2)).then((value) {
+        Future.delayed(Duration(seconds: 2)).then((value) {
           percentage = percentage + 30.0;
           pr.update(progress: percentage, message: "Almost done...");
           print(percentage);
 
-           Future.delayed(Duration(seconds: 2)).then((value) {
+          Future.delayed(Duration(seconds: 2)).then((value) {
             pr.hide().whenComplete(() {
               print(pr.isShowing());
             });
@@ -112,9 +177,10 @@ class _PropertyInputFormState extends State<PropertyInputForm> {
     });
   }
 
-
   @override
   Widget build(BuildContext context) {
+    double _width = MediaQuery.of(context).size.width;
+    double _height = MediaQuery.of(context).size.height;
     ProgressDialog pr = ProgressDialog(context);
 
     pr = ProgressDialog(
@@ -122,16 +188,15 @@ class _PropertyInputFormState extends State<PropertyInputForm> {
       type: ProgressDialogType.Download,
       textDirection: TextDirection.rtl,
       isDismissible: false,
-     //  customBody: LinearProgressIndicator(
-     //   valueColor: AlwaysStoppedAnimation<Color>(Colors.blueAccent),
-     //   backgroundColor: Colors.white,
-     // ),
+      //  customBody: LinearProgressIndicator(
+      //   valueColor: AlwaysStoppedAnimation<Color>(Colors.blueAccent),
+      //   backgroundColor: Colors.white,
+      // ),
     );
 
     pr.style(
 //      message: 'Downloading file...',
-      message:
-      'Please wait ...',
+      message: 'Please wait ...',
       borderRadius: 10.0,
       backgroundColor: Colors.white,
       elevation: 10.0,
@@ -151,69 +216,95 @@ class _PropertyInputFormState extends State<PropertyInputForm> {
       ),
       body: SingleChildScrollView(
         child: SafeArea(
-          child: Container(
-            child: Column(
-              children: [
-                Form(
-                  key: formKey,
-                  child: Column(
-                    children: buildInputTextField(),
-                  ),
-                ),
-                SizedBox(height: 5),
-                DividerWithText(tag: "The Approval Images"),
-                RaisedButton(
-                  child: Text("Pick the Images one by one :"),
-                  onPressed: () async {
-                    image = await ImagePicker.platform
-                        .pickImage(source: ImageSource.gallery);
-                    /*setState(() {
+          child: Column(
+            crossAxisAlignment:CrossAxisAlignment.start,
+            children: [
+              Container(
+                  padding: EdgeInsets.symmetric(vertical: 20 ,horizontal: 25),
+                  width: _width * 0.8,
+                  child: Text(
+                    "Please enter all the information for adding a new property :",
+                    style: TextStyle(fontWeight: FontWeight.bold),
+                  )),
+              Container(
+                child: Column(
+                  children: [
+                    Form(
+                      key: formKey,
+                      child: Container(
+                        width: _width * 0.9,
+                        child: Column(
+                          children: buildInputTextField(),
+                        ),
+                      ),
+                    ),
+                    SizedBox(height: 5),
+                    DividerWithText(tag: "The Approval Images"),
+                    Container(
+                      width: _width*0.6,
+                      child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(primary: Colors.grey[500]),
+                        child: Text("Pick the Images one by one :"),
+                        onPressed: () async {
+                          image = await ImagePicker.platform
+                              .pickImage(source: ImageSource.gallery);
+                          /*setState(() {
+                                  loading = true;
+                                });*/
+                          String imageUrl = await locater
+                              .get<UserController>()
+                              .uploadPropertyApprovalPhoto(File(image.path));
+                          developer.log(imageUrl);
+                          setState(() {
+                            imagesUrls.add(imageUrl);
                             loading = true;
-                          });*/
-                    String imageUrl = await locater
-                        .get<UserController>()
-                        .uploadPropertyApprovalPhoto(File(image.path));
-                    developer.log(imageUrl);
-                    setState(() {
-                      imagesUrls.add(imageUrl);
-                      loading = true;
-                    });
-                  },
-                ),
-                DividerWithText(tag: ""),
-                ElevatedButton(
-                  //TODO need to remove it ... used to check if the upload is done
-                  child: Text("Check"),
-                  onPressed: () async {
-                    await showProgressBar(pr);
-                    showDialog(
-                        context: context,
-                        builder: (BuildContext context) => Popup(
-                              title: "Done",
-                              content: "Done",
-                            ));
-                    developer.log(imagesUrls.length.toString());
-                  },
-                ),
-                RaisedButton(
-                  child: Text("Submit"),
-                  onPressed: () {
-                    final form = formKey.currentState;
-                    form.save();
+                          });
+                        },
+                      ),
+                    ),
+                    DividerWithText(tag: ""),
+                    // Container(
+                    //   width: _width*0.6,
+                    //   child: ElevatedButton(
+                    //     //TODO need to remove it ... used to check if the upload is done
+                    //     child: Text("Check"),
+                    //     onPressed: () async {
+                    //       await showProgressBar(pr);
+                    //       showDialog(
+                    //           context: context,
+                    //           builder: (BuildContext context) => Popup(
+                    //                 title: "Done",
+                    //                 content: "Done",
+                    //               ));
+                    //       developer.log(imagesUrls.length.toString());
+                    //     },
+                    //   ),
+                    // ),
+                    Container(
+                      width: _width*0.6,
+                      child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(primary: Color(0xFF3DD6EB),),
+                        child: Text("Submit",style: TextStyle(fontWeight: FontWeight.bold,fontSize: 20),),
+                        onPressed: () {
+                          final form = formKey.currentState;
+                          form.save();
 
-                    //Create a property to approve model and send it to approval request
-                    PropertyToApprove model = new PropertyToApprove(
-                        user_id: locater<UserController>().currentUser.dbId,
-                        title: _title,
-                        phone: _phone,
-                        location: _location,
-                        description: _description,
-                        approvalImagesUrls: imagesUrls);
-                    HTTP_Requests.sendApprovalRequest(model);
-                  },
+                          //Create a property to approve model and send it to approval request
+                          PropertyToApprove model = new PropertyToApprove(
+                              user_id: locater<UserController>().currentUser.dbId,
+                              title: _title,
+                              phone: _phone,
+                              location: _location,
+                              description: _description,
+                              approvalImagesUrls: imagesUrls);
+                          HTTP_Requests.sendApprovalRequest(model);
+                        },
+                      ),
+                    ),
+                  ],
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
         ),
       ),

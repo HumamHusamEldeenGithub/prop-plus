@@ -46,41 +46,6 @@ class FavouritesState extends State<Favourites> {
         "assets/real-state.jpg",
         4,
         "Location - location"));
-    favouriteModules.add(new FavouriteModule(
-        "Luxury hotel",
-        "Location - location",
-        "100",
-        "assets/banner1.jpg",
-        5,
-        "Location - location"));
-    favouriteModules.add(new FavouriteModule(
-        "Luxury hotel",
-        "Location - location",
-        "100",
-        "assets/img3.jpg",
-        3,
-        "Location - location"));
-    favouriteModules.add(new FavouriteModule(
-        "Luxury hotel",
-        "Location - location",
-        "100",
-        "assets/real-state.jpg",
-        4,
-        "Location - location"));
-    favouriteModules.add(new FavouriteModule(
-        "Luxury hotel",
-        "Location - location",
-        "100",
-        "assets/real-state.jpg",
-        4,
-        "Location - location"));
-    favouriteModules.add(new FavouriteModule(
-        "Luxury hotel",
-        "Location - location",
-        "100",
-        "assets/real-state.jpg",
-        4,
-        "Location - location"));
   }
 
   @override

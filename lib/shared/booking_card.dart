@@ -54,7 +54,7 @@ class _BookingCardState extends State<BookingCard> {
                           bottomRight: FavouriteTheme.borderRadius)),
                 ),
                 SizedBox(
-                  width: 20,
+                  width: 10,
                 ),
                 Expanded(
                   child: Container(

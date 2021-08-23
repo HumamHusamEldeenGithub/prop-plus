@@ -45,9 +45,10 @@ class UserController{
    // _currentUser.avatarURl = await getDownloadUrl();
   }
 
-  Future<String>createUserWithEmailAndPassword(String email ,String password , String userName) async{
+  Future createUserWithEmailAndPassword(String email ,String password , String userName) async{
     _currentUser = await _authService.createUserWithEmailAndPassword(email, password, userName);
-    return  _currentUser.uid ;
+    int dbId = await HTTP_Requests.createNewUserInDB(userName,"",email,_currentUser.uid);
+    _currentUser.dbId = dbId ;
   }
 
   signOut(){

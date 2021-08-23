@@ -4,10 +4,8 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:prop_plus/constant/Validator.dart';
 import 'package:prop_plus/services/locater.dart';
-import 'package:prop_plus/services/provider.dart';
 import 'package:prop_plus/services/user_controller.dart';
-import 'package:prop_plus/shared/custom_text_field.dart';
-import 'package:http/http.dart' as http;
+import 'package:prop_plus/shared/http_requests.dart';
 
 class SignUpScreen extends StatefulWidget {
   @override
@@ -62,39 +60,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
     );
   }
 
-  Future<void> createNewUserInDB(String userID) async {
-    print(jsonEncode(<String, String>{
-      'name': _name,
-      'phone': _phone,
-      'email': _email,
-      'firebase_id': userID,
-      'date_of_reg': DateTime.now().toString(),
-    }));
-    final response = await http.post(
-      Uri.parse('https://propplus-production.herokuapp.com/users'),
-      headers: <String, String>{
-        'Content-Type': 'application/json; charset=UTF-8',
-      },
-      body: jsonEncode(<String, String>{
-        'name': _name,
-        'phone': _phone,
-        'email': _email,
-        'firebase_id': userID,
-        'date_of_reg': DateTime.now().toString(),
-      }),
-    );
-
-    if (response.statusCode == 201 || response.statusCode == 200) {
-      // If the server did return a 201 CREATED response,
-      // then parse the JSON.
-      Navigator.of(context).pushReplacementNamed('/home');
-    } else {
-      // If the server did not return a 201 CREATED response,
-      // then throw an exception.
-      throw Exception('Failed to post to users table  .');
-    }
-  }
-
 // using to make sure that all inputs  of the textfields are validate
   bool validate() {
     final form = formKey.currentState;
@@ -108,17 +73,11 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
   void submit() async {
     if (validate()) {
-      //call the auth methods
-      //SignIn
-      developer.log(_email);
-      developer.log(_password);
-      developer.log(_name);
       try {
-        dynamic userID = await locater
+        await locater
             .get<UserController>()
             .createUserWithEmailAndPassword(_email, _password, _name);
-        //TODO : create a new user with the prev userID
-        await createNewUserInDB(userID);
+        Navigator.of(context).pushReplacementNamed('/home');
       } catch (e) {
         setState(() {
           _warning = e.message;

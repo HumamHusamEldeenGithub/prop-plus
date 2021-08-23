@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:prop_plus/constant/FavouriteTheme.dart';
 import 'package:prop_plus/modules/main_module.dart';
+import 'package:prop_plus/modules/property_module.dart';
 import 'package:prop_plus/modules/user_properties_module.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:prop_plus/screens/description.dart';
@@ -9,7 +10,7 @@ import 'package:prop_plus/screens/user_property_description_screen.dart';
 
 
 class UserPropertyCard extends StatefulWidget {
-  final MainModule module ;
+  final PropertyModule module ;
   const UserPropertyCard({Key key,this.module}) : super(key: key);
 
   @override
@@ -40,10 +41,10 @@ class _UserPropertyCardState extends State<UserPropertyCard> {
                   width: 100,
                   height: 100,
                   decoration: BoxDecoration(
-                      image: DecorationImage(
-                        image: NetworkImage(widget.module.imgSrc),
-                        fit: BoxFit.cover,
-                      ),
+                      // image: DecorationImage(
+                      //   image: NetworkImage(widget.module.imgSrc),
+                      //   fit: BoxFit.cover,
+                      // ),
                       borderRadius: BorderRadius.only(
                           topRight: FavouriteTheme.borderRadius,
                           topLeft: FavouriteTheme.borderRadius,
@@ -66,19 +67,19 @@ class _UserPropertyCardState extends State<UserPropertyCard> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              widget.module.propertyModule.title,
+                              widget.module.title,
                               style: FavouriteTheme.titleTextStyle,
                             ),
+                            // Text(
+                            //   "\$ ${widget.module.price}/night",
+                            //   style: FavouriteTheme.priceTextStyle,
+                            // ),
                             Text(
-                              "\$ ${widget.module.price}/night",
-                              style: FavouriteTheme.priceTextStyle,
-                            ),
-                            Text(
-                              widget.module.propertyModule.location,
+                              widget.module.location,
                               style: FavouriteTheme.locationTextStyle,
                             ),
                             RatingBar.builder(
-                              initialRating: widget.module.propertyModule.rating,
+                              initialRating: widget.module.rating,
                               minRating: 1,
                               direction: Axis.horizontal,
                               allowHalfRating: true,

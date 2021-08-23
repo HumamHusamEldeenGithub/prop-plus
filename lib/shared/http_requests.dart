@@ -67,7 +67,8 @@ class HTTP_Requests {
     return list;
   }
 
-  static Future<List<ServiceModule>> getAllService(PropertyModule propertyModule) async {
+  static Future<List<ServiceModule>> getAllService(
+      PropertyModule propertyModule) async {
     print(propertyModule.id);
     http.Response response;
     response = await http.get(Uri.parse(
@@ -108,16 +109,17 @@ class HTTP_Requests {
   static Future<List> getUserProperties(int id) async {
     print(id);
     http.Response response;
-    response = await http.get(
-        Uri.parse("https://propplus-production.herokuapp.com/properties/ByUserId/"+id.toString()));
+    response = await http.get(Uri.parse(
+        "https://propplus-production.herokuapp.com/properties/ByUserId/" +
+            id.toString()));
     var data = jsonDecode(response.body) as List;
     print(data);
-    List<MainModule> list = <MainModule>[];
+    List<PropertyModule> list = <PropertyModule>[];
     for (var i = 0; i < data.length; i++) {
       var property = PropertyModule.fromJson(data[i]);
-      var item = MainModule.fromJson(property, data[i]);
+      print(property);
       try {
-        if (item != null) list.add(item);
+        if (property != null) list.add(property);
       } catch (e) {
         print(e);
       }
@@ -129,16 +131,52 @@ class HTTP_Requests {
 
   ////////////////////SEND/////////////////////////
 
+  static Future<dynamic> createNewUserInDB(
+      String _name, String _phone, String _email, String userID) async {
+    print(jsonEncode(<String, String>{
+      'name': _name,
+      'phone': _phone,
+      'email': _email,
+      'firebase_id': userID,
+      'date_of_reg': DateTime.now().toString(),
+    }));
+    final response = await http.post(
+      Uri.parse('https://propplus-production.herokuapp.com/users'),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: jsonEncode(<String, String>{
+        'name': _name,
+        'phone': _phone,
+        'email': _email,
+        'firebase_id': userID,
+        'date_of_reg': DateTime.now().toString(),
+      }),
+    );
+
+    if (response.statusCode == 201 || response.statusCode == 200) {
+      // If the server did return a 201 CREATED response,
+      // then parse the JSON.
+      Map<String, dynamic> content = jsonDecode(response.body);
+      int id = int.parse(content['id']);
+      return id;
+    } else {
+      // If the server did not return a 201 CREATED response,
+      // then throw an exception.
+      throw Exception('Failed to post to users table  .');
+    }
+  }
+
   static Future<void> addNewServiceToDB(ServiceModule module) async {
     final response = await http.post(
       Uri.parse('https://propplus-production.herokuapp.com/services'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },
-      body: jsonEncode(<String,dynamic>{
-        "property_id":module.propertyModule.id.toString(),
-        "description":module.description,
-        "price_per_night":module.price.toString(),
+      body: jsonEncode(<String, dynamic>{
+        "property_id": module.propertyModule.id.toString(),
+        "description": module.description,
+        "price_per_night": module.price.toString(),
       }),
     );
 
@@ -161,8 +199,11 @@ class HTTP_Requests {
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
         },
-        body: jsonEncode(
-            <String, dynamic>{'service_id': newServiceId, 'url': jsonUrls,'main_url':module.imageUrls[0]}),
+        body: jsonEncode(<String, dynamic>{
+          'service_id': newServiceId,
+          'url': jsonUrls,
+          'main_url': module.imageUrls[0]
+        }),
       );
       if (imageResponse.statusCode == 201 || response.statusCode == 200) {
       } else {
@@ -268,8 +309,6 @@ class HTTP_Requests {
 
   ////////////////////SEND/////////////////////////
 
-
-
   // Mock Functions
   /*
   static List createPropertyModules() {
@@ -312,51 +351,77 @@ class HTTP_Requests {
         location: "Location - location"));
     return propertyModules;
   }
-
+*/
   static List createTrendingModules() {
-    List<TrendingModule> trendingModules = <TrendingModule>[];
-    trendingModules.add(new TrendingModule(
-        "Luxury hotel",
-        "Location - location",
-        "100",
-        "assets/real-state.jpg",
-        4,
-        "Location - location"));
-    trendingModules.add(new TrendingModule(
-        "Luxury hotel",
-        "Location - location",
-        "100",
-        "assets/banner1.jpg",
-        5,
-        "Location - location"));
-    trendingModules.add(new TrendingModule(
-        "Luxury hotel",
-        "Location - location",
-        "100",
-        "assets/img3.jpg",
-        3,
-        "Location - location"));
-    trendingModules.add(new TrendingModule(
-        "Luxury hotel",
-        "Location - location",
-        "100",
-        "assets/real-state.jpg",
-        4,
-        "Location - location"));
+    List<MainModule> trendingModules = <MainModule>[];
+    trendingModules.add(new MainModule(
+        propertyModule: new PropertyModule(
+          id: 1,
+          title: "Luxury house",
+          description: "Nice flat",
+          location: "Muhajireen",
+          phone: "00",
+          rating: 4,
+        ),
+        service_id: 1,
+        imgSrc: "assets/real-state.jpg",
+        price: 80));
+
+    trendingModules.add(new MainModule(
+        propertyModule: new PropertyModule(
+          id: 1,
+          title: "Small studio",
+          description: "Nice flat",
+          location: "Muhagereen",
+          phone: "00",
+          rating: 4,
+        ),
+        service_id: 1,
+        imgSrc: "assets/Studio-apartment-decor-ideas.jpg",
+        price: 20));
+    trendingModules.add(new MainModule(
+        propertyModule: new PropertyModule(
+          id: 1,
+          title: "Luxury house",
+          description: "Nice flat",
+          location: "Muhajireen",
+          phone: "00",
+          rating: 4,
+        ),
+        service_id: 1,
+        imgSrc: "assets/real-state.jpg",
+        price: 80));
+    // trendingModules.add(new TrendingModule(
+    //     "Luxury hotel",
+    //     "Location - location",
+    //     "100",
+    //     "assets/banner1.jpg",
+    //     5,
+    //     "Location - location"));
+    // trendingModules.add(new TrendingModule(
+    //     "Luxury hotel",
+    //     "Location - location",
+    //     "100",
+    //     "assets/img3.jpg",
+    //     3,
+    //     "Location - location"));
+    // trendingModules.add(new TrendingModule(
+    //     "Luxury hotel",
+    //     "Location - location",
+    //     "100",
+    //     "assets/real-state.jpg",
+    //     4,
+    //     "Location - location"));
     return trendingModules;
   }
 
-  */
   static List createCategoriesModules() {
     List<CategoryModel> categoriesModules = <CategoryModel>[];
-    categoriesModules.add(new CategoryModel(Icons.hotel, "Hotel", false));
-    categoriesModules.add(new CategoryModel(Icons.hotel, "Hotel2", false));
-    categoriesModules.add(new CategoryModel(Icons.hotel, "Hotel3", false));
-    categoriesModules.add(new CategoryModel(Icons.hotel, "Hotel4", false));
-    categoriesModules.add(new CategoryModel(Icons.hotel, "Hotel4", false));
-    categoriesModules.add(new CategoryModel(Icons.hotel, "Hotel4", false));
-    categoriesModules.add(new CategoryModel(Icons.hotel, "Hotel4", false));
-    categoriesModules.add(new CategoryModel(Icons.hotel, "Hotel4", false));
+    categoriesModules.add(new CategoryModel(Icons.hotel, "Hotel", true));
+    categoriesModules.add(new CategoryModel(Icons.star, "Top Rated ", false));
+    categoriesModules.add(new CategoryModel(Icons.beach_access, "Beach", false));
+    categoriesModules.add(new CategoryModel(Icons.attach_money_rounded, "Best Price", false));
+    categoriesModules.add(new CategoryModel(Icons.house_sharp, "Villas", false));
     return categoriesModules;
   }
 }

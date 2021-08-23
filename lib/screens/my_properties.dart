@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:prop_plus/modules/main_module.dart';
+import 'package:prop_plus/modules/property_module.dart';
 import 'package:prop_plus/modules/user_properties_module.dart';
 import 'package:prop_plus/services/locater.dart';
 import 'package:prop_plus/services/user_controller.dart';
@@ -21,9 +22,10 @@ class _MyPropertiesState extends State<MyProperties> {
 
   List<MainModule> userPropertyModules = <MainModule>[];
 
-  Future<List<MainModule>> getUserPropertiesFromDB() async {
+  Future<List<PropertyModule>> getUserPropertiesFromDB() async {
     print(locater<UserController>().currentUser.dbId);
     var modules = await HTTP_Requests.getUserProperties(locater<UserController>().currentUser.dbId);
+    print(modules);
     // for (var i =0 ; i< modules.length ; i++){
     //   modules[i].imageUrls = await HTTP_Requests.getAllImagesForService(modules[i].service_id);
     // }
@@ -67,7 +69,8 @@ class _MyPropertiesState extends State<MyProperties> {
             return ListView.builder(
               itemCount: snapshot.data.length,
               itemBuilder: (context, index) {
-                MainModule module = snapshot.data[index];
+                PropertyModule module = snapshot.data[index];
+                print(module);
                 return UserPropertyCard(
                   module: module,
                 );

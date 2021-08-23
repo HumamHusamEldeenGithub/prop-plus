@@ -42,6 +42,8 @@ class _MyProperties_DetailsScreen extends State<MyProperties_DetailsScreen> {
 
   @override
   Widget build(BuildContext context) {
+    double _width = MediaQuery.of(context).size.width;
+    double _height = MediaQuery.of(context).size.height;
     dynamic module = ModalRoute.of(context).settings.arguments  ;
     return Scaffold(
       bottomNavigationBar: RaisedButton(
@@ -65,10 +67,10 @@ class _MyProperties_DetailsScreen extends State<MyProperties_DetailsScreen> {
           GestureDetector(
             child: AnimatedContainer(
               duration: const Duration(seconds: 1),
-              child: Image.network(
-                module.imgSrc,
-                fit: BoxFit.cover,
-              ),
+              // child: Image.network(
+              //   module.imgSrc,
+              //   fit: BoxFit.cover,
+              // ),
               height: imageVisible == true ? 300 : 0,
               width: 600,
             ),
@@ -99,7 +101,7 @@ class _MyProperties_DetailsScreen extends State<MyProperties_DetailsScreen> {
                             Padding(
                               padding: const EdgeInsets.only(left: 5),
                               child: Text(
-                                module.propertyModule.title,
+                                module.title,
                                 style: TextStyle(
                                     color: Colors.black,
                                     fontSize: 20.0,
@@ -109,7 +111,7 @@ class _MyProperties_DetailsScreen extends State<MyProperties_DetailsScreen> {
                           ],
                         ),
                         SizedBox(
-                          width: 200,
+                          width: _width*0.5,
                         ),
                         IconButton(
                           icon: favorite
@@ -130,7 +132,7 @@ class _MyProperties_DetailsScreen extends State<MyProperties_DetailsScreen> {
                     ),
                     const SizedBox(height: 10.0),
                     Text(
-                      module.propertyModule.description,
+                      module.description,
                       textAlign: TextAlign.justify,
                       style: TextStyle(
                           fontWeight: FontWeight.w300, fontSize: 14.0),
@@ -150,9 +152,9 @@ class _MyProperties_DetailsScreen extends State<MyProperties_DetailsScreen> {
                             SizedBox(
                               height: 5,
                             ),
-                            Text(
-                                module.price.toString()
-                            )
+                            // Text(
+                            //     module.price.toString()
+                            // )
                           ],
                         ),
                         Column(
@@ -169,7 +171,7 @@ class _MyProperties_DetailsScreen extends State<MyProperties_DetailsScreen> {
                             CustomStarBar(
                               starSize: 12,
                               starPadding: 0.6,
-                              rating: module.propertyModule.rating,
+                              rating: module.rating,
                             ),
                           ],
                         ),
@@ -185,7 +187,7 @@ class _MyProperties_DetailsScreen extends State<MyProperties_DetailsScreen> {
                               height: 5,
                             ),
                             Text(
-                                module.propertyModule.location
+                                module.location
                             )
                           ],
                         )

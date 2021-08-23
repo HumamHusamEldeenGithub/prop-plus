@@ -126,11 +126,11 @@ class _MainWidgetState extends State<MainWidget> {
   Future<void> _getDataFromDB() async {
     MainWidget.databaseData['PropertyModules'] =
         await HTTP_Requests.getRecommendedProperties();
-    /*
+
     MainWidget.databaseData['TrendingModules'] =
         await HTTP_Requests.createTrendingModules();
 
-     */
+
     MainWidget.databaseData['CategoriesModules'] =
         await HTTP_Requests.createCategoriesModules();
 

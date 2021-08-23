@@ -24,16 +24,50 @@ class _AddNewServiceScreen extends State<AddNewServiceScreen> {
 
   List<Widget> buildInputTextField() {
     List<Widget> textFields = [];
-    textFields.add(DividerWithText(
-      tag: "Add Description ",
+    textFields.add(SizedBox(
+      height: 15,
     ));
     textFields.add(TextFormField(
+      decoration: InputDecoration(
+        labelText: "Description",
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(5),
+          borderSide: BorderSide(
+            color: Colors.black,
+            width: 0.5,
+          ),
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(15),
+          borderSide: BorderSide(
+            color: Color(0xFF00B9FF),
+            width: 2.0,
+          ),
+        ),
+      ),
       onSaved: (value) => _description = value,
     ));
-    textFields.add(DividerWithText(
-      tag: "Add price per night ",
+    textFields.add(SizedBox(
+      height: 15,
     ));
     textFields.add(TextFormField(
+      decoration: InputDecoration(
+        labelText: "Price per night",
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(5),
+          borderSide: BorderSide(
+            color: Colors.black,
+            width: 0.5,
+          ),
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(15),
+          borderSide: BorderSide(
+            color: Color(0xFF00B9FF),
+            width: 2.0,
+          ),
+        ),
+      ),
       onSaved: (value) => _price = value,
     ));
     return textFields;
@@ -41,6 +75,8 @@ class _AddNewServiceScreen extends State<AddNewServiceScreen> {
 
   @override
   Widget build(BuildContext context) {
+    double _width = MediaQuery.of(context).size.width;
+    double _height = MediaQuery.of(context).size.height;
     dynamic module = ModalRoute.of(context).settings.arguments;
     return Scaffold(
       appBar: AppBar(
@@ -48,29 +84,31 @@ class _AddNewServiceScreen extends State<AddNewServiceScreen> {
       ),
       body: SingleChildScrollView(
         child: SafeArea(
-          child: Container(
-            child: Column(
-              children: [
-                Row(
-                  children: [
-                    Center(
-                      child: Text(
-                        "Add information of your new property's service",
-                        style: TextStyle(fontSize: MainTheme.fontMedium),
-                      ),
-                    ),
-                  ],
+          child: Column(
+            children: [
+              Container(
+                padding: EdgeInsets.symmetric(vertical: 20),
+                width: _width * 0.8,
+                child: Text(
+                  "Add information of your new property's service :",
+                  style: TextStyle(fontWeight: FontWeight.bold),
                 ),
-                SizedBox(height: 35),
-                Form(
-                  key: formKey,
+              ),
+              Form(
+                key: formKey,
+                child: Container(
+                  width: _width * 0.9,
                   child: Column(
                     children: buildInputTextField(),
                   ),
                 ),
-                SizedBox(height: 5),
-                DividerWithText(tag: "Add Pic "),
-                ElevatedButton(
+              ),
+              SizedBox(height: 15),
+              DividerWithText(tag: "Add Pic "),
+              Container(
+                width: _width * 0.6,
+                child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(primary: Colors.grey[500]),
                   child: Text("Pick Image "),
                   onPressed: () async {
                     image = await ImagePicker.platform
@@ -84,24 +122,29 @@ class _AddNewServiceScreen extends State<AddNewServiceScreen> {
                     });
                   },
                 ),
-                DividerWithText(tag: ""),
-                ElevatedButton(
-                  child: Text("Submit"),
+              ),
+              DividerWithText(tag: ""),
+              Container(
+                width: _width * 0.6,
+                child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(primary: Color(0xFF3DD6EB),),
+                  child: Text("Submit",style: TextStyle(fontWeight: FontWeight.bold,fontSize: 20),),
                   onPressed: () {
                     final form = formKey.currentState;
                     form.save();
-                    HTTP_Requests.addNewServiceToDB(
-                        ServiceModule(
+                    HTTP_Requests.addNewServiceToDB(ServiceModule(
                             propertyModule: module.propertyModule,
                             price: double.parse(_price),
                             description: _description,
-                            imageUrls: ["https://images.pexels.com/photos/3288104/pexels-photo-3288104.png?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260"])
+                            imageUrls: [
+                          "https://images.pexels.com/photos/3288104/pexels-photo-3288104.png?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260"
+                        ])
                         // }
                         );
                   },
-                )
-              ],
-            ),
+                ),
+              )
+            ],
           ),
         ),
       ),

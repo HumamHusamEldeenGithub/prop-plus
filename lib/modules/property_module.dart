@@ -11,8 +11,8 @@ class PropertyModule {
           phone: json['phone']?.toString(),
           description: json['description']?.toString(),
           rating: double.parse(json['rating']?.toString()),
-          location: json['city'].toString() + ' / ' +
-              json['street']?.toString());
-    } catch(e){return null ;}
+          location: json['city'] !=null ? json['city'].toString() + ' / ' +
+              json['street']?.toString():"");
+    } catch(e){print(e);return null ;}
   }
 }

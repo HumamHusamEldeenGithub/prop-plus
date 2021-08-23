@@ -157,20 +157,23 @@ class _DetailsScreenState extends State<DetailsScreen> {
                           ],
                         ),
                         const SizedBox(height: 10.0),
-                        Text(
-                          serviceModule != null
-                              ? serviceModule.description
-                              : "",
-                          textAlign: TextAlign.justify,
-                          style: TextStyle(
-                              fontWeight: FontWeight.w300, fontSize: 14.0),
+                        Center(
+                          child: Text(
+                            serviceModule != null
+                                ? serviceModule.description
+                                : "",
+                            textAlign: TextAlign.justify,
+                            style: TextStyle(
+                                fontWeight: FontWeight.w300, fontSize: 14.0),
+                          ),
                         ),
-                        const SizedBox(height: 15),
+                        const SizedBox(height: 30),
                         Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Column(
                               children: [
+                                const SizedBox(width: 60),
                                 Text(
                                   "Price".toUpperCase(),
                                   style: TextStyle(
@@ -180,7 +183,22 @@ class _DetailsScreenState extends State<DetailsScreen> {
                                 SizedBox(
                                   height: 5,
                                 ),
-                                Text(prevModule.price.toString())
+                                Text(prevModule.price.toString()+" \$")
+                              ],
+                            ),
+
+                            Column(
+                              children: [
+                                Text(
+                                  "Location".toUpperCase(),
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.w600,
+                                      fontSize: 14.0),
+                                ),
+                                SizedBox(
+                                  height: 5,
+                                ),
+                                Text(prevModule.propertyModule.location),
                               ],
                             ),
                             Column(
@@ -195,28 +213,15 @@ class _DetailsScreenState extends State<DetailsScreen> {
                                   height: 5,
                                 ),
                                 CustomStarBar(
-                                  starSize: 12,
+                                  starSize: 1,
                                   starPadding: 0.6,
                                   rating: prevModule.propertyModule.rating,
                                 ),
                               ],
                             ),
-                            Column(
-                              children: [
-                                Text(
-                                  "Location".toUpperCase(),
-                                  style: TextStyle(
-                                      fontWeight: FontWeight.w600,
-                                      fontSize: 14.0),
-                                ),
-                                SizedBox(
-                                  height: 5,
-                                ),
-                                Text("Unknown"),
-                              ],
-                            ),
                           ],
                         ),
+                        SizedBox(height: 50,),
                         args['showAllServices']!=false ?  Center(
                           child: ElevatedButton(
                               onPressed: () => {
