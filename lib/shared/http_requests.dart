@@ -424,4 +424,40 @@ class HTTP_Requests {
     categoriesModules.add(new CategoryModel(Icons.house_sharp, "Villas", false));
     return categoriesModules;
   }
+  static Future sendBookingEmail(String name , String email,String subject,String message) async{
+    final service_id = 'service_9jx63jf';
+    final template_id = 'template_p9r61j9';
+    final user_id = 'user_ajnKi0eDKQOl6ozAkEila';
+  final url = Uri.parse('https://api.emailjs.com/api/v1.0/email/send');
+  final response =  await http.post(url,
+  headers: {
+    'origin': 'http://localhost',
+    'Content-Type': 'application/json'
+  },
+  body:jsonEncode( {
+    'service_id': service_id,
+    'template_id': template_id,
+    'user_id': user_id,
+    'template_params':{
+      'user_name':name,
+      'user_subject':subject,
+      'user_message':message,
+      'user_email':email,
+
+    }
+  })
+  );
+    if (response.statusCode == 201 || response.statusCode == 200) {
+      // If the server did return a 201 CREATED response,
+      // then parse the JSON.
+      //TODO : return a flag to show succeeded widget
+      developer.log("done");
+    } else {
+      // If the server did not return a 201 CREATED response,
+      // then throw an exception.
+      developer.log(response.body.toString());
+    }
+
+
+  }
 }
