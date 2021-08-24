@@ -65,7 +65,11 @@ class HTTP_Requests {
     http.Response response;
     response = await http.get(Uri.parse(
         "https://propplus-production.herokuapp.com/bookings/service_id/" +
-            serviceId));
+            serviceId),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        'Authorization': authorizationKey,
+      },);
     var data = jsonDecode(response.body) as List;
     print(data);
     List<BookingModule> list = <BookingModule>[];

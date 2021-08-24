@@ -9,6 +9,7 @@ import 'package:prop_plus/services/provider.dart';
 import 'package:prop_plus/services/user_controller.dart';
 import 'package:prop_plus/shared/custom_text_field.dart';
 import 'package:http/http.dart' as http;
+import 'package:prop_plus/shared/http_requests.dart';
 
 class SignInScreen extends StatefulWidget {
   @override
@@ -151,7 +152,11 @@ class _SignInScreenState extends State<SignInScreen> {
   Future<void> getUserFromDB(String userID) async {
     final response = await http.get(Uri.parse(
         'https://propplus-production.herokuapp.com/users/ByFirebase/' +
-            userID));
+            userID),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        'Authorization': HTTP_Requests.authorizationKey,
+      },);
 
     if (response.statusCode == 201 || response.statusCode == 200) {
       // If the server did return a 201 CREATED response,
