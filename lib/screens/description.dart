@@ -12,8 +12,7 @@ import '../shared/custom_image_view.dart';
 import '../shared/http_requests.dart';
 
 class DetailsScreen extends StatefulWidget {
-
-  static String path = "/description" ;
+  static String path = "/description";
 
   @override
   _DetailsScreenState createState() => _DetailsScreenState();
@@ -25,7 +24,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
   bool imageVisible = true;
   bool favorite = false;
   bool initialized = false;
-  dynamic prevModule ;
+  dynamic prevModule;
   Future<ServiceModule> loadService(dynamic prevModule) async {
     serviceModule = await HTTP_Requests.getService(
         prevModule.service_id, prevModule.propertyModule);
@@ -58,8 +57,8 @@ class _DetailsScreenState extends State<DetailsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    var args = ModalRoute.of(context).settings.arguments as Map ;
-    prevModule =args['module'] ;
+    var args = ModalRoute.of(context).settings.arguments as Map;
+    prevModule = args['module'];
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
 
@@ -70,42 +69,60 @@ class _DetailsScreenState extends State<DetailsScreen> {
           return Scaffold(body: Center(child: CircularProgressIndicator()));
         }
         return Scaffold(
-          bottomNavigationBar: ElevatedButton(
-            style: ButtonStyle(
-              backgroundColor:
-                  MaterialStateProperty.all<Color>(MainTheme.mainColor),
-              textStyle: MaterialStateProperty.all<TextStyle>(TextStyle(
-                color: Colors.white,
-              )),
+          bottomNavigationBar: Container(
+            height: 45,
+            child: ElevatedButton(
+              style: ButtonStyle(
+                backgroundColor:
+                    MaterialStateProperty.all<Color>(MainTheme.mainColor),
+                textStyle: MaterialStateProperty.all<TextStyle>(TextStyle(
+                  color: Colors.white,
+                )),
+              ),
+              child: Text(
+                "Book Now",
+                style: TextStyle(fontWeight: FontWeight.normal),
+              ),
+              onPressed: () {
+                Navigator.pushNamed(context, BookingCalenderScreen.path,
+                    arguments: serviceModule);
+              },
             ),
-            child: Text(
-              "Book Now",
-              style: TextStyle(fontWeight: FontWeight.normal),
-            ),
-            onPressed: () {
-              Navigator.pushNamed(context, BookingCalenderScreen.path,
-                  arguments: serviceModule);
-            },
           ),
           body: ListView(
             controller: _scrollController,
             children: [
-              GestureDetector(
-                child: AnimatedContainer(
-                  duration: const Duration(seconds: 1),
-                  child: Image.network(
-                    serviceModule.imageUrls[0],
-                    fit: BoxFit.cover,
+              Stack(
+                children: [
+                  GestureDetector(
+                    child: AnimatedContainer(
+                      duration: const Duration(seconds: 1),
+                      child: Image.network(
+                        serviceModule.imageUrls[0],
+                        fit: BoxFit.cover,
+                      ),
+                      height: imageVisible == true ? height * 0.4 : 0,
+                      width: width,
+                    ),
+                    onTap: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => PhotosSlider(
+                                  imagesUrls: serviceModule.imageUrls)));
+                    },
                   ),
-                  height: imageVisible == true ? height * 0.4 : 0,
-                  width: width,
-                ),
-                onTap: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => PhotosSlider(imagesUrls: serviceModule.imageUrls)));
-                },
+                  Container(
+                    child: Padding(
+                      padding: const EdgeInsets.only(left: 10,top: 10),
+                      child: IconButton(
+                          onPressed: (){
+                            Navigator.pop(context);
+                          },
+                          icon: Icon(Icons.arrow_back,size: 30,)),
+                    )
+                  ),
+                ]
               ),
               Column(
                 mainAxisAlignment: MainAxisAlignment.start,
@@ -183,10 +200,9 @@ class _DetailsScreenState extends State<DetailsScreen> {
                                 SizedBox(
                                   height: 5,
                                 ),
-                                Text(prevModule.price.toString()+" \$")
+                                Text(prevModule.price.toString() + " \$")
                               ],
                             ),
-
                             Column(
                               children: [
                                 Text(
@@ -221,16 +237,24 @@ class _DetailsScreenState extends State<DetailsScreen> {
                             ),
                           ],
                         ),
-                        SizedBox(height: 50,),
-                        args['showAllServices']!=false ?  Center(
-                          child: ElevatedButton(
-                              onPressed: () => {
-                                    Navigator.pushNamed(
-                                        context, AllServices.path,
-                                        arguments: serviceModule.propertyModule)
-                                  },
-                              child: Text('Show all services ')),
-                        ):SizedBox()
+                        SizedBox(
+                          height: 50,
+                        ),
+                        args['showAllServices'] != false
+                            ? Center(
+                                child: ElevatedButton(
+                                    style: ButtonStyle(
+                                        backgroundColor:
+                                        MaterialStateProperty.all<Color>(MainTheme.mainColor)),
+                                    onPressed: () => {
+                                          Navigator.pushNamed(
+                                              context, AllServices.path,
+                                              arguments:
+                                                  serviceModule.propertyModule)
+                                        },
+                                    child: Text('Show all services ')),
+                              )
+                            : SizedBox()
                       ],
                     ),
                   )

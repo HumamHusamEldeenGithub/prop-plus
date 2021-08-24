@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:prop_plus/constant/MainTheme.dart';
 import 'package:prop_plus/modules/booking_module.dart';
 import 'package:prop_plus/modules/main_module.dart';
 import 'package:prop_plus/modules/service_module.dart';
@@ -59,6 +60,18 @@ class AllServicesState extends State<AllServices> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        flexibleSpace: Container(
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment.centerLeft,
+              end: Alignment.centerRight,
+              colors: [
+                MainTheme.mainColor,
+                MainTheme.secondaryColor,
+              ],
+            ),
+          ),
+        ),
         title: Text("All Services"),
       ),
       body: Center(

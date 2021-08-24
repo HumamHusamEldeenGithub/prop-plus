@@ -80,6 +80,18 @@ class _AddNewServiceScreen extends State<AddNewServiceScreen> {
     dynamic module = ModalRoute.of(context).settings.arguments;
     return Scaffold(
       appBar: AppBar(
+        flexibleSpace: Container(
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment.centerLeft,
+              end: Alignment.centerRight,
+              colors: [
+                MainTheme.mainColor,
+                MainTheme.secondaryColor,
+              ],
+            ),
+          ),
+        ),
         title: Text("New Service"),
       ),
       body: SingleChildScrollView(

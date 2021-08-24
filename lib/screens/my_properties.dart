@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:prop_plus/constant/MainTheme.dart';
 import 'package:prop_plus/modules/main_module.dart';
 import 'package:prop_plus/modules/property_module.dart';
 import 'package:prop_plus/modules/user_properties_module.dart';
@@ -56,6 +57,18 @@ class _MyPropertiesState extends State<MyProperties> {
     // );
     return Scaffold(
       appBar: AppBar(
+        flexibleSpace: Container(
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment.centerLeft,
+              end: Alignment.centerRight,
+              colors: [
+                MainTheme.mainColor,
+                MainTheme.secondaryColor,
+              ],
+            ),
+          ),
+        ),
         title: Text("My Properties"),
       ),
       body: Center(

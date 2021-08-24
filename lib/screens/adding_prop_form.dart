@@ -212,6 +212,18 @@ class _PropertyInputFormState extends State<PropertyInputForm> {
 
     return Scaffold(
       appBar: AppBar(
+        flexibleSpace: Container(
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment.centerLeft,
+              end: Alignment.centerRight,
+              colors: [
+                MainTheme.mainColor,
+                MainTheme.secondaryColor,
+              ],
+            ),
+          ),
+        ),
         title: Text("Add the information of your Prop"),
       ),
       body: SingleChildScrollView(

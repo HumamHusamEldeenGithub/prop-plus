@@ -8,6 +8,8 @@ class MainTheme{
   static double fontXLarge = 20;
   static Color mainColor = Color(0xFF00B9FF);
   static Color secondaryColor = Color(0xFF3DD6EB);
+  static Color greyedOutColor = Color(0xFF004353);
+  static Color transMainColor = Color(0x6400B9FF);
   static Color heartColor = Color(0xFFff5959);
   static Color shadowColor = Color(0xFFC3BFBF);
   static Offset shadowOffest = Offset(0, 3);

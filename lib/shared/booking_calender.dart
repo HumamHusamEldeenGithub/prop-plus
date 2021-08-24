@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:prop_plus/constant/MainTheme.dart';
 import 'package:prop_plus/modules/booking_module.dart';
@@ -18,8 +19,9 @@ class BookingCalender extends StatefulWidget {
 class _BookingCalenderState extends State<BookingCalender> {
   List<DateTime> blackOutDates = <DateTime>[];
   List<BookingModule> bookingModules;
-
-  Future initailizeBlackOuts() async {
+  bool initialized = false;
+  Future<void> initailizeBlackOuts() async {
+    initialized = true;
     List<DateTime> curBlackOutDates = <DateTime>[];
     bookingModules = await HTTP_Requests.getAllBookingForService(3.toString());
     for (int i = 0; i < bookingModules.length; i++) {
@@ -33,35 +35,86 @@ class _BookingCalenderState extends State<BookingCalender> {
         curBlackOutDates.add(bookingModules[i].fromDate.add(Duration(days: j)));
       }
     }
-    setState(() {
-      blackOutDates=curBlackOutDates;
-    });
+    curBlackOutDates.add(DateTime(2021,8,15));
+    curBlackOutDates.add(DateTime(2021,8,16));
+    curBlackOutDates.add(DateTime(2021,8,17));
+    blackOutDates=curBlackOutDates;
   }
 
   void onSelectionChanged(DateRangePickerSelectionChangedArgs args) {}
 
   @override
-  void initState() {
-    super.initState();
-    initailizeBlackOuts();
-  }
-
-  @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: blackOutDates.isNotEmpty
-            ? SfDateRangePicker(
-                monthCellStyle: DateRangePickerMonthCellStyle(
-                    cellDecoration: BoxDecoration(color: Colors.white),
-                    blackoutDateTextStyle:
-                        TextStyle(color: MainTheme.greyFontColor)),
-                monthViewSettings: DateRangePickerMonthViewSettings(
-                  blackoutDates: blackOutDates ,
+      appBar: AppBar(
+        flexibleSpace: Container(
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment.centerLeft,
+              end: Alignment.centerRight,
+              colors: [
+                MainTheme.mainColor,
+                MainTheme.secondaryColor,
+              ],
+            ),
+          ),
+        ),
+      ),
+        body: FutureBuilder(
+          future: initailizeBlackOuts(),
+          builder: (context,snapshot){
+            if(snapshot.connectionState == ConnectionState.done){
+              return Container(
+                child: Column(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.all(25),
+                      child: Text(
+                          "Please choose the range of time you would like to book this service",
+                          style: TextStyle(fontSize: MainTheme.fontMedium),
+                      ),
+                    ),
+                    Container(
+                      height: 500,
+                      child: SfDateRangePicker(
+                        startRangeSelectionColor: MainTheme.mainColor,
+                        endRangeSelectionColor: MainTheme.mainColor,
+                        rangeSelectionColor: Color(0x6400B9FF),
+                        selectionShape: DateRangePickerSelectionShape.rectangle,
+                        monthCellStyle: DateRangePickerMonthCellStyle(
+                          cellDecoration: BoxDecoration(color: Colors.white,shape: BoxShape.rectangle),
+                          blackoutDateTextStyle: TextStyle(color: Colors.white),
+                          blackoutDatesDecoration: BoxDecoration(
+                              shape: BoxShape.rectangle,
+                              color: Color(0xFFA86A6A),
+                              borderRadius: BorderRadius.circular(5),
+                          ),
+                        ),
+                        monthViewSettings: DateRangePickerMonthViewSettings(
+                          blackoutDates: blackOutDates ,
+                        ),
+                        onSelectionChanged: onSelectionChanged,
+                        selectionMode: DateRangePickerSelectionMode.range,
+                      ),
+                    ),
+                    Container(
+                      width: 70,
+                      child: FloatingActionButton(
+                        backgroundColor: MainTheme.mainColor,
+                        onPressed: (){},
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                        child: Text("Book Now",textAlign: TextAlign.center,style: TextStyle(color: Colors.white),),
+                      )
+                    )
+                  ],
                 ),
-                onSelectionChanged: onSelectionChanged,
-              )
-            : Center(
-                child: CircularProgressIndicator(),
-              ));
+              );
+            }
+            else{
+              return Center(child: CircularProgressIndicator());
+            }
+          }
+        )
+    );
   }
 }
