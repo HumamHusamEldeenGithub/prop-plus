@@ -6,6 +6,7 @@ import 'package:prop_plus/modules/user_module.dart';
 import 'package:prop_plus/services/locater.dart';
 import 'package:prop_plus/services/user_controller.dart';
 import 'package:prop_plus/shared/custom_avatar.dart';
+import 'package:prop_plus/shared/http_requests.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 class Profile extends StatefulWidget {
@@ -123,7 +124,8 @@ class ProfileState extends State<Profile> {
                         Navigator.of(context).pushNamed('/myProperties');
                       },
                       child: Text("My Properties")),
-                )
+                ),
+                
               ],
             ),
           ],
