@@ -14,14 +14,20 @@ import 'dart:developer' as developer;
 
 // ignore: camel_case_types
 class HTTP_Requests {
+  static String authorizationKey = "55b1cbe8-e38e-410f-842a-7f70dc4762cc";
   ////////////////////GET/////////////////////////
 
   static Future<ServiceModule> getService(
       int serviceId, PropertyModule propertyModule) async {
     http.Response response;
-    response = await http.get(Uri.parse(
-        "https://propplus-production.herokuapp.com/services/" +
-            serviceId.toString()));
+    response = await http.get(
+      Uri.parse("https://propplus-production.herokuapp.com/services/" +
+          serviceId.toString()),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        'Authorization': authorizationKey,
+      },
+    );
     var data = jsonDecode(response.body);
     print(data);
     ServiceModule module;
@@ -32,7 +38,14 @@ class HTTP_Requests {
   static Future<List> getRecommendedProperties() async {
     http.Response response;
     response = await http.get(
-        Uri.parse("https://propplus-production.herokuapp.com/properties/home"));
+      Uri.parse(
+        "https://propplus-production.herokuapp.com/properties/home",
+      ),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        'Authorization': authorizationKey,
+      },
+    );
     var data = jsonDecode(response.body) as List;
     print(data);
     List<MainModule> list = <MainModule>[];
@@ -71,9 +84,15 @@ class HTTP_Requests {
       PropertyModule propertyModule) async {
     print(propertyModule.id);
     http.Response response;
-    response = await http.get(Uri.parse(
-        "https://propplus-production.herokuapp.com/services/ByPropertyId/" +
-            propertyModule.id.toString()));
+    response = await http.get(
+      Uri.parse(
+          "https://propplus-production.herokuapp.com/services/ByPropertyId/" +
+              propertyModule.id.toString()),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        'Authorization': authorizationKey,
+      },
+    );
     var data = jsonDecode(response.body) as List;
     print(data);
     List<ServiceModule> list = <ServiceModule>[];
@@ -90,9 +109,15 @@ class HTTP_Requests {
 
   static Future<List<String>> getAllImagesForService(int id) async {
     http.Response response;
-    response = await http.get(Uri.parse(
-        "https://propplus-production.herokuapp.com/images/ByServiceId/" +
-            id.toString()));
+    response = await http.get(
+      Uri.parse(
+          "https://propplus-production.herokuapp.com/images/ByServiceId/" +
+              id.toString()),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        'Authorization': authorizationKey,
+      },
+    );
     var data = jsonDecode(response.body) as List;
     List<String> list = <String>[];
     for (var i = 0; i < data.length; i++) {
@@ -109,9 +134,15 @@ class HTTP_Requests {
   static Future<List> getUserProperties(int id) async {
     print(id);
     http.Response response;
-    response = await http.get(Uri.parse(
-        "https://propplus-production.herokuapp.com/properties/ByUserId/" +
-            id.toString()));
+    response = await http.get(
+      Uri.parse(
+          "https://propplus-production.herokuapp.com/properties/ByUserId/" +
+              id.toString()),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        'Authorization': authorizationKey,
+      },
+    );
     var data = jsonDecode(response.body) as List;
     print(data);
     List<PropertyModule> list = <PropertyModule>[];
@@ -144,6 +175,7 @@ class HTTP_Requests {
       Uri.parse('https://propplus-production.herokuapp.com/users'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
+        'Authorization': authorizationKey,
       },
       body: jsonEncode(<String, String>{
         'name': _name,
@@ -172,6 +204,7 @@ class HTTP_Requests {
       Uri.parse('https://propplus-production.herokuapp.com/services'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
+        'Authorization': authorizationKey,
       },
       body: jsonEncode(<String, dynamic>{
         "property_id": module.propertyModule.id.toString(),
@@ -198,6 +231,7 @@ class HTTP_Requests {
         Uri.parse('https://propplus-production.herokuapp.com/images'),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
+          'Authorization': authorizationKey,
         },
         body: jsonEncode(<String, dynamic>{
           'service_id': newServiceId,
@@ -220,9 +254,14 @@ class HTTP_Requests {
 
   static Future<int> getUserId(String firebaseId) async {
     http.Response response;
-    response = await http.get(Uri.parse(
-        "https://propplus-production.herokuapp.com/users/ByFirebase/" +
-            firebaseId));
+    response = await http.get(
+      Uri.parse("https://propplus-production.herokuapp.com/users/ByFirebase/" +
+          firebaseId),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        'Authorization': authorizationKey,
+      },
+    );
     var data = jsonDecode(response.body);
     print(data);
     return data['id'];
@@ -234,6 +273,7 @@ class HTTP_Requests {
           'https://propplus-production.herokuapp.com/properties_to_approve'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
+        'Authorization': authorizationKey,
       },
       body: jsonEncode(<String, String>{
         'name': module.title,
@@ -259,6 +299,7 @@ class HTTP_Requests {
         Uri.parse('https://propplus-production.herokuapp.com/approval_images'),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
+          'Authorization': authorizationKey,
         },
         body: jsonEncode(<String, dynamic>{
           'property_to_approve_id': propToApproveId.toString(),
@@ -288,6 +329,7 @@ class HTTP_Requests {
       Uri.parse('https://propplus-production.herokuapp.com/bookings'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
+        'Authorization': authorizationKey,
       },
       body: jsonEncode(<String, String>{
         'service_id': serviceId,
@@ -419,34 +461,37 @@ class HTTP_Requests {
     List<CategoryModel> categoriesModules = <CategoryModel>[];
     categoriesModules.add(new CategoryModel(Icons.hotel, "Hotel", true));
     categoriesModules.add(new CategoryModel(Icons.star, "Top Rated ", false));
-    categoriesModules.add(new CategoryModel(Icons.beach_access, "Beach", false));
-    categoriesModules.add(new CategoryModel(Icons.attach_money_rounded, "Best Price", false));
-    categoriesModules.add(new CategoryModel(Icons.house_sharp, "Villas", false));
+    categoriesModules
+        .add(new CategoryModel(Icons.beach_access, "Beach", false));
+    categoriesModules.add(
+        new CategoryModel(Icons.attach_money_rounded, "Best Price", false));
+    categoriesModules
+        .add(new CategoryModel(Icons.house_sharp, "Villas", false));
     return categoriesModules;
   }
-  static Future sendBookingEmail(String name , String email,String subject,String message) async{
+
+  static Future sendBookingEmail(
+      String name, String email, String subject, String message) async {
     final service_id = 'service_9jx63jf';
     final template_id = 'template_p9r61j9';
     final user_id = 'user_ajnKi0eDKQOl6ozAkEila';
-  final url = Uri.parse('https://api.emailjs.com/api/v1.0/email/send');
-  final response =  await http.post(url,
-  headers: {
-    'origin': 'http://localhost',
-    'Content-Type': 'application/json'
-  },
-  body:jsonEncode( {
-    'service_id': service_id,
-    'template_id': template_id,
-    'user_id': user_id,
-    'template_params':{
-      'user_name':name,
-      'user_subject':subject,
-      'user_message':message,
-      'user_email':email,
-
-    }
-  })
-  );
+    final url = Uri.parse('https://api.emailjs.com/api/v1.0/email/send');
+    final response = await http.post(url,
+        headers: {
+          'origin': 'http://localhost',
+          'Content-Type': 'application/json'
+        },
+        body: jsonEncode({
+          'service_id': service_id,
+          'template_id': template_id,
+          'user_id': user_id,
+          'template_params': {
+            'user_name': name,
+            'user_subject': subject,
+            'user_message': message,
+            'user_email': email,
+          }
+        }));
     if (response.statusCode == 201 || response.statusCode == 200) {
       // If the server did return a 201 CREATED response,
       // then parse the JSON.
@@ -457,7 +502,5 @@ class HTTP_Requests {
       // then throw an exception.
       developer.log(response.body.toString());
     }
-
-
   }
 }

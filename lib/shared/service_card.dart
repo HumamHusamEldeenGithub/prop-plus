@@ -24,8 +24,11 @@ class _ServiceCardState extends State<ServiceCard> {
       padding: const EdgeInsets.only(bottom: 20),
       child: GestureDetector(
         onTap: () {
-          Navigator.pushNamed(context, DetailsScreen.path,
-              arguments: {'module':widget.module,'showAllServices': false} ,);
+          Navigator.pushNamed(
+            context,
+            DetailsScreen.path,
+            arguments: {'module': widget.module, 'showAllServices': false},
+          );
         },
         child: Card(
           elevation: 5,
@@ -37,12 +40,12 @@ class _ServiceCardState extends State<ServiceCard> {
                 children: [
                   ClipRect(
                       child: Align(
-                        //TODO FIX THIS
-                        child:
-                             Image.network(widget.module.imageUrls[0])
-                            ,
-                        heightFactor: 0.65,
-                      )),
+                    //TODO FIX THIS
+                    child: Image.network(widget.module.imageUrls.isNotEmpty
+                        ? widget.module.imageUrls[0]
+                        : ""),
+                    heightFactor: 0.65,
+                  )),
                   Padding(
                     padding: const EdgeInsets.all(10),
                     child: Row(
@@ -71,14 +74,15 @@ class _ServiceCardState extends State<ServiceCard> {
                             Row(
                               children: [
                                 RatingBar.builder(
-                                  initialRating: widget.module.propertyModule.rating,
+                                  initialRating:
+                                      widget.module.propertyModule.rating,
                                   minRating: 1,
                                   direction: Axis.horizontal,
                                   allowHalfRating: true,
                                   itemCount: 5,
                                   itemSize: 20,
                                   itemPadding:
-                                  EdgeInsets.symmetric(horizontal: 2),
+                                      EdgeInsets.symmetric(horizontal: 2),
                                   itemBuilder: (context, _) => Icon(
                                     Icons.star,
                                     color: Colors.amber,
@@ -126,20 +130,20 @@ class _ServiceCardState extends State<ServiceCard> {
                   ),
                   child: Center(
                       child: IconButton(
-                        icon: favorite
-                            ? Icon(
-                          Icons.favorite,
-                          color: MainTheme.mainColor,
-                        )
-                            : Icon(
-                          Icons.favorite_border,
-                        ),
-                        onPressed: () {
-                          setState(() {
-                            favorite = !favorite;
-                          });
-                        },
-                      )),
+                    icon: favorite
+                        ? Icon(
+                            Icons.favorite,
+                            color: MainTheme.mainColor,
+                          )
+                        : Icon(
+                            Icons.favorite_border,
+                          ),
+                    onPressed: () {
+                      setState(() {
+                        favorite = !favorite;
+                      });
+                    },
+                  )),
                 )),
           ]),
         ),

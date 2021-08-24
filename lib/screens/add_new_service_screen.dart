@@ -145,7 +145,7 @@ class _AddNewServiceScreen extends State<AddNewServiceScreen> {
                     final form = formKey.currentState;
                     form.save();
                     HTTP_Requests.addNewServiceToDB(ServiceModule(
-                            propertyModule: module.propertyModule,
+                            propertyModule: module,
                             price: double.parse(_price),
                             description: _description,
                             imageUrls: [
