@@ -29,7 +29,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
     serviceModule = await HTTP_Requests.getService(
         prevModule.service_id, prevModule.propertyModule);
     var urls =
-        await HTTP_Requests.getAllImagesForService(prevModule.service_id);
+    await HTTP_Requests.getAllImagesForService(prevModule.service_id);
     serviceModule.imageUrls = urls;
     return serviceModule;
   }
@@ -74,14 +74,14 @@ class _DetailsScreenState extends State<DetailsScreen> {
             child: ElevatedButton(
               style: ButtonStyle(
                 backgroundColor:
-                    MaterialStateProperty.all<Color>(MainTheme.mainColor),
+                MaterialStateProperty.all<Color>(MainTheme.mainColor),
                 textStyle: MaterialStateProperty.all<TextStyle>(TextStyle(
                   color: Colors.white,
                 )),
               ),
               child: Text(
                 "Book Now",
-                style: TextStyle(fontWeight: FontWeight.normal),
+                style: TextStyle(fontWeight: FontWeight.bold),
               ),
               onPressed: () {
                 Navigator.pushNamed(context, BookingCalenderScreen.path,
@@ -92,37 +92,23 @@ class _DetailsScreenState extends State<DetailsScreen> {
           body: ListView(
             controller: _scrollController,
             children: [
-              Stack(
-                children: [
-                  GestureDetector(
-                    child: AnimatedContainer(
-                      duration: const Duration(seconds: 1),
-                      child: Image.network(
-                        serviceModule.imageUrls[0],
-                        fit: BoxFit.cover,
-                      ),
-                      height: imageVisible == true ? height * 0.4 : 0,
-                      width: width,
-                    ),
-                    onTap: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => PhotosSlider(
-                                  imagesUrls: serviceModule.imageUrls)));
-                    },
+              GestureDetector(
+                child: AnimatedContainer(
+                  duration: const Duration(seconds: 1),
+                  child: Image.network(
+                    serviceModule.imageUrls[0],
+                    fit: BoxFit.cover,
                   ),
-                  Container(
-                    child: Padding(
-                      padding: const EdgeInsets.only(left: 10,top: 10),
-                      child: IconButton(
-                          onPressed: (){
-                            Navigator.pop(context);
-                          },
-                          icon: Icon(Icons.arrow_back,size: 30,)),
-                    )
-                  ),
-                ]
+                  height: imageVisible == true ? height * 0.4 : 0,
+                  width: width,
+                ),
+                onTap: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => PhotosSlider(
+                              imagesUrls: serviceModule.imageUrls)));
+                },
               ),
               Column(
                 mainAxisAlignment: MainAxisAlignment.start,
@@ -159,12 +145,12 @@ class _DetailsScreenState extends State<DetailsScreen> {
                             IconButton(
                               icon: favorite
                                   ? Icon(
-                                      Icons.favorite,
-                                      color: MainTheme.mainColor,
-                                    )
+                                Icons.favorite,
+                                color: MainTheme.mainColor,
+                              )
                                   : Icon(
-                                      Icons.favorite_border,
-                                    ),
+                                Icons.favorite_border,
+                              ),
                               onPressed: () {
                                 setState(() {
                                   favorite = !favorite;
@@ -238,23 +224,25 @@ class _DetailsScreenState extends State<DetailsScreen> {
                           ],
                         ),
                         SizedBox(
-                          height: 50,
+                          height: 35,
+                        ),
+                        CustomAminitiesListView(),
+                        SizedBox(
+                          height: 20,
                         ),
                         args['showAllServices'] != false
                             ? Center(
-                                child: ElevatedButton(
-                                    style: ButtonStyle(
-                                        backgroundColor:
-                                        MaterialStateProperty.all<Color>(MainTheme.mainColor)),
-                                    onPressed: () => {
-                                          Navigator.pushNamed(
-                                              context, AllServices.path,
-                                              arguments:
-                                                  serviceModule.propertyModule)
-                                        },
-                                    child: Text('Show all services ')),
-                              )
-                            : SizedBox()
+                          child: ElevatedButton(
+                              onPressed: () => {
+                                Navigator.pushNamed(
+                                    context, AllServices.path,
+                                    arguments:
+                                    serviceModule.propertyModule)
+                              },
+                              child: Text('Show all services ')),
+                        )
+                            : SizedBox.shrink(),
+
                       ],
                     ),
                   )
@@ -282,9 +270,9 @@ class CustomAminitiesCard extends StatelessWidget {
             children: [
               Card(
                   child: Icon(
-                icon,
-                size: 30,
-              )),
+                    icon,
+                    size: 30,
+                  )),
               Text(
                 title,
                 style: TextStyle(fontSize: 12, color: Colors.black),
@@ -303,11 +291,13 @@ class CustomAminitiesListView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       height: 60,
-      child: ListView(
-        shrinkWrap: true,
-        scrollDirection: Axis.horizontal,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
           CustomAminitiesCard(icon: Icons.car_rental, title: "Parking"),
+          CustomAminitiesCard(icon: Icons.bathtub, title: "Bath tup"),
+          CustomAminitiesCard(icon: Icons.wifi, title: "Wifi"),
+          CustomAminitiesCard(icon: Icons.ac_unit, title: "Cooler"),
         ],
       ),
     );
