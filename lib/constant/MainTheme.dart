@@ -6,6 +6,7 @@ class MainTheme{
   static double fontMedium = 16;
   static double fontLarge = 18;
   static double fontXLarge = 20;
+  static double fontXXLarge = 24;
   static Color mainColor = Color(0xFF00B9FF);
   static Color secondaryColor = Color(0xFF3DD6EB);
   static Color greyedOutColor = Color(0xFF004353);

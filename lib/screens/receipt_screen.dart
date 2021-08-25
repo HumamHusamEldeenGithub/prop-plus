@@ -6,29 +6,58 @@ import 'package:prop_plus/modules/booking_module.dart';
 import 'package:prop_plus/modules/user_module.dart';
 import 'package:prop_plus/services/locater.dart';
 import 'package:prop_plus/services/user_controller.dart';
+import 'package:prop_plus/shared/http_requests.dart';
+import 'package:prop_plus/shared/loading_dialog.dart';
+import 'package:prop_plus/shared/loading_widget.dart';
 import 'package:prop_plus/shared/receipt.dart';
 
 class ReceiptScreen extends StatefulWidget {
   static final path = "/receipt";
-  BookingModule bookingModule;
-  ReceiptScreen({Key key,this.bookingModule}) : super(key: key);
+  ReceiptScreen({Key key}) : super(key: key);
 
   @override
   _ReceiptScreenState createState() => _ReceiptScreenState();
 }
 
 class _ReceiptScreenState extends State<ReceiptScreen> {
-  UserModule user;
-  double totalPrice;
+  BookingModule bookingModule;
 
   @override
   void initState() {
     super.initState();
-    user = locater.get<UserController>().currentUser;
   }
+
+  Future<void> sendBooking() async{
+    showDialog(context: context, builder: (context){
+      return FutureBuilder(
+        future: HTTP_Requests.sendBookRequest(bookingModule.serviceModule.service_id.toString(), bookingModule.fromDate.toString(), bookingModule.toDate.toString()),
+        builder: (context,snapshot){
+          if(snapshot.connectionState == ConnectionState.done){
+            return AlertDialog(
+              titlePadding: EdgeInsets.only(top: 20),
+              title: Text("Booked successfully!",textAlign: TextAlign.center,),
+              actions: <Widget>[
+                TextButton(
+                  onPressed: () {
+                    Navigator.pushReplacementNamed(context, '/homeScreen');
+                  },
+                  child: Text('Return to home',style: TextStyle(fontSize: MainTheme.fontMedium),)
+                ),
+              ],
+            );
+          }
+          else{
+            return Center(
+              child: CircularProgressIndicator(),
+            );
+          }
+        });
+    });
+   }
 
   @override
   Widget build(BuildContext context) {
+    bookingModule = ModalRoute.of(context).settings.arguments;
     return Scaffold(
       appBar: AppBar(
         flexibleSpace: Container(
@@ -44,7 +73,15 @@ class _ReceiptScreenState extends State<ReceiptScreen> {
           ),
         ),
       ),
-      body: Receipt()
+      bottomNavigationBar: Container(
+        height: 45,
+        child: ElevatedButton(
+          onPressed: sendBooking,
+          child: Text("Book now",),
+          style: ButtonStyle(backgroundColor: MaterialStateProperty.all<Color>(MainTheme.mainColor)),
+        ),
+      ),
+      body: Receipt(bookingModule: bookingModule)
     );
   }
 }
