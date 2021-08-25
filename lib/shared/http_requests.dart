@@ -193,6 +193,7 @@ class HTTP_Requests {
     if (response.statusCode == 201 || response.statusCode == 200) {
       // If the server did return a 201 CREATED response,
       // then parse the JSON.
+      developer.log("Added to db ");
       Map<String, dynamic> content = jsonDecode(response.body);
       int id = int.parse(content['id']);
       return id;
