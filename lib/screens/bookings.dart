@@ -21,6 +21,7 @@ class BookingsState extends State<Bookings> {
     await widget.parentFunction();
     // if failed,use refreshFailed()
     _refreshController.refreshCompleted();
+    refreshPage();
   }
 
   void _onLoading() async{

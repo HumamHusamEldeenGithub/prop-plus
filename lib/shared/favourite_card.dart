@@ -6,12 +6,18 @@ import 'package:prop_plus/modules/favourite_module.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:prop_plus/modules/main_module.dart';
 import 'package:prop_plus/screens/description.dart';
+import 'package:prop_plus/services/locater.dart';
+import 'package:prop_plus/services/user_controller.dart';
+
+import 'http_requests.dart';
+import 'loading_widget.dart';
 
 
 
 class FavouriteCard extends StatefulWidget {
+  Function refreshFunction ;
   final MainModule module ;
-  const FavouriteCard({Key key,this.module}) : super(key: key);
+  FavouriteCard({this.refreshFunction,Key key,this.module}) : super(key: key);
 
   @override
   _FavouriteCardState createState() => _FavouriteCardState();
@@ -19,7 +25,7 @@ class FavouriteCard extends StatefulWidget {
 
 class _FavouriteCardState extends State<FavouriteCard> {
 
-  bool favorite = false;
+  bool favorite = true;
 
   @override
   Widget build(BuildContext context) {
@@ -116,9 +122,29 @@ class _FavouriteCardState extends State<FavouriteCard> {
                                   Icons.favorite_border,
                                   size: 20,
                                 ),
-                                onPressed: () {
+                                onPressed: ()async {
+                                  if (!favorite) {
+                                    Loading.showLoaderDialog(context, "Adding property to favorite");
+                                    await HTTP_Requests.addNewFavourite(
+                                        locater<UserController>()
+                                            .currentUser
+                                            .dbId
+                                            .toString(),
+                                        widget.module.propertyModule.id.toString());
+
+                                  } else {
+                                    Loading.showLoaderDialog(context, "Removing property from favorite");
+                                    await HTTP_Requests.deleteFavourite(
+                                        locater<UserController>()
+                                            .currentUser
+                                            .dbId
+                                            .toString(),
+                                        widget.module.propertyModule.id.toString());
+                                  }
                                   setState(() {
                                     favorite = !favorite;
+                                    Navigator.pop(context);
+                                    widget.refreshFunction();
                                   });
                                 },
                               ),

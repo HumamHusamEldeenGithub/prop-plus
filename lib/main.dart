@@ -61,11 +61,13 @@ class MyApp extends StatelessWidget {
           '/propInputForm': (BuildContext context) => PropertyInputForm(),
           '/myProperties': (BuildContext context) => MyProperties(),
           '/explore': (BuildContext context) => Explore(),
-          '/description' : (BuildContext context) => DetailsScreen(),
-          '/my_property_description' : (BuildContext context) => MyProperties_DetailsScreen(),
-          '/add_new_service' : (BuildContext context) => AddNewServiceScreen(),
-          '/booking_calender_screen' : (BuildContext context) => BookingCalenderScreen(),
-          '/all_services' : (BuildContext context) => AllServices(),
+          '/description': (BuildContext context) => DetailsScreen(),
+          '/my_property_description': (BuildContext context) =>
+              MyProperties_DetailsScreen(),
+          '/add_new_service': (BuildContext context) => AddNewServiceScreen(),
+          '/booking_calender_screen': (BuildContext context) =>
+              BookingCalenderScreen(),
+          '/all_services': (BuildContext context) => AllServices(),
         },
       ),
     );
@@ -81,10 +83,11 @@ class MainWidget extends StatefulWidget {
 class _MainWidgetState extends State<MainWidget> {
   SearchBar searchBar;
   List<Widget> Screens = [];
+  List<Function> screenDBDataGetter = [];
   int _selectedIndex = 0;
   GlobalKey<HomeState> _homeGlobalKey = GlobalKey<HomeState>();
   GlobalKey<FavouritesState> _favouritesGlobalKey =
-  GlobalKey<FavouritesState>();
+      GlobalKey<FavouritesState>();
   GlobalKey<BookingsState> _bookingsGlobalKey = GlobalKey<BookingsState>();
   GlobalKey<ProfileState> _profileGlobalKey = GlobalKey<ProfileState>();
 
@@ -131,7 +134,6 @@ class _MainWidgetState extends State<MainWidget> {
     MainWidget.databaseData['TrendingModules'] =
         await HTTP_Requests.getTrendingProperties("Hotels");
 
-
     MainWidget.databaseData['CategoriesModules'] =
         await HTTP_Requests.createCategoriesModules();
 
@@ -141,11 +143,10 @@ class _MainWidgetState extends State<MainWidget> {
 
   Future<void> getDataFromDBForFavorite() async {
     MainWidget.databaseData['FavouriteModules'] =
-    await HTTP_Requests.getFavouriteProperties(locater<UserController>().currentUser.dbId);
+        await HTTP_Requests.getFavouriteProperties(
+            locater<UserController>().currentUser.dbId);
 
     _favouritesGlobalKey.currentState?.refreshPage();
-
-
   }
 
   Future<void> getDataFromDBForBookings() async {
@@ -153,7 +154,6 @@ class _MainWidgetState extends State<MainWidget> {
     // await HTTP_Requests.getRecommendedProperties();
 
     _bookingsGlobalKey.currentState?.refreshPage();
-
   }
 
   @override
@@ -164,12 +164,21 @@ class _MainWidgetState extends State<MainWidget> {
     getDataFromDBForHome();
     getDataFromDBForFavorite();
     Screens = [
-      Home(parentFunction: getDataFromDBForHome,
+      Home(
+        parentFunction: getDataFromDBForHome,
         key: _homeGlobalKey,
       ),
-      Favourites(parentFunction: getDataFromDBForHome,key: _favouritesGlobalKey),
-      Bookings(parentFunction: getDataFromDBForFavorite,key: _bookingsGlobalKey),
-      Profile(parentFunction: getDataFromDBForBookings,key: _profileGlobalKey)
+      Favourites(
+          parentFunction: getDataFromDBForFavorite, key: _favouritesGlobalKey),
+      Bookings(
+          parentFunction: getDataFromDBForFavorite, key: _bookingsGlobalKey),
+      Profile(parentFunction: getDataFromDBForBookings, key: _profileGlobalKey)
+    ];
+    screenDBDataGetter = [
+      getDataFromDBForHome,
+      getDataFromDBForFavorite,
+      getDataFromDBForBookings,
+      getDataFromDBForBookings
     ];
   }
 
@@ -219,11 +228,11 @@ class _MainWidgetState extends State<MainWidget> {
                   icon: Icons.person,
                   text: 'Profile',
                 ),
-
               ],
               selectedIndex: _selectedIndex,
               onTabChange: (index) {
                 setState(() {
+                  screenDBDataGetter[index]() ;
                   _selectedIndex = index;
                   print(index);
                 });

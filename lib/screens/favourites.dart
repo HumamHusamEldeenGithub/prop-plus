@@ -16,7 +16,6 @@ class Favourites extends StatefulWidget {
 }
 
 class FavouritesState extends State<Favourites> {
-  List<FavouriteModule> favouriteModules = <FavouriteModule>[];
   RefreshController _refreshController =
       RefreshController(initialRefresh: false);
 
@@ -25,6 +24,7 @@ class FavouritesState extends State<Favourites> {
     await widget.parentFunction();
     // if failed,use refreshFailed()
     _refreshController.refreshCompleted();
+    refreshPage();
   }
 
   void _onLoading() async {
@@ -39,21 +39,10 @@ class FavouritesState extends State<Favourites> {
     setState(() {});
   }
 
-  void createFavouriteModules() {
-    favouriteModules.add(new FavouriteModule(
-        "Luxury hotel",
-        "Location - location",
-        "100",
-        "assets/real-state.jpg",
-        4,
-        "Location - location"));
-  }
-
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    createFavouriteModules();
   }
 
   @override
@@ -94,7 +83,7 @@ class FavouritesState extends State<Favourites> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children:
                         MainWidget.databaseData['FavouriteModules'].map((card) {
-                      return FavouriteCard(module: card);
+                      return FavouriteCard(refreshFunction:widget.parentFunction,module: card);
                     }).toList(),
                   ),
                 )

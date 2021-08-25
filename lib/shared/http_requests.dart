@@ -29,7 +29,7 @@ class HTTP_Requests {
       },
     );
     var data = jsonDecode(response.body);
-    print(data);
+    //print(data);
     ServiceModule module;
     var item = ServiceModule.fromJson(data, propertyModule);
     return item;
