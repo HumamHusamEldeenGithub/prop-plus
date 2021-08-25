@@ -39,11 +39,6 @@ class BookingsState extends State<Bookings> {
   void createBookingModules() {
     bookingsModules.add(new BookingModule(
         id: 1,
-        title: "Luxury hotel",
-        description: "Description - description",
-        price: 100,
-        imgSrc: "assets/real-state.jpg",
-        location: "Location - location",
         fromDate: DateTime.parse("2021-01-01"),
         toDate: DateTime.parse("2021-01-05")
       )

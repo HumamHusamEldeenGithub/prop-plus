@@ -61,12 +61,13 @@ class HTTP_Requests {
     return list;
   }
 
-  static Future<List> getAllBookingForService(String serviceId) async {
+  static Future<List> getAllBookingForService(ServiceModule serviceModule) async {
+    int serviceId = serviceModule.service_id;
     http.Response response;
     response = await http.get(
       Uri.parse(
           "https://propplus-production.herokuapp.com/bookings/service_id/" +
-              serviceId),
+              serviceId.toString()),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
         'Authorization': authorizationKey,
@@ -76,7 +77,7 @@ class HTTP_Requests {
     print(data);
     List<BookingModule> list = <BookingModule>[];
     for (var i = 0; i < data.length; i++) {
-      var item = BookingModule.fromJson(data[i]);
+      var item = BookingModule.fromJson(data[i],serviceModule);
       try {
         if (item != null) list.add(item);
       } catch (e) {

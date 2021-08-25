@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:prop_plus/constant/MainTheme.dart';
 import 'package:prop_plus/modules/booking_module.dart';
 import 'package:prop_plus/modules/service_module.dart';
+import 'package:prop_plus/screens/receipt_screen.dart';
 import 'package:prop_plus/shared/http_requests.dart';
 import 'package:syncfusion_flutter_datepicker/datepicker.dart';
 
@@ -20,9 +21,16 @@ class _BookingCalenderState extends State<BookingCalender> {
   List<DateTime> _blackOutDates = <DateTime>[];
   List<BookingModule> _bookingModules;
   DateRangePickerController _controller = DateRangePickerController();
+  BookingModule bookingModule;
+
+
+  DateTime startDateToBook;
+  DateTime endDateToBook;
+  DateTime curDate;
+
   Future<void> initailizeBlackOuts() async {
     List<DateTime> curBlackOutDates = <DateTime>[];
-    _bookingModules = await HTTP_Requests.getAllBookingForService(3.toString());
+    _bookingModules = await HTTP_Requests.getAllBookingForService(widget.serviceModule);
     for (int i = 0; i < _bookingModules.length; i++) {
       for (int j = 0;
           j <=
@@ -41,9 +49,9 @@ class _BookingCalenderState extends State<BookingCalender> {
   void onSelectionChanged(DateRangePickerSelectionChangedArgs args) {
     if(_controller.selectedRange.startDate == null)
       return;
-    DateTime startDateToBook = _controller.selectedRange.startDate;
-    DateTime endDateToBook = _controller.selectedRange.endDate;
-    DateTime curDate = DateTime.now();
+    startDateToBook = _controller.selectedRange.startDate;
+    endDateToBook = _controller.selectedRange.endDate;
+    curDate = DateTime.now();
     curDate = DateTime(curDate.year,curDate.month,curDate.day);
     if(startDateToBook.isBefore(curDate)){
       _controller.selectedRange = PickerDateRange(null, null);
@@ -61,6 +69,7 @@ class _BookingCalenderState extends State<BookingCalender> {
           ],
         );
       });
+      return;
     }
     if(endDateToBook!=null){
       for (int j = 0; j <= endDateToBook.difference(startDateToBook).inDays; j++){
@@ -86,8 +95,10 @@ class _BookingCalenderState extends State<BookingCalender> {
         }
       }
     }
+  }
 
-
+  void ContinueToReceipt(){
+    bookingModule = new BookingModule(serviceModule: widget.serviceModule,fromDate: startDateToBook,toDate: endDateToBook);
   }
 
   @override
@@ -146,14 +157,14 @@ class _BookingCalenderState extends State<BookingCalender> {
                       ),
                     ),
                     Container(
-                      width: 80,
+                      width: 100,
                       height: 50,
                       child: ElevatedButton(
                         style: ButtonStyle(
                           backgroundColor: MaterialStateProperty.all<Color>(MainTheme.mainColor),
                           shape: MaterialStateProperty.all<RoundedRectangleBorder>(RoundedRectangleBorder(borderRadius: BorderRadius.circular(10))),
                         ),
-                        onPressed: (){},
+                        onPressed: ContinueToReceipt,
                         child: Text("Continue",textAlign: TextAlign.center,style: TextStyle(color: Colors.white),),
                       )
                     )

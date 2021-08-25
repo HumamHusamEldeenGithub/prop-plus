@@ -1,20 +1,16 @@
+import 'package:prop_plus/modules/service_module.dart';
+
 class BookingModule{
-  final int id,price;
-  final String title, description, imgSrc;
+  final ServiceModule serviceModule;
+  final int id;
   final DateTime fromDate,toDate;
-  final String location;
-  BookingModule({this.id, this.title, this.description, this.price, this.imgSrc, this.location,this.fromDate,this.toDate});
-  factory BookingModule.fromJson(Map<String, dynamic> json){
+  BookingModule({this.id, this.serviceModule,this.fromDate,this.toDate});
+  factory BookingModule.fromJson(Map<String, dynamic> json, ServiceModule serviceModule){
     try{
 
       return new BookingModule(
-
           id: int.parse(json['booking_id']?.toString()),
-          title: json['title']?.toString(),
-          description: json['description']?.toString(),
-          price: int.parse(json['price']?.toString()),
-          imgSrc: json['url']?.toString(),
-          location: json['city']?.toString() + ' / ' + json['street']?.toString(),
+          serviceModule: serviceModule,
           fromDate: DateTime.parse(json['start_date']?.toString().replaceAll('.', ':').substring(0,19) + 'Z'),
           toDate: DateTime.parse(json['end_date']?.toString().replaceAll('.', ':').substring(0,19) + 'Z')
       );
