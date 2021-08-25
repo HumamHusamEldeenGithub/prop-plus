@@ -1,33 +1,36 @@
-
 import 'package:flutter/material.dart';
 import 'package:prop_plus/constant/MainTheme.dart';
 import 'package:prop_plus/constant/FavouriteTheme.dart';
 import 'package:prop_plus/modules/booking_module.dart';
 import 'package:prop_plus/modules/booking_module.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:prop_plus/modules/main_module.dart';
 import 'package:prop_plus/screens/description.dart';
 import 'package:intl/intl.dart';
 import 'package:prop_plus/screens/description.dart';
 
-
-
 class BookingCard extends StatefulWidget {
-  final dynamic module ;
-  const BookingCard({Key key,this.module}) : super(key: key);
+  final dynamic module;
+  const BookingCard({Key key, this.module}) : super(key: key);
 
   @override
   _BookingCardState createState() => _BookingCardState();
 }
 
 class _BookingCardState extends State<BookingCard> {
-
   bool favorite = false;
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: (){
-        Navigator.pushNamed(context, DetailsScreen.path,arguments: widget.module) ;
+      onTap: () {
+        Navigator.pushNamed(context, DetailsScreen.path,
+            arguments: {'module': new MainModule(
+                propertyModule: widget.module.serviceModule.propertyModule,
+                service_id: widget.module.serviceModule.service_id,
+                imgSrc: "",
+                price: int.parse(widget.module.serviceModule.price.toString()))}
+        );
       },
       child: Container(
         child: Card(
@@ -69,15 +72,16 @@ class _BookingCardState extends State<BookingCard> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              widget.module.title,
+                              widget.module.serviceModule.propertyModule.title,
                               style: FavouriteTheme.titleTextStyle,
                             ),
                             Text(
-                              "\$ ${widget.module.price}/night",
+                              "\$ ${widget.module.serviceModule.price}/night",
                               style: FavouriteTheme.priceTextStyle,
                             ),
                             Text(
-                              widget.module.location,
+                              widget
+                                  .module.serviceModule.propertyModule.location,
                               style: FavouriteTheme.locationTextStyle,
                             ),
                             RatingBar.builder(
@@ -86,8 +90,7 @@ class _BookingCardState extends State<BookingCard> {
                               allowHalfRating: true,
                               itemCount: 5,
                               itemSize: 20,
-                              itemPadding:
-                              EdgeInsets.symmetric(horizontal: 2),
+                              itemPadding: EdgeInsets.symmetric(horizontal: 2),
                               itemBuilder: (context, _) => Icon(
                                 Icons.star,
                                 color: Colors.amber,
@@ -102,8 +105,18 @@ class _BookingCardState extends State<BookingCard> {
                           mainAxisAlignment: MainAxisAlignment.center,
                           crossAxisAlignment: CrossAxisAlignment.end,
                           children: [
-                            Text("FROM : "+DateFormat('yyyy-MM-dd').format(widget.module.fromDate).toString() ,style: FavouriteTheme.locationTextStyle),
-                            Text("TO : "+DateFormat('yyyy-MM-dd').format(widget.module.toDate).toString(), style: FavouriteTheme.locationTextStyle)
+                            Text(
+                                "FROM : " +
+                                    DateFormat('yyyy-MM-dd')
+                                        .format(widget.module.fromDate)
+                                        .toString(),
+                                style: FavouriteTheme.locationTextStyle),
+                            Text(
+                                "TO : " +
+                                    DateFormat('yyyy-MM-dd')
+                                        .format(widget.module.toDate)
+                                        .toString(),
+                                style: FavouriteTheme.locationTextStyle)
                           ],
                         ),
                       ],
