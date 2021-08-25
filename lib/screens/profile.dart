@@ -125,7 +125,7 @@ class ProfileState extends State<Profile> {
                       },
                       child: Text("My Properties")),
                 ),
-                
+
               ],
             ),
           ],

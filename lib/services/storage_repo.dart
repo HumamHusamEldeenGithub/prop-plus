@@ -24,9 +24,18 @@ class StorageRepo{
   }
 
   Future<String> uploadPropertyApprovalPhotos(File file ) async {
-    developer.log(FileSupport().getFileNameWithoutExtension(file));
+    //developer.log(FileSupport().getFileNameWithoutExtension(file));
     var userId = await _authService.getCurrentUID();
     var storageRef = storage.ref().child("users/user_id:${userId}/approvalPhotos/${FileSupport().getFileNameWithoutExtension(file)}");
+    var uploadTask = await storageRef.putFile(file);
+    String downloadURL = await uploadTask.ref.getDownloadURL();
+    return downloadURL;
+  }
+
+  Future<String> uploadServicePic(File file ) async {
+    //developer.log(FileSupport().getFileNameWithoutExtension(file));
+    var userId = await _authService.getCurrentUID();
+    var storageRef = storage.ref().child("users/user_id:${userId}/propetiesPics/${FileSupport().getFileNameWithoutExtension(file)}");
     var uploadTask = await storageRef.putFile(file);
     String downloadURL = await uploadTask.ref.getDownloadURL();
     return downloadURL;

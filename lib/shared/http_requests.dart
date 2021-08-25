@@ -269,6 +269,7 @@ class HTTP_Requests {
     if (response.statusCode == 201 || response.statusCode == 200) {
       // If the server did return a 201 CREATED response,
       // then parse the JSON.
+      developer.log("Added");
 
       Map<String, dynamic> newService = jsonDecode(response.body);
       dynamic newServiceId = newService['id'];
@@ -293,6 +294,7 @@ class HTTP_Requests {
         }),
       );
       if (imageResponse.statusCode == 201 || response.statusCode == 200) {
+        developer.log("Done");
       } else {
         throw Exception('Failed to post to  images table  .');
       }

@@ -38,6 +38,9 @@ class UserController{
   Future<String> uploadPropertyApprovalPhoto(File image) async{
     return await _storageRepo.uploadPropertyApprovalPhotos(image);
   }
+  Future<String> uploadServicePhoto(File image) async{
+    return await _storageRepo.uploadServicePic(image);
+  }
   Future<String>signInWithEmailAndPassword (String email ,String password) async{
     _currentUser =await _authService.signInWithEmailAndPassword(email, password);
     return _currentUser.uid ;
@@ -49,6 +52,7 @@ class UserController{
     _currentUser = await _authService.createUserWithEmailAndPassword(email, password, userName);
     int dbId = await HTTP_Requests.createNewUserInDB(userName,"",email,_currentUser.uid);
     _currentUser.dbId = dbId ;
+    return _currentUser.uid;
   }
 
   signOut(){
