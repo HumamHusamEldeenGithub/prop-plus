@@ -22,6 +22,7 @@ import 'package:prop_plus/services/locater.dart';
 import 'package:prop_plus/services/provider.dart';
 import 'package:flutter_search_bar/flutter_search_bar.dart';
 import 'package:prop_plus/screens/description.dart';
+import 'package:prop_plus/services/user_controller.dart';
 import 'dart:developer' as developer;
 import 'dart:async';
 import 'package:prop_plus/shared/http_requests.dart';
@@ -139,8 +140,8 @@ class _MainWidgetState extends State<MainWidget> {
   }
 
   Future<void> getDataFromDBForFavorite() async {
-    // MainWidget.databaseData['PropertyModules'] =
-    // await HTTP_Requests.getRecommendedProperties();
+    MainWidget.databaseData['FavouriteModules'] =
+    await HTTP_Requests.getFavouriteProperties(locater<UserController>().currentUser.dbId);
 
     _favouritesGlobalKey.currentState?.refreshPage();
 
@@ -161,6 +162,7 @@ class _MainWidgetState extends State<MainWidget> {
     super.initState();
     _MyHomePageState();
     getDataFromDBForHome();
+    getDataFromDBForFavorite();
     Screens = [
       Home(parentFunction: getDataFromDBForHome,
         key: _homeGlobalKey,
@@ -246,7 +248,6 @@ class HomeController extends StatelessWidget {
       builder: (context, AsyncSnapshot<String> snapshot) {
         if (snapshot.connectionState == ConnectionState.active) {
           final bool SignedIn = snapshot.hasData;
-          developer.log(SignedIn.toString());
           return SignedIn ? MainWidget() : WelcomeView();
         }
         return CircularProgressIndicator();

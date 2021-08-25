@@ -4,12 +4,13 @@ import 'package:prop_plus/constant/MainTheme.dart';
 import 'package:prop_plus/constant/FavouriteTheme.dart';
 import 'package:prop_plus/modules/favourite_module.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:prop_plus/modules/main_module.dart';
 import 'package:prop_plus/screens/description.dart';
 
 
 
 class FavouriteCard extends StatefulWidget {
-  final FavouriteModule module ;
+  final MainModule module ;
   const FavouriteCard({Key key,this.module}) : super(key: key);
 
   @override
@@ -24,7 +25,7 @@ class _FavouriteCardState extends State<FavouriteCard> {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: (){
-        Navigator.pushNamed(context, DetailsScreen.path,arguments: widget.module) ;
+        Navigator.pushNamed(context, DetailsScreen.path,arguments: {'module': widget.module}) ;
       },
       child: Container(
         child: Card(
@@ -41,7 +42,7 @@ class _FavouriteCardState extends State<FavouriteCard> {
                   height: 100,
                   decoration: BoxDecoration(
                       image: DecorationImage(
-                        image: AssetImage("assets/real-state.jpg"),
+                        image: NetworkImage(widget.module.imgSrc),
                         fit: BoxFit.cover,
                       ),
                       borderRadius: BorderRadius.only(
@@ -66,19 +67,19 @@ class _FavouriteCardState extends State<FavouriteCard> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              "Luxury hotel",
+                              widget.module.propertyModule.title,
                               style: FavouriteTheme.titleTextStyle,
                             ),
                             Text(
-                              "\$ 100/night",
+                              "\$ "+widget.module.price.toString(),
                               style: FavouriteTheme.priceTextStyle,
                             ),
                             Text(
-                              "Location - location",
+                              widget.module.propertyModule.location,
                               style: FavouriteTheme.locationTextStyle,
                             ),
                             RatingBar.builder(
-                              initialRating: widget.module.rating,
+                              initialRating: widget.module.propertyModule.rating,
                               minRating: 1,
                               direction: Axis.horizontal,
                               allowHalfRating: true,

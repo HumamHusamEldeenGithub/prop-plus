@@ -47,7 +47,33 @@ class HTTP_Requests {
       },
     );
     var data = jsonDecode(response.body) as List;
-    print(data);
+    //print(data);
+    List<MainModule> list = <MainModule>[];
+    for (var i = 0; i < data.length; i++) {
+      var property = PropertyModule.fromJson(data[i]);
+      var item = MainModule.fromJson(property, data[i]);
+      try {
+        if (item != null) list.add(item);
+      } catch (e) {
+        print(e);
+      }
+    }
+    return list;
+  }
+
+  static Future<List> getFavouriteProperties(int userId) async {
+    http.Response response;
+    response = await http.get(
+      Uri.parse(
+        "https://propplus-production.herokuapp.com/favourite_properties/withDetails/"+userId.toString(),
+      ),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        'Authorization': authorizationKey,
+      },
+    );
+    var data = jsonDecode(response.body) as List;
+    //print(data);
     List<MainModule> list = <MainModule>[];
     for (var i = 0; i < data.length; i++) {
       var property = PropertyModule.fromJson(data[i]);
@@ -203,7 +229,7 @@ class HTTP_Requests {
       },
     );
     var data = jsonDecode(response.body) as List;
-    print(data);
+    //print(data);
     List<MainModule> list = <MainModule>[];
     for (var i = 0; i < data.length; i++) {
       var property = PropertyModule.fromJson(data[i]);
@@ -248,7 +274,6 @@ class HTTP_Requests {
     if (response.statusCode == 201 || response.statusCode == 200) {
       // If the server did return a 201 CREATED response,
       // then parse the JSON.
-      developer.log("Added to db ");
       Map<String, dynamic> content = jsonDecode(response.body);
       int id = int.parse(content['id'].toString());
       return id;
@@ -327,7 +352,7 @@ class HTTP_Requests {
     if (response.statusCode == 201 || response.statusCode == 200) {
       // If the server did return a 201 CREATED response,
       // then parse the JSON.
-      developer.log("Added");
+
 
       Map<String, dynamic> newService = jsonDecode(response.body);
       dynamic newServiceId = newService['id'];
@@ -352,7 +377,6 @@ class HTTP_Requests {
         }),
       );
       if (imageResponse.statusCode == 201 || response.statusCode == 200) {
-        developer.log("Done");
       } else {
         throw Exception('Failed to post to  images table  .');
       }
@@ -609,11 +633,9 @@ class HTTP_Requests {
       // If the server did return a 201 CREATED response,
       // then parse the JSON.
       //TODO : return a flag to show succeeded widget
-      developer.log("done");
     } else {
       // If the server did not return a 201 CREATED response,
       // then throw an exception.
-      developer.log(response.body.toString());
     }
   }
 }

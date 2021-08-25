@@ -6,10 +6,11 @@ import 'package:prop_plus/services/user_controller.dart';
 import 'package:prop_plus/shared/favourite_card.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
+import '../main.dart';
 
 class Favourites extends StatefulWidget {
   Function parentFunction;
-  Favourites({this.parentFunction,Key key}) : super(key: key);
+  Favourites({this.parentFunction, Key key}) : super(key: key);
   @override
   FavouritesState createState() => FavouritesState();
 }
@@ -17,24 +18,23 @@ class Favourites extends StatefulWidget {
 class FavouritesState extends State<Favourites> {
   List<FavouriteModule> favouriteModules = <FavouriteModule>[];
   RefreshController _refreshController =
-  RefreshController(initialRefresh: false);
+      RefreshController(initialRefresh: false);
 
-  void _onRefresh() async{
+  void _onRefresh() async {
     // monitor network fetch
     await widget.parentFunction();
     // if failed,use refreshFailed()
     _refreshController.refreshCompleted();
   }
 
-  void _onLoading() async{
+  void _onLoading() async {
     // monitor network fetch
     await Future.delayed(Duration(milliseconds: 1000));
     // if failed,use loadFailed(),if no data return,use LoadNodata()
-    if(mounted)
-      setState(() {
-      });
+    if (mounted) setState(() {});
     _refreshController.loadComplete();
   }
+
   void refreshPage() {
     setState(() {});
   }
@@ -64,26 +64,22 @@ class FavouritesState extends State<Favourites> {
         enablePullUp: true,
         header: WaterDropHeader(),
         footer: CustomFooter(
-          builder: (BuildContext context,LoadStatus mode){
-            Widget body ;
-            if(mode==LoadStatus.idle){
-              body =  Text("pull up load");
-            }
-            else if(mode==LoadStatus.loading){
-              body =  CupertinoActivityIndicator();
-            }
-            else if(mode == LoadStatus.failed){
+          builder: (BuildContext context, LoadStatus mode) {
+            Widget body;
+            if (mode == LoadStatus.idle) {
+              body = Text("pull up load");
+            } else if (mode == LoadStatus.loading) {
+              body = CupertinoActivityIndicator();
+            } else if (mode == LoadStatus.failed) {
               body = Text("Load Failed!Click retry!");
-            }
-            else if(mode == LoadStatus.canLoading){
+            } else if (mode == LoadStatus.canLoading) {
               body = Text("release to load more");
-            }
-            else{
+            } else {
               body = Text("No more Data");
             }
             return Container(
               height: 55.0,
-              child: Center(child:body),
+              child: Center(child: body),
             );
           },
         ),
@@ -92,13 +88,19 @@ class FavouritesState extends State<Favourites> {
         onLoading: _onLoading,
         child: SingleChildScrollView(
           scrollDirection: Axis.vertical,
-          child: Column(
-            children: favouriteModules.map((card) {
-              return FavouriteCard(module: card);
-            }).toList(),
-          ),
+          child: MainWidget.databaseData['PropertyModules'] != null
+              ? Center(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children:
+                        MainWidget.databaseData['FavouriteModules'].map((card) {
+                      return FavouriteCard(module: card);
+                    }).toList(),
+                  ),
+                )
+              : SizedBox(),
         ),
-      ) ,
+      ),
     );
   }
 }

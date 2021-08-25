@@ -271,7 +271,6 @@ class _PropertyInputFormState extends State<PropertyInputForm> {
                           String imageUrl = await locater
                               .get<UserController>()
                               .uploadPropertyApprovalPhoto(File(image.path));
-                          developer.log(imageUrl);
                           setState(() {
                             imagesUrls.add(imageUrl);
                             imageUrl =null;

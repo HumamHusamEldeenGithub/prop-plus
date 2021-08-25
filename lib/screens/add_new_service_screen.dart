@@ -140,7 +140,6 @@ class _AddNewServiceScreen extends State<AddNewServiceScreen> {
                       image = null;
                       Navigator.pop(context);
                     });
-                    developer.log(url);
                   },
                 ),
               ),

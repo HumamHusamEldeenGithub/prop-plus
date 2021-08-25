@@ -51,10 +51,8 @@ class UserController{
 
   Future createUserWithEmailAndPassword(String email ,String password , String userName) async{
     _currentUser = await _authService.createUserWithEmailAndPassword(email, password, userName);
-    developer.log(_currentUser.uid);
     int dbId = await HTTP_Requests.createNewUserInDB(userName,"",email,_currentUser.uid);
     _currentUser.dbId = dbId ;
-    developer.log(_currentUser.dbId.toString());
     return _currentUser.uid;
   }
 
