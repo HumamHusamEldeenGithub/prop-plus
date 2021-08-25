@@ -17,31 +17,78 @@ class BookingCalender extends StatefulWidget {
 }
 
 class _BookingCalenderState extends State<BookingCalender> {
-  List<DateTime> blackOutDates = <DateTime>[];
-  List<BookingModule> bookingModules;
-  bool initialized = false;
+  List<DateTime> _blackOutDates = <DateTime>[];
+  List<BookingModule> _bookingModules;
+  DateRangePickerController _controller = DateRangePickerController();
   Future<void> initailizeBlackOuts() async {
-    initialized = true;
     List<DateTime> curBlackOutDates = <DateTime>[];
-    bookingModules = await HTTP_Requests.getAllBookingForService(3.toString());
-    for (int i = 0; i < bookingModules.length; i++) {
+    _bookingModules = await HTTP_Requests.getAllBookingForService(3.toString());
+    for (int i = 0; i < _bookingModules.length; i++) {
       for (int j = 0;
           j <=
-              bookingModules[i]
+              _bookingModules[i]
                   .toDate
-                  .difference(bookingModules[i].fromDate)
+                  .difference(_bookingModules[i].fromDate)
                   .inDays;
           j++) {
-        curBlackOutDates.add(bookingModules[i].fromDate.add(Duration(days: j)));
+        curBlackOutDates.add(_bookingModules[i].fromDate.add(Duration(days: j)));
       }
     }
-    curBlackOutDates.add(DateTime(2021,8,15));
-    curBlackOutDates.add(DateTime(2021,8,16));
-    curBlackOutDates.add(DateTime(2021,8,17));
-    blackOutDates=curBlackOutDates;
+    curBlackOutDates.add(DateTime(2021,8,26));
+    _blackOutDates=curBlackOutDates;
   }
 
-  void onSelectionChanged(DateRangePickerSelectionChangedArgs args) {}
+  void onSelectionChanged(DateRangePickerSelectionChangedArgs args) {
+    if(_controller.selectedRange.startDate == null)
+      return;
+    DateTime startDateToBook = _controller.selectedRange.startDate;
+    DateTime endDateToBook = _controller.selectedRange.endDate;
+    DateTime curDate = DateTime.now();
+    curDate = DateTime(curDate.year,curDate.month,curDate.day);
+    if(startDateToBook.isBefore(curDate)){
+      _controller.selectedRange = PickerDateRange(null, null);
+      showDialog(context: context, builder: (context){
+        return AlertDialog(
+          title: Text('Invalid booking date'),
+          content: Text("You can't choose a date before the current date!"),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              child: Text('Close')
+            ),
+          ],
+        );
+      });
+    }
+    if(endDateToBook!=null){
+      for (int j = 0; j <= endDateToBook.difference(startDateToBook).inDays; j++){
+        DateTime dateToIterate = startDateToBook.add(Duration(days: j));
+        print(dateToIterate);
+        if(_blackOutDates.contains(dateToIterate)){
+          _controller.selectedRange = PickerDateRange(null, null);
+          showDialog(context: context, builder: (context){
+            return AlertDialog(
+              title: Text('Invalid booking date'),
+              content: Text("Sorry you can't book in this range, Please choose different days!"),
+              actions: <Widget>[
+                TextButton(
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                    child: Text('Close')
+                ),
+              ],
+            );
+          });
+          return;
+        }
+      }
+    }
+
+
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -77,6 +124,7 @@ class _BookingCalenderState extends State<BookingCalender> {
                     Container(
                       height: 500,
                       child: SfDateRangePicker(
+                        controller: _controller,
                         startRangeSelectionColor: MainTheme.mainColor,
                         endRangeSelectionColor: MainTheme.mainColor,
                         rangeSelectionColor: Color(0x6400B9FF),
@@ -87,23 +135,26 @@ class _BookingCalenderState extends State<BookingCalender> {
                           blackoutDatesDecoration: BoxDecoration(
                               shape: BoxShape.rectangle,
                               color: Color(0xFFA86A6A),
-                              borderRadius: BorderRadius.circular(5),
+                              borderRadius: BorderRadius.circular(10),
                           ),
                         ),
                         monthViewSettings: DateRangePickerMonthViewSettings(
-                          blackoutDates: blackOutDates ,
+                          blackoutDates: _blackOutDates ,
                         ),
                         onSelectionChanged: onSelectionChanged,
                         selectionMode: DateRangePickerSelectionMode.range,
                       ),
                     ),
                     Container(
-                      width: 70,
-                      child: FloatingActionButton(
-                        backgroundColor: MainTheme.mainColor,
+                      width: 80,
+                      height: 50,
+                      child: ElevatedButton(
+                        style: ButtonStyle(
+                          backgroundColor: MaterialStateProperty.all<Color>(MainTheme.mainColor),
+                          shape: MaterialStateProperty.all<RoundedRectangleBorder>(RoundedRectangleBorder(borderRadius: BorderRadius.circular(10))),
+                        ),
                         onPressed: (){},
-                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-                        child: Text("Book Now",textAlign: TextAlign.center,style: TextStyle(color: Colors.white),),
+                        child: Text("Continue",textAlign: TextAlign.center,style: TextStyle(color: Colors.white),),
                       )
                     )
                   ],
