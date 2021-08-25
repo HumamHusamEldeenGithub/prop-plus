@@ -54,7 +54,7 @@ class BookingsState extends State<Bookings> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    createBookingModules();
+    //createBookingModules();
   }
 
   @override
