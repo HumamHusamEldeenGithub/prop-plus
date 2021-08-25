@@ -3,6 +3,10 @@ import 'package:prop_plus/constant/MainTheme.dart';
 import 'package:prop_plus/constant/TrendingTheme.dart';
 import 'package:prop_plus/modules/main_module.dart';
 import 'package:prop_plus/screens/description.dart';
+import 'package:prop_plus/services/locater.dart';
+import 'package:prop_plus/services/user_controller.dart';
+import 'package:prop_plus/shared/http_requests.dart';
+import 'package:prop_plus/shared/loading_widget.dart';
 
 
 class TrendingCard extends StatefulWidget {
@@ -98,9 +102,28 @@ class _TrendingCardState extends State<TrendingCard> {
                                     Icons.favorite_border,
                                     size: 20,
                                   ),
-                                  onPressed: () {
+                                  onPressed: () async {
+                                    if (!favorite) {
+                                      Loading.showLoaderDialog(context, "Adding property to favorite");
+                                      await HTTP_Requests.addNewFavourite(
+                                          locater<UserController>()
+                                              .currentUser
+                                              .dbId
+                                              .toString(),
+                                          widget.module.propertyModule.id.toString());
+
+                                    } else {
+                                      Loading.showLoaderDialog(context, "Removing property from favorite");
+                                      await HTTP_Requests.deleteFavourite(
+                                          locater<UserController>()
+                                              .currentUser
+                                              .dbId
+                                              .toString(),
+                                          widget.module.propertyModule.id.toString());
+                                    }
                                     setState(() {
                                       favorite = !favorite;
+                                      Navigator.pop(context);
                                     });
                                   },
                                 ),

@@ -7,6 +7,7 @@ import 'package:prop_plus/screens/description.dart';
 import 'package:prop_plus/services/locater.dart';
 import 'package:prop_plus/services/user_controller.dart';
 import 'package:prop_plus/shared/http_requests.dart';
+import 'package:prop_plus/shared/loading_widget.dart';
 
 class RecommendedCard extends StatefulWidget {
   final MainModule module;
@@ -27,7 +28,7 @@ class _RecommendedCardState extends State<RecommendedCard> {
       child: GestureDetector(
         onTap: () {
           Navigator.pushNamed(context, DetailsScreen.path,
-              arguments: {'module':widget.module});
+              arguments: {'module': widget.module});
         },
         child: Card(
           elevation: 5,
@@ -72,7 +73,8 @@ class _RecommendedCardState extends State<RecommendedCard> {
                             Row(
                               children: [
                                 RatingBar.builder(
-                                  initialRating: widget.module.propertyModule.rating,
+                                  initialRating:
+                                      widget.module.propertyModule.rating,
                                   minRating: 1,
                                   direction: Axis.horizontal,
                                   allowHalfRating: true,
@@ -135,13 +137,28 @@ class _RecommendedCardState extends State<RecommendedCard> {
                         : Icon(
                             Icons.favorite_border,
                           ),
-                    onPressed: () {
+                    onPressed: ()async{
+                      if (!favorite) {
+                        Loading.showLoaderDialog(context, "Adding property to favorite");
+                        await HTTP_Requests.addNewFavourite(
+                            locater<UserController>()
+                                .currentUser
+                                .dbId
+                                .toString(),
+                            widget.module.propertyModule.id.toString());
+
+                      } else {
+                        Loading.showLoaderDialog(context, "Removing property from favorite");
+                        await HTTP_Requests.deleteFavourite(
+                            locater<UserController>()
+                                .currentUser
+                                .dbId
+                                .toString(),
+                            widget.module.propertyModule.id.toString());
+                      }
                       setState(() {
                         favorite = !favorite;
-                        if (favorite)
-                        HTTP_Requests.addNewFavourite(locater<UserController>().currentUser.dbId.toString(), widget.module.propertyModule.id.toString());
-                            else
-                        HTTP_Requests.deleteFavourite(locater<UserController>().currentUser.dbId.toString(), widget.module.propertyModule.id.toString());
+                        Navigator.pop(context);
                       });
                     },
                   )),
