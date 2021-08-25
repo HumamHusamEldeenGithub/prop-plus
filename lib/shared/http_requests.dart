@@ -194,7 +194,7 @@ class HTTP_Requests {
       // If the server did return a 201 CREATED response,
       // then parse the JSON.
       Map<String, dynamic> content = jsonDecode(response.body);
-      int id = int.parse(content['id']);
+      int id = int.parse(content['id'].toString());
       return id;
     } else {
       // If the server did not return a 201 CREATED response,
