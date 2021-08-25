@@ -10,6 +10,7 @@ import 'package:prop_plus/services/user_controller.dart';
 import 'package:prop_plus/shared/custom_divider.dart';
 import 'package:http/http.dart' as http;
 import 'package:prop_plus/shared/http_requests.dart';
+import 'dart:developer' as developer;
 
 class AddNewServiceScreen extends StatefulWidget {
   static String path = "/add_new_service";
@@ -125,13 +126,13 @@ class _AddNewServiceScreen extends State<AddNewServiceScreen> {
                   onPressed: () async {
                     image = await ImagePicker.platform
                         .pickImage(source: ImageSource.gallery);
-                    await locater
+                    String url = await locater
                         .get<UserController>()
-                        .uploadProfilePicture(File(image.path));
+                        .uploadServicePhoto(File(image.path));
                     setState(() {
-                      _imageUrl =
-                          locater.get<UserController>().currentUser.avatarURl;
+                      _imageUrl = url;
                     });
+                    developer.log(_imageUrl);
                   },
                 ),
               ),
@@ -148,8 +149,8 @@ class _AddNewServiceScreen extends State<AddNewServiceScreen> {
                             propertyModule: module,
                             price: double.parse(_price),
                             description: _description,
-                            imageUrls: [
-                          "https://images.pexels.com/photos/3288104/pexels-photo-3288104.png?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260"
+                            imageUrls: [ _imageUrl
+                          //"https://images.pexels.com/photos/3288104/pexels-photo-3288104.png?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260"
                         ])
                         // }
                         );
