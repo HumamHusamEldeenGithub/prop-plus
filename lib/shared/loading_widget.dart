@@ -17,7 +17,7 @@ class Loading {
       child: new Row(
         children: [
           CircularProgressIndicator(),
-          Container(margin: EdgeInsets.only(left: 7), child: AutoSizeText("${title}")),
+          Container(margin: EdgeInsets.only(left: 7), child: AutoSizeText("${title}",maxFontSize:15 ,)),
         ],
       ),
     ));

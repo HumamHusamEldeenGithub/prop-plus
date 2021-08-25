@@ -32,7 +32,8 @@ class AuthService{
     final authResult = await _firebaseAuth.createUserWithEmailAndPassword(email: email, password: password,);
     //Update the UserName
     updateUserName(userName,authResult.user);
-    return UserModule(uid: authResult.user.uid , userName: authResult.user.displayName);
+    developer.log(authResult.user.displayName.toString());
+    return UserModule(uid: authResult.user.uid , userName: authResult.user.displayName.toString());
   }
   //Add UserName to Account
   Future updateUserName(String name , firebaseAuth.User firebaseUser ) async {

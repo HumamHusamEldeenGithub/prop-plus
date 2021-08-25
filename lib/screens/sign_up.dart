@@ -84,6 +84,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
       } catch (e) {
         setState(() {
           _warning = e.message;
+          Navigator.pop(context);
         });
       }
     }

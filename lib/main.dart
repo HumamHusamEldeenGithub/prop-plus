@@ -7,6 +7,7 @@ import 'package:prop_plus/screens/adding_prop_form.dart';
 import 'package:prop_plus/screens/all_services.dart';
 import 'package:prop_plus/screens/anonymous_loading_screen.dart';
 import 'package:prop_plus/screens/booking_calender_screen.dart';
+import 'package:prop_plus/screens/edit_profile.dart';
 import 'package:prop_plus/screens/explore.dart';
 import 'package:prop_plus/screens/my_properties.dart';
 import 'package:prop_plus/screens/home.dart';
@@ -70,6 +71,7 @@ class MyApp extends StatelessWidget {
               BookingCalenderScreen(),
           '/all_services': (BuildContext context) => AllServices(),
           '/receipt' : (BuildContext context) => ReceiptScreen(),
+          '/editProfilePage': (BuildContext context) => EditProfilePage(),
         },
       ),
     );

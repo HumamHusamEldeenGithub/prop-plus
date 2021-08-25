@@ -126,6 +126,14 @@ class ProfileState extends State<Profile> {
                       },
                       child: Text("My Properties")),
                 ),
+                SizedBox(
+                  width: _width * 0.5,
+                  child: ElevatedButton(
+                      onPressed: () {
+                        Navigator.of(context).pushNamed('/editProfilePage');
+                      },
+                      child: Text("Edit Profile")),
+                ),
 
               ],
             ),

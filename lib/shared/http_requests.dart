@@ -65,7 +65,8 @@ class HTTP_Requests {
     http.Response response;
     response = await http.get(
       Uri.parse(
-        "https://propplus-production.herokuapp.com/favourite_properties/withDetails/"+userId.toString(),
+        "https://propplus-production.herokuapp.com/favourite_properties/withDetails/" +
+            userId.toString(),
       ),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
@@ -87,7 +88,8 @@ class HTTP_Requests {
     return list;
   }
 
-  static Future<List> getAllBookingForService(ServiceModule serviceModule) async {
+  static Future<List> getAllBookingForService(
+      ServiceModule serviceModule) async {
     int serviceId = serviceModule.service_id;
     http.Response response;
     response = await http.get(
@@ -103,7 +105,7 @@ class HTTP_Requests {
     print(data);
     List<BookingModule> list = <BookingModule>[];
     for (var i = 0; i < data.length; i++) {
-      var item = BookingModule.fromJson(data[i],serviceModule);
+      var item = BookingModule.fromJson(data[i], serviceModule);
       try {
         if (item != null) list.add(item);
       } catch (e) {
@@ -352,7 +354,6 @@ class HTTP_Requests {
     if (response.statusCode == 201 || response.statusCode == 200) {
       // If the server did return a 201 CREATED response,
       // then parse the JSON.
-
 
       Map<String, dynamic> newService = jsonDecode(response.body);
       dynamic newServiceId = newService['id'];
@@ -607,8 +608,16 @@ class HTTP_Requests {
     return categoriesModules;
   }
 
-  static Future sendBookingEmail(
-      String name, String email, String subject, String message) async {
+  static Future sendBookingEmailToTheOwner(
+      String name,
+      String email,
+      String propertyName,
+      String startDate,
+      String endDate,
+      String customerName,
+      String customerPhone,
+      String customerEmail,
+      String totalPrice) async {
     final service_id = 'service_9jx63jf';
     final template_id = 'template_p9r61j9';
     final user_id = 'user_ajnKi0eDKQOl6ozAkEila';
@@ -624,9 +633,15 @@ class HTTP_Requests {
           'user_id': user_id,
           'template_params': {
             'user_name': name,
-            'user_subject': subject,
-            'user_message': message,
+            'property_name': propertyName,
+            'start_date': startDate,
+            'end_date':endDate,
+            'customer_name':customerName,
+            'customer_email':customerEmail,
+            'customer_phone':customerPhone,
+            'total_price':totalPrice,
             'user_email': email,
+
           }
         }));
     if (response.statusCode == 201 || response.statusCode == 200) {
