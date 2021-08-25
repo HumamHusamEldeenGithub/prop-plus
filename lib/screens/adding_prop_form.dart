@@ -11,6 +11,7 @@ import 'package:http/http.dart' as http;
 import 'dart:developer' as developer;
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:prop_plus/shared/http_requests.dart';
+import 'package:prop_plus/shared/loading_dialog.dart';
 import 'package:prop_plus/shared/loading_widget.dart';
 import 'package:prop_plus/shared/popup.dart';
 import 'package:progress_dialog/progress_dialog.dart';
@@ -229,10 +230,10 @@ class _PropertyInputFormState extends State<PropertyInputForm> {
       body: SingleChildScrollView(
         child: SafeArea(
           child: Column(
-            crossAxisAlignment:CrossAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Container(
-                  padding: EdgeInsets.symmetric(vertical: 20 ,horizontal: 25),
+                  padding: EdgeInsets.symmetric(vertical: 20, horizontal: 25),
                   width: _width * 0.8,
                   child: Text(
                     "Please enter all the information for adding a new property :",
@@ -253,13 +254,16 @@ class _PropertyInputFormState extends State<PropertyInputForm> {
                     SizedBox(height: 5),
                     DividerWithText(tag: "The Approval Images"),
                     Container(
-                      width: _width*0.6,
+                      width: _width * 0.6,
                       child: ElevatedButton(
-                        style: ElevatedButton.styleFrom(primary: Colors.grey[500]),
+                        style:
+                            ElevatedButton.styleFrom(primary: Colors.grey[500]),
                         child: Text("Pick the Images one by one :"),
                         onPressed: () async {
                           image = await ImagePicker.platform
                               .pickImage(source: ImageSource.gallery);
+                          showLoaderDialog(context,"Uploading the photo");
+
                           /*setState(() {
                                   loading = true;
                                 });*/
@@ -269,7 +273,7 @@ class _PropertyInputFormState extends State<PropertyInputForm> {
                           developer.log(imageUrl);
                           setState(() {
                             imagesUrls.add(imageUrl);
-                            loading = true;
+                            Navigator.pop(context);
                           });
                         },
                       ),
@@ -293,23 +297,31 @@ class _PropertyInputFormState extends State<PropertyInputForm> {
                     //   ),
                     // ),
                     Container(
-                      width: _width*0.6,
+                      width: _width * 0.6,
                       child: ElevatedButton(
-                        style: ElevatedButton.styleFrom(primary: Color(0xFF3DD6EB),),
-                        child: Text("Submit",style: TextStyle(fontWeight: FontWeight.bold,fontSize: 20),),
-                        onPressed: () {
+                        style: ElevatedButton.styleFrom(
+                          primary: Color(0xFF3DD6EB),
+                        ),
+                        child: Text(
+                          "Submit",
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold, fontSize: 20),
+                        ),
+                        onPressed: () async {
                           final form = formKey.currentState;
                           form.save();
-
+                          showLoaderDialog(context, "Adding the property .....");
                           //Create a property to approve model and send it to approval request
                           PropertyToApprove model = new PropertyToApprove(
-                              user_id: locater<UserController>().currentUser.dbId,
+                              user_id:
+                                  locater<UserController>().currentUser.dbId,
                               title: _title,
                               phone: _phone,
                               location: _location,
                               description: _description,
                               approvalImagesUrls: imagesUrls);
-                          HTTP_Requests.sendApprovalRequest(model);
+                         await HTTP_Requests.sendApprovalRequest(model);
+                         Navigator.pop(context);
                         },
                       ),
                     ),
@@ -320,6 +332,22 @@ class _PropertyInputFormState extends State<PropertyInputForm> {
           ),
         ),
       ),
+    );
+  }
+
+  showLoaderDialog(BuildContext context,String title){
+    AlertDialog alert=AlertDialog(
+      content: new Row(
+        children: [
+          CircularProgressIndicator(),
+          Container(margin: EdgeInsets.only(left: 7),child:Text("${title}")),
+        ],),
+    );
+    showDialog(barrierDismissible: false,
+      context:context,
+      builder:(BuildContext context){
+        return alert;
+      },
     );
   }
 }

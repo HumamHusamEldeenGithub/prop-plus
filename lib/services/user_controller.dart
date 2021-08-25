@@ -5,6 +5,7 @@ import 'package:prop_plus/services/auth_repo.dart';
 import 'package:prop_plus/services/locater.dart';
 import 'package:prop_plus/services/storage_repo.dart';
 import 'package:prop_plus/shared/http_requests.dart';
+import 'dart:developer' as developer;
 
 class UserController{
   UserModule _currentUser;
@@ -50,8 +51,10 @@ class UserController{
 
   Future createUserWithEmailAndPassword(String email ,String password , String userName) async{
     _currentUser = await _authService.createUserWithEmailAndPassword(email, password, userName);
+    developer.log(_currentUser.uid);
     int dbId = await HTTP_Requests.createNewUserInDB(userName,"",email,_currentUser.uid);
     _currentUser.dbId = dbId ;
+    developer.log(_currentUser.dbId.toString());
     return _currentUser.uid;
   }
 
