@@ -203,6 +203,55 @@ class HTTP_Requests {
     }
   }
 
+  static Future<dynamic> addNewFavourite(
+      String userId, String propertyId) async {
+    print(userId);
+    print(propertyId);
+    final response = await http.post(
+      Uri.parse('https://propplus-production.herokuapp.com/favourite_properties'),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        'Authorization': authorizationKey,
+      },
+      body: jsonEncode(<String, String>{
+        'user_id': userId,
+        'property_id': propertyId,
+      }),
+    );
+    if (response.statusCode == 201 || response.statusCode == 200) {
+      // If the server did return a 201 CREATED response,
+      // then parse the JSON.
+      print("ADD NEW FAVOURITE TO USER : "+userId);
+    } else {
+      // If the server did not return a 201 CREATED response,
+      // then throw an exception.
+      throw Exception('Failed to post to Favourite table  .');
+    }
+  }
+
+  static Future<dynamic> deleteFavourite(
+      String userId, String propertyId) async {
+    final response = await http.delete(
+      Uri.parse('https://propplus-production.herokuapp.com/favourite_properties/ByUser_PropertyId'),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        'Authorization': authorizationKey,
+      },
+      body: jsonEncode(<String, String>{
+        'user_id': userId,
+        'property_id': propertyId,
+      }),
+    );
+    if (response.statusCode == 201 || response.statusCode == 200) {
+      // If the server did return a 201 CREATED response,
+      // then parse the JSON.
+    } else {
+      // If the server did not return a 201 CREATED response,
+      // then throw an exception.
+      throw Exception('Failed to post to users table  .');
+    }
+  }
+
   static Future<void> addNewServiceToDB(ServiceModule module) async {
     final response = await http.post(
       Uri.parse('https://propplus-production.herokuapp.com/services'),

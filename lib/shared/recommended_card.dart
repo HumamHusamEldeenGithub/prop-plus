@@ -4,6 +4,9 @@ import 'package:prop_plus/constant/MainTheme.dart';
 import 'package:prop_plus/modules/property_module.dart';
 import 'package:prop_plus/modules/main_module.dart';
 import 'package:prop_plus/screens/description.dart';
+import 'package:prop_plus/services/locater.dart';
+import 'package:prop_plus/services/user_controller.dart';
+import 'package:prop_plus/shared/http_requests.dart';
 
 class RecommendedCard extends StatefulWidget {
   final MainModule module;
@@ -135,6 +138,10 @@ class _RecommendedCardState extends State<RecommendedCard> {
                     onPressed: () {
                       setState(() {
                         favorite = !favorite;
+                        if (favorite)
+                        HTTP_Requests.addNewFavourite(locater<UserController>().currentUser.dbId.toString(), widget.module.propertyModule.id.toString());
+                            else
+                        HTTP_Requests.deleteFavourite(locater<UserController>().currentUser.dbId.toString(), widget.module.propertyModule.id.toString());
                       });
                     },
                   )),
