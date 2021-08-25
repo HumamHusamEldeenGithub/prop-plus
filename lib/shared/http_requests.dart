@@ -115,6 +115,33 @@ class HTTP_Requests {
     return list;
   }
 
+  static Future<List> getAllBookingsForUser(int userId) async {
+    http.Response response;
+    response = await http.get(
+      Uri.parse(
+        "https://propplus-production.herokuapp.com/bookings/ByUserId/"+userId.toString(),
+      ),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        'Authorization': authorizationKey,
+      },
+    );
+    var data = jsonDecode(response.body) as List;
+    print(data);
+    List<BookingModule> list = <BookingModule>[];
+    for (var i = 0; i < data.length; i++) {
+      var property = PropertyModule.fromJson(data[i]);
+      var service = ServiceModule.fromJson2(data[i],property);
+      var booking = BookingModule.fromJson(data[i], service);
+      try {
+        if (booking != null) list.add(booking);
+      } catch (e) {
+        print(e);
+      }
+    }
+    return list;
+  }
+
   static Future<List<ServiceModule>> getAllService(
       PropertyModule propertyModule) async {
     print(propertyModule.id);

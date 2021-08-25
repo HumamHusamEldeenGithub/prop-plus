@@ -155,7 +155,7 @@ class _AddNewServiceScreen extends State<AddNewServiceScreen> {
                     Loading.showLoaderDialog(context, "Adding the Service .....");
                     HTTP_Requests.addNewServiceToDB(ServiceModule(
                             propertyModule: module,
-                            price: double.parse(_price),
+                            price: int.parse(_price),
                             description: _description,
                             imageUrls: _imagesUrls)
                         // }

@@ -154,8 +154,8 @@ class _MainWidgetState extends State<MainWidget> {
   }
 
   Future<void> getDataFromDBForBookings() async {
-    // MainWidget.databaseData['PropertyModules'] =
-    // await HTTP_Requests.getRecommendedProperties();
+    MainWidget.databaseData['BookingsModules'] =
+    await HTTP_Requests.getAllBookingsForUser(locater<UserController>().currentUser.dbId);
 
     _bookingsGlobalKey.currentState?.refreshPage();
   }
@@ -167,6 +167,7 @@ class _MainWidgetState extends State<MainWidget> {
     _MyHomePageState();
     getDataFromDBForHome();
     getDataFromDBForFavorite();
+    getDataFromDBForBookings();
     Screens = [
       Home(
         parentFunction: getDataFromDBForHome,

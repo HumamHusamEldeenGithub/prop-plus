@@ -4,6 +4,8 @@ import 'package:prop_plus/modules/booking_module.dart';
 import 'package:prop_plus/shared/booking_card.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
+import '../main.dart';
+
 class Bookings extends StatefulWidget {
   Function parentFunction;
   Bookings({this.parentFunction,Key key}) : super(key: key);
@@ -12,7 +14,7 @@ class Bookings extends StatefulWidget {
 }
 
 class BookingsState extends State<Bookings> {
-  List<BookingModule> bookingsModules = <BookingModule>[];
+
   RefreshController _refreshController =
   RefreshController(initialRefresh: false);
 
@@ -35,15 +37,6 @@ class BookingsState extends State<Bookings> {
   }
   void refreshPage() {
     setState(() {});
-  }
-
-  void createBookingModules() {
-    bookingsModules.add(new BookingModule(
-        id: 1,
-        fromDate: DateTime.parse("2021-01-01"),
-        toDate: DateTime.parse("2021-01-05")
-      )
-    );
   }
 
   @override
@@ -89,11 +82,17 @@ class BookingsState extends State<Bookings> {
         onLoading: _onLoading,
         child: SingleChildScrollView(
           scrollDirection: Axis.vertical,
-          child: Column(
-            children: bookingsModules.map((card) {
-              return BookingCard(module: card);
-            }).toList(),
-          ),
+          child: MainWidget.databaseData['BookingsModules'] != null
+              ? Center(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children:
+              MainWidget.databaseData['BookingsModules'].map((card) {
+                return BookingCard(module: card);
+              }).toList(),
+            ),
+          )
+              : SizedBox(),
         ),
       ),
     );
