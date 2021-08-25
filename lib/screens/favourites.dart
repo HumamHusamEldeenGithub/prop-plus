@@ -8,7 +8,8 @@ import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 
 class Favourites extends StatefulWidget {
-  Favourites({Key key}) : super(key: key);
+  Function parentFunction;
+  Favourites({this.parentFunction,Key key}) : super(key: key);
   @override
   FavouritesState createState() => FavouritesState();
 }
@@ -20,7 +21,7 @@ class FavouritesState extends State<Favourites> {
 
   void _onRefresh() async{
     // monitor network fetch
-    await Future.delayed(Duration(milliseconds: 1000));
+    await widget.parentFunction();
     // if failed,use refreshFailed()
     _refreshController.refreshCompleted();
   }

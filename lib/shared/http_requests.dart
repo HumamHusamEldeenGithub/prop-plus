@@ -63,13 +63,15 @@ class HTTP_Requests {
 
   static Future<List> getAllBookingForService(String serviceId) async {
     http.Response response;
-    response = await http.get(Uri.parse(
-        "https://propplus-production.herokuapp.com/bookings/service_id/" +
-            serviceId),
+    response = await http.get(
+      Uri.parse(
+          "https://propplus-production.herokuapp.com/bookings/service_id/" +
+              serviceId),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
         'Authorization': authorizationKey,
-      },);
+      },
+    );
     var data = jsonDecode(response.body) as List;
     print(data);
     List<BookingModule> list = <BookingModule>[];
@@ -162,6 +164,58 @@ class HTTP_Requests {
     return list;
   }
 
+  static Future<List> getSearchResult(String searchText) async {
+    http.Response response;
+    response = await http.get(
+      Uri.parse(
+        "https://propplus-production.herokuapp.com/properties/home",
+      ),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        'Authorization': authorizationKey,
+      },
+    );
+    var data = jsonDecode(response.body) as List;
+    print(data);
+    List<MainModule> list = <MainModule>[];
+    for (var i = 0; i < data.length; i++) {
+      var property = PropertyModule.fromJson(data[i]);
+      var item = MainModule.fromJson(property, data[i]);
+      try {
+        if (item != null) list.add(item);
+      } catch (e) {
+        print(e);
+      }
+    }
+    return list;
+  }
+
+  static Future<List> getTrendingProperties(String type) async {
+    http.Response response;
+    response = await http.get(
+      Uri.parse(
+        "https://propplus-production.herokuapp.com/properties/home",
+      ),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        'Authorization': authorizationKey,
+      },
+    );
+    var data = jsonDecode(response.body) as List;
+    print(data);
+    List<MainModule> list = <MainModule>[];
+    for (var i = 0; i < data.length; i++) {
+      var property = PropertyModule.fromJson(data[i]);
+      var item = MainModule.fromJson(property, data[i]);
+      try {
+        if (item != null) list.add(item);
+      } catch (e) {
+        print(e);
+      }
+    }
+    return list;
+  }
+
   ////////////////////GET/////////////////////////
 
   ////////////////////SEND/////////////////////////
@@ -208,7 +262,8 @@ class HTTP_Requests {
     print(userId);
     print(propertyId);
     final response = await http.post(
-      Uri.parse('https://propplus-production.herokuapp.com/favourite_properties'),
+      Uri.parse(
+          'https://propplus-production.herokuapp.com/favourite_properties'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
         'Authorization': authorizationKey,
@@ -221,7 +276,7 @@ class HTTP_Requests {
     if (response.statusCode == 201 || response.statusCode == 200) {
       // If the server did return a 201 CREATED response,
       // then parse the JSON.
-      print("ADD NEW FAVOURITE TO USER : "+userId);
+      print("ADD NEW FAVOURITE TO USER : " + userId);
     } else {
       // If the server did not return a 201 CREATED response,
       // then throw an exception.
@@ -232,7 +287,8 @@ class HTTP_Requests {
   static Future<dynamic> deleteFavourite(
       String userId, String propertyId) async {
     final response = await http.delete(
-      Uri.parse('https://propplus-production.herokuapp.com/favourite_properties/ByUser_PropertyId'),
+      Uri.parse(
+          'https://propplus-production.herokuapp.com/favourite_properties/ByUser_PropertyId'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
         'Authorization': authorizationKey,

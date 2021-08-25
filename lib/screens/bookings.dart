@@ -5,7 +5,8 @@ import 'package:prop_plus/shared/booking_card.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 class Bookings extends StatefulWidget {
-  Bookings({Key key}) : super(key: key);
+  Function parentFunction;
+  Bookings({this.parentFunction,Key key}) : super(key: key);
   @override
   BookingsState createState() => BookingsState();
 }
@@ -17,7 +18,7 @@ class BookingsState extends State<Bookings> {
 
   void _onRefresh() async{
     // monitor network fetch
-    await Future.delayed(Duration(milliseconds: 1000));
+    await widget.parentFunction();
     // if failed,use refreshFailed()
     _refreshController.refreshCompleted();
   }

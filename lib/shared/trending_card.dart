@@ -39,7 +39,7 @@ class _TrendingCardState extends State<TrendingCard> {
                     height: 150,
                     decoration: BoxDecoration(
                       image: DecorationImage(
-                        image: AssetImage(widget.module.imgSrc),
+                        image: NetworkImage(widget.module.imgSrc),
                         fit: BoxFit.cover,
                       ),
                     borderRadius: BorderRadius.only(topRight: TrendingTheme.borderRadius, topLeft: TrendingTheme.borderRadius)
