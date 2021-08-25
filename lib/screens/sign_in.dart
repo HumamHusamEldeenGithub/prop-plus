@@ -10,6 +10,7 @@ import 'package:prop_plus/services/user_controller.dart';
 import 'package:prop_plus/shared/custom_text_field.dart';
 import 'package:http/http.dart' as http;
 import 'package:prop_plus/shared/http_requests.dart';
+import 'package:prop_plus/shared/loading_widget.dart';
 
 class SignInScreen extends StatefulWidget {
   @override
@@ -188,10 +189,13 @@ class _SignInScreenState extends State<SignInScreen> {
       //call the auth methods
       //SignIn
       try {
+        Loading.showLoaderDialog(context, "Signing In...");
         dynamic userID = await locater
             .get<UserController>()
             .signInWithEmailAndPassword(_email, _password);
         await getUserFromDB(userID);
+        Navigator.pop(context);
+        Navigator.of(context).pushReplacementNamed('/home');
       } catch (e) {
         setState(() {
           _warning = e.toString();

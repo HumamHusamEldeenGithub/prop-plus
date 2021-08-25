@@ -262,7 +262,8 @@ class _PropertyInputFormState extends State<PropertyInputForm> {
                         onPressed: () async {
                           image = await ImagePicker.platform
                               .pickImage(source: ImageSource.gallery);
-                          showLoaderDialog(context,"Uploading the photo");
+                          if(image!=null)
+                          Loading.showLoaderDialog(context,"Uploading the photo");
 
                           /*setState(() {
                                   loading = true;
@@ -273,29 +274,14 @@ class _PropertyInputFormState extends State<PropertyInputForm> {
                           developer.log(imageUrl);
                           setState(() {
                             imagesUrls.add(imageUrl);
+                            imageUrl =null;
+                            image=null;
                             Navigator.pop(context);
                           });
                         },
                       ),
                     ),
                     DividerWithText(tag: ""),
-                    // Container(
-                    //   width: _width*0.6,
-                    //   child: ElevatedButton(
-                    //     //TODO need to remove it ... used to check if the upload is done
-                    //     child: Text("Check"),
-                    //     onPressed: () async {
-                    //       await showProgressBar(pr);
-                    //       showDialog(
-                    //           context: context,
-                    //           builder: (BuildContext context) => Popup(
-                    //                 title: "Done",
-                    //                 content: "Done",
-                    //               ));
-                    //       developer.log(imagesUrls.length.toString());
-                    //     },
-                    //   ),
-                    // ),
                     Container(
                       width: _width * 0.6,
                       child: ElevatedButton(
@@ -310,7 +296,7 @@ class _PropertyInputFormState extends State<PropertyInputForm> {
                         onPressed: () async {
                           final form = formKey.currentState;
                           form.save();
-                          showLoaderDialog(context, "Adding the property .....");
+                          Loading.showLoaderDialog(context, "Adding the property .....");
                           //Create a property to approve model and send it to approval request
                           PropertyToApprove model = new PropertyToApprove(
                               user_id:
@@ -322,6 +308,7 @@ class _PropertyInputFormState extends State<PropertyInputForm> {
                               approvalImagesUrls: imagesUrls);
                          await HTTP_Requests.sendApprovalRequest(model);
                          Navigator.pop(context);
+                          Loading.showCustomDialog(context, "Adding Confirmed ");
                         },
                       ),
                     ),
@@ -335,19 +322,5 @@ class _PropertyInputFormState extends State<PropertyInputForm> {
     );
   }
 
-  showLoaderDialog(BuildContext context,String title){
-    AlertDialog alert=AlertDialog(
-      content: new Row(
-        children: [
-          CircularProgressIndicator(),
-          Container(margin: EdgeInsets.only(left: 7),child:Text("${title}")),
-        ],),
-    );
-    showDialog(barrierDismissible: false,
-      context:context,
-      builder:(BuildContext context){
-        return alert;
-      },
-    );
-  }
+
 }

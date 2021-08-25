@@ -12,6 +12,8 @@ import 'package:http/http.dart' as http;
 import 'package:prop_plus/shared/http_requests.dart';
 import 'dart:developer' as developer;
 
+import 'package:prop_plus/shared/loading_widget.dart';
+
 class AddNewServiceScreen extends StatefulWidget {
   static String path = "/add_new_service";
   @override
@@ -19,7 +21,8 @@ class AddNewServiceScreen extends StatefulWidget {
 }
 
 class _AddNewServiceScreen extends State<AddNewServiceScreen> {
-  String _title, _description, _location, _imageUrl, _price;
+  String _title, _description, _location,  _price;
+  List<String> _imagesUrls = List<String>();
   PickedFile image;
   final formKey = GlobalKey<FormState>();
 
@@ -126,13 +129,18 @@ class _AddNewServiceScreen extends State<AddNewServiceScreen> {
                   onPressed: () async {
                     image = await ImagePicker.platform
                         .pickImage(source: ImageSource.gallery);
+                    if(image!=null)
+                    Loading.showLoaderDialog(context,"Uploading the photo");
                     String url = await locater
                         .get<UserController>()
                         .uploadServicePhoto(File(image.path));
                     setState(() {
-                      _imageUrl = url;
+                      _imagesUrls.add(url);
+                      url = null;
+                      image = null;
+                      Navigator.pop(context);
                     });
-                    developer.log(_imageUrl);
+                    developer.log(url);
                   },
                 ),
               ),
@@ -145,15 +153,16 @@ class _AddNewServiceScreen extends State<AddNewServiceScreen> {
                   onPressed: () {
                     final form = formKey.currentState;
                     form.save();
+                    Loading.showLoaderDialog(context, "Adding the Service .....");
                     HTTP_Requests.addNewServiceToDB(ServiceModule(
                             propertyModule: module,
                             price: double.parse(_price),
                             description: _description,
-                            imageUrls: [ _imageUrl
-                          //"https://images.pexels.com/photos/3288104/pexels-photo-3288104.png?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260"
-                        ])
+                            imageUrls: _imagesUrls)
                         // }
                         );
+                    Navigator.pop(context);
+                    Loading.showCustomDialog(context, "Adding Confirmed ");
                   },
                 ),
               )

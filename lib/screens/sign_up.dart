@@ -6,6 +6,7 @@ import 'package:prop_plus/constant/Validator.dart';
 import 'package:prop_plus/services/locater.dart';
 import 'package:prop_plus/services/user_controller.dart';
 import 'package:prop_plus/shared/http_requests.dart';
+import 'package:prop_plus/shared/loading_widget.dart';
 
 class SignUpScreen extends StatefulWidget {
   @override
@@ -74,9 +75,11 @@ class _SignUpScreenState extends State<SignUpScreen> {
   void submit() async {
     if (validate()) {
       try {
+        Loading.showLoaderDialog(context, "Signing Up");
         await locater
             .get<UserController>()
             .createUserWithEmailAndPassword(_email, _password, _name);
+        Navigator.pop(context);
         Navigator.of(context).pushReplacementNamed('/home');
       } catch (e) {
         setState(() {
