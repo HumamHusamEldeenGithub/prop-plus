@@ -130,7 +130,7 @@ class _FavouriteCardState extends State<FavouriteCard> {
                                             .currentUser
                                             .dbId
                                             .toString(),
-                                        widget.module.propertyModule.id.toString());
+                                        widget.module.service_id.toString());
 
                                   } else {
                                     Loading.showLoaderDialog(context, "Removing property from favorite");
@@ -139,7 +139,7 @@ class _FavouriteCardState extends State<FavouriteCard> {
                                             .currentUser
                                             .dbId
                                             .toString(),
-                                        widget.module.propertyModule.id.toString());
+                                        widget.module.service_id.toString());
                                   }
                                   setState(() {
                                     favorite = !favorite;

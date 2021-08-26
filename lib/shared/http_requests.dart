@@ -88,11 +88,11 @@ class HTTP_Requests {
     return list;
   }
 
-  static Future<List> getFavouriteProperties(int userId) async {
+  static Future<List> getFavouriteServices(int userId) async {
     http.Response response;
     response = await http.get(
       Uri.parse(
-        "https://propplus-production.herokuapp.com/favourite_properties/withDetails/" +
+        "https://propplus-production.herokuapp.com/favourite_services/withDetails/" +
             userId.toString(),
       ),
       headers: <String, String>{
@@ -369,19 +369,19 @@ class HTTP_Requests {
   }
 
   static Future<dynamic> addNewFavourite(
-      String userId, String propertyId) async {
+      String userId, String serviceId) async {
     print(userId);
-    print(propertyId);
+    print(serviceId);
     final response = await http.post(
       Uri.parse(
-          'https://propplus-production.herokuapp.com/favourite_properties'),
+          'https://propplus-production.herokuapp.com/favourite_services'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
         'Authorization': authorizationKey,
       },
       body: jsonEncode(<String, String>{
         'user_id': userId,
-        'property_id': propertyId,
+        'service_id': serviceId,
       }),
     );
     if (response.statusCode == 201 || response.statusCode == 200) {
@@ -396,17 +396,17 @@ class HTTP_Requests {
   }
 
   static Future<dynamic> deleteFavourite(
-      String userId, String propertyId) async {
+      String userId, String serviceId) async {
     final response = await http.delete(
       Uri.parse(
-          'https://propplus-production.herokuapp.com/favourite_properties/ByUser_PropertyId'),
+          'https://propplus-production.herokuapp.com/favourite_services/ByUser_ServiceId'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
         'Authorization': authorizationKey,
       },
       body: jsonEncode(<String, String>{
         'user_id': userId,
-        'property_id': propertyId,
+        'service_id': serviceId,
       }),
     );
     if (response.statusCode == 201 || response.statusCode == 200) {

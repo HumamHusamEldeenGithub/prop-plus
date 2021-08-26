@@ -28,7 +28,7 @@ class _TrendingCardState extends State<TrendingCard> {
         child: GestureDetector(
           onTap: () {
             Navigator.pushNamed(context, DetailsScreen.path,
-                arguments: {'module':widget.module});
+                arguments: {'module': widget.module});
           },
           child: Container(
             child: Card(
@@ -107,8 +107,7 @@ class _TrendingCardState extends State<TrendingCard> {
                                               .currentUser
                                               .dbId
                                               .toString(),
-                                          widget.module.propertyModule.id
-                                              .toString());
+                                          widget.module.service_id.toString());
                                     } else {
                                       Loading.showLoaderDialog(context,
                                           "Removing property from favorite");
@@ -117,8 +116,7 @@ class _TrendingCardState extends State<TrendingCard> {
                                               .currentUser
                                               .dbId
                                               .toString(),
-                                          widget.module.propertyModule.id
-                                              .toString());
+                                          widget.module.service_id.toString());
                                     }
                                     setState(() {
                                       favorite = !favorite;

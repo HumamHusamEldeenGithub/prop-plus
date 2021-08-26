@@ -70,7 +70,7 @@ class MyApp extends StatelessWidget {
           '/booking_calender_screen': (BuildContext context) =>
               BookingCalenderScreen(),
           '/all_services': (BuildContext context) => AllServices(),
-          '/receipt' : (BuildContext context) => ReceiptScreen(),
+          '/receipt': (BuildContext context) => ReceiptScreen(),
           '/editProfilePage': (BuildContext context) => EditProfilePage(),
         },
       ),
@@ -132,8 +132,7 @@ class _MainWidgetState extends State<MainWidget> {
   }
 
   Future<void> getDataFromDBForHome(bool refresh) async {
-    if(refresh)
-      emptyPropertiesMap();
+    if (refresh) emptyPropertiesMap();
     MainWidget.databaseData['PropertyModules'] =
         await HTTP_Requests.getRecommendedProperties();
 
@@ -147,7 +146,7 @@ class _MainWidgetState extends State<MainWidget> {
 
   Future<void> getDataFromDBForFavorite() async {
     MainWidget.databaseData['FavouriteModules'] =
-        await HTTP_Requests.getFavouriteProperties(
+        await HTTP_Requests.getFavouriteServices(
             locater<UserController>().currentUser.dbId);
 
     _favouritesGlobalKey.currentState?.refreshPage();
@@ -155,31 +154,30 @@ class _MainWidgetState extends State<MainWidget> {
 
   Future<void> getDataFromDBForBookings() async {
     MainWidget.databaseData['BookingsModules'] =
-    await HTTP_Requests.getAllBookingsForUser(locater<UserController>().currentUser.dbId);
+        await HTTP_Requests.getAllBookingsForUser(
+            locater<UserController>().currentUser.dbId);
 
     _bookingsGlobalKey.currentState?.refreshPage();
   }
 
   Future<void> changeCategory(String type) async {
-
     emptyPropertiesMap();
 
     MainWidget.databaseData['PropertyModules'] =
-    await HTTP_Requests.getRecommendedPropertiesWithType(type);
+        await HTTP_Requests.getRecommendedPropertiesWithType(type);
 
     MainWidget.databaseData['TrendingModules'] =
-    await HTTP_Requests.getTrendingPropertiesWithType(type);
+        await HTTP_Requests.getTrendingPropertiesWithType(type);
 
     _homeGlobalKey.currentState?.refreshPage();
   }
 
-  void emptyPropertiesMap(){
-    MainWidget.databaseData['PropertyModules'] =[];
+  void emptyPropertiesMap() {
+    MainWidget.databaseData['PropertyModules'] = [];
 
-    MainWidget.databaseData['TrendingModules'] =[];
+    MainWidget.databaseData['TrendingModules'] = [];
 
     _homeGlobalKey.currentState?.refreshPage();
-
   }
 
   @override
@@ -208,7 +206,7 @@ class _MainWidgetState extends State<MainWidget> {
       getDataFromDBForFavorite,
       getDataFromDBForBookings,
       //TODO
-      (){}
+      () {}
     ];
   }
 
@@ -262,8 +260,11 @@ class _MainWidgetState extends State<MainWidget> {
               selectedIndex: _selectedIndex,
               onTabChange: (index) {
                 setState(() {
-                  screenDBDataGetter[index]() ;
                   _selectedIndex = index;
+                  if (_selectedIndex == 0)
+                    screenDBDataGetter[index](false);
+                  else
+                    screenDBDataGetter[index]();
                   print(index);
                 });
               },
