@@ -10,6 +10,7 @@ import 'package:prop_plus/services/user_controller.dart';
 import 'package:prop_plus/shared/custom_divider.dart';
 import 'package:http/http.dart' as http;
 import 'package:prop_plus/shared/http_requests.dart';
+import 'package:prop_plus/shared/loading_dialog.dart';
 import 'dart:developer' as developer;
 
 import 'package:prop_plus/shared/loading_widget.dart';
@@ -77,6 +78,33 @@ class _AddNewServiceScreen extends State<AddNewServiceScreen> {
     return textFields;
   }
 
+  Future<void> uploadImage() async{
+    String url;
+    try {
+      url = await locater
+          .get<UserController>()
+          .uploadServicePhoto(File(image.path));
+    }
+    catch(e){
+      print("Failed to upload image");
+      return;
+    }
+    setState(() {
+      _imagesUrls.add(url);
+      url = null;
+      image = null;
+    });
+  }
+  
+  Future<void> submitForm(dynamic module) async {
+    await HTTP_Requests.addNewServiceToDB(ServiceModule(
+        propertyModule: module,
+        price: int.parse(_price),
+        description: _description,
+        imageUrls: _imagesUrls)
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     double _width = MediaQuery.of(context).size.width;
@@ -129,17 +157,9 @@ class _AddNewServiceScreen extends State<AddNewServiceScreen> {
                   onPressed: () async {
                     image = await ImagePicker.platform
                         .pickImage(source: ImageSource.gallery);
-                    if(image!=null)
-                    Loading.showLoaderDialog(context,"Uploading the photo");
-                    String url = await locater
-                        .get<UserController>()
-                        .uploadServicePhoto(File(image.path));
-                    setState(() {
-                      _imagesUrls.add(url);
-                      url = null;
-                      image = null;
-                      Navigator.pop(context);
-                    });
+                    if(image!=null){
+                      LoadingDialog.showLoadingDialog(context, uploadImage(), Text("Uploaded image"), (){Navigator.pop(context);});
+                    }
                   },
                 ),
               ),
@@ -152,16 +172,10 @@ class _AddNewServiceScreen extends State<AddNewServiceScreen> {
                   onPressed: () {
                     final form = formKey.currentState;
                     form.save();
-                    Loading.showLoaderDialog(context, "Adding the Service .....");
-                    HTTP_Requests.addNewServiceToDB(ServiceModule(
-                            propertyModule: module,
-                            price: int.parse(_price),
-                            description: _description,
-                            imageUrls: _imagesUrls)
-                        // }
-                        );
-                    Navigator.pop(context);
-                    Loading.showCustomDialog(context, "Adding Confirmed ");
+                    ///
+                    LoadingDialog.showLoadingDialog(context, submitForm(module), Text("You've successfully submitted your service!"), (){
+                      Navigator.of(context).popUntil((route) => route.isFirst);
+                    });
                   },
                 ),
               )

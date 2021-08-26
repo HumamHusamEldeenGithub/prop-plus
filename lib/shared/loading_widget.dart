@@ -36,7 +36,7 @@ class Loading {
       actions: <Widget>[
         TextButton(
             onPressed: () {
-              Navigator.pushReplacementNamed(context, '/homeScreen');
+              Navigator.of(context).popUntil((route) => route.isFirst);
             },
             child: Text('Done')),
       ],

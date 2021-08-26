@@ -5,6 +5,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:prop_plus/constant/MainTheme.dart';
 import 'package:prop_plus/services/locater.dart';
 import 'package:prop_plus/services/user_controller.dart';
+import 'package:prop_plus/shared/loading_dialog.dart';
 import 'dart:developer' as developer;
 
 import 'package:prop_plus/shared/loading_widget.dart';
@@ -19,9 +20,30 @@ class _EditProfilePageState extends State<EditProfilePage> {
   PickedFile image;
   final formKey = GlobalKey<FormState>();
   String _name = locater.get<UserController>().currentUser.userName.toString();
+  Function setStateCallback;
+
+  Future<void> uploadImage() async{
+    String imageUrl;
+    try {
+      imageUrl = await locater
+          .get<UserController>()
+          .uploadProfilePicture(File(image.path));
+    }
+    catch(E) {
+      print("Failed to upload image");
+      return;
+    }
+    setState(() {
+      setStateCallback();
+      locater.get<UserController>().currentUser.avatarURl = imageUrl;
+      imageUrl =null;
+      image=null;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
+    setStateCallback = ModalRoute.of(context).settings.arguments;
     return Scaffold(
       appBar: AppBar(
         flexibleSpace: Container(
@@ -86,18 +108,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
                             image = await ImagePicker.platform
                                 .pickImage(source: ImageSource.gallery);
                             if(image!=null)
-                              Loading.showLoaderDialog(context,"Uploading the photo");
-
-                            String imageUrl = await locater
-                                .get<UserController>()
-                                .uploadProfilePicture(File(image.path));
-                            setState(() {
-                              locater.get<UserController>().currentUser.avatarURl = imageUrl;
-                              imageUrl =null;
-                              image=null;
-                              Navigator.pop(context);
-                            });
-
+                              LoadingDialog.showLoadingDialog(context, uploadImage(), Text("Uploaded Image"), (){Navigator.pop(context);});
                           },
                           child: Container(
                             height: 40,

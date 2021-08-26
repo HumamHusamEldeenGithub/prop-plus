@@ -29,10 +29,6 @@ class _ReceiptState extends State<Receipt> {
     }
   }
 
-  void BookNow(){
-
-  }
-
   @override
   Widget build(BuildContext context) {
     TextStyle titleStyle = TextStyle(fontWeight: FontWeight.bold,fontSize: MainTheme.fontXXLarge,);

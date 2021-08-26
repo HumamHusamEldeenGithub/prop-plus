@@ -22,7 +22,7 @@ class PropertyInputForm extends StatefulWidget {
 }
 
 class _PropertyInputFormState extends State<PropertyInputForm> {
-  String _title, _description, _location, _phone;
+  String _title, _description, _city, _street, _phone, _type = "Hotel";
   PickedFile image;
   List<String> imagesUrls = List<String>();
   bool loading = false;
@@ -32,6 +32,29 @@ class _PropertyInputFormState extends State<PropertyInputForm> {
     List<Widget> textFields = [];
     textFields.add(SizedBox(
       height: 15,
+    ));
+    textFields.add(DropdownButton<String>(
+      value: _type,
+      icon: const Icon(Icons.arrow_downward),
+      iconSize: 20,
+      elevation: 16,
+      style: TextStyle(color: MainTheme.mainColor),
+      underline: Container(
+        height: 2,
+        color: Colors.black,
+      ),
+      onChanged: (String newValue) {
+        setState(() {
+          _type = newValue;
+        });
+      },
+      items: <String>['Hotel', 'Private Property']
+          .map<DropdownMenuItem<String>>((String value) {
+        return DropdownMenuItem<String>(
+          value: value,
+          child: Text(value),
+        );
+      }).toList(),
     ));
     textFields.add(TextFormField(
       decoration: InputDecoration(
@@ -104,7 +127,7 @@ class _PropertyInputFormState extends State<PropertyInputForm> {
     ));
     textFields.add(TextFormField(
       decoration: InputDecoration(
-        labelText: "Location",
+        labelText: "City",
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(5),
           borderSide: BorderSide(
@@ -120,7 +143,30 @@ class _PropertyInputFormState extends State<PropertyInputForm> {
           ),
         ),
       ),
-      onSaved: (value) => _location = value,
+      onSaved: (value) => _city = value,
+    ));
+    textFields.add(SizedBox(
+      height: 15,
+    ));
+    textFields.add(TextFormField(
+      decoration: InputDecoration(
+        labelText: "Street",
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(5),
+          borderSide: BorderSide(
+            color: Colors.black,
+            width: 0.5,
+          ),
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(15),
+          borderSide: BorderSide(
+            color: Color(0xFF00B9FF),
+            width: 2.0,
+          ),
+        ),
+      ),
+      onSaved: (value) => _street = value,
     ));
     textFields.add(SizedBox(
       height: 15,
@@ -176,6 +222,39 @@ class _PropertyInputFormState extends State<PropertyInputForm> {
         });
       print("PR status  ${pr.isShowing()}");
     });
+  }
+
+
+  Future<void> uploadImage() async{
+    String imageUrl;
+    try {
+      imageUrl = await locater
+        .get<UserController>()
+        .uploadPropertyApprovalPhoto(File(image.path));
+    }
+    catch(e){
+      print("Failed to upload image");
+      return;
+    }
+    setState(() {
+      imagesUrls.add(imageUrl);
+      imageUrl = null;
+      image = null;
+    });
+  }
+
+  Future<void> submitForm() async {
+    PropertyToApprove module = new PropertyToApprove(
+        user_id:
+        locater<UserController>().currentUser.dbId,
+        title: _title,
+        phone: _phone,
+        city: _city,
+        street: _street,
+        type: _type,
+        description: _description,
+        approvalImagesUrls: imagesUrls);
+    await HTTP_Requests.sendApprovalRequest(module);
   }
 
   @override
@@ -260,23 +339,15 @@ class _PropertyInputFormState extends State<PropertyInputForm> {
                             ElevatedButton.styleFrom(primary: Colors.grey[500]),
                         child: Text("Pick the Images one by one :"),
                         onPressed: () async {
+
                           image = await ImagePicker.platform
                               .pickImage(source: ImageSource.gallery);
                           if(image!=null)
-                          Loading.showLoaderDialog(context,"Uploading the photo");
-
+                            LoadingDialog.showLoadingDialog(context, uploadImage(), Text("Uploaded image"), (){Navigator.pop(context);});
                           /*setState(() {
                                   loading = true;
                                 });*/
-                          String imageUrl = await locater
-                              .get<UserController>()
-                              .uploadPropertyApprovalPhoto(File(image.path));
-                          setState(() {
-                            imagesUrls.add(imageUrl);
-                            imageUrl =null;
-                            image=null;
-                            Navigator.pop(context);
-                          });
+
                         },
                       ),
                     ),
@@ -295,19 +366,7 @@ class _PropertyInputFormState extends State<PropertyInputForm> {
                         onPressed: () async {
                           final form = formKey.currentState;
                           form.save();
-                          Loading.showLoaderDialog(context, "Adding the property .....");
-                          //Create a property to approve model and send it to approval request
-                          PropertyToApprove model = new PropertyToApprove(
-                              user_id:
-                                  locater<UserController>().currentUser.dbId,
-                              title: _title,
-                              phone: _phone,
-                              location: _location,
-                              description: _description,
-                              approvalImagesUrls: imagesUrls);
-                         await HTTP_Requests.sendApprovalRequest(model);
-                         Navigator.pop(context);
-                          Loading.showCustomDialog(context, "Adding Confirmed ");
+                          LoadingDialog.showLoadingDialog(context, submitForm(), Text("You've successfully submitted your property!"), (){Navigator.popUntil(context, ModalRoute.withName('/homeScreen'));});
                         },
                       ),
                     ),
@@ -320,6 +379,4 @@ class _PropertyInputFormState extends State<PropertyInputForm> {
       ),
     );
   }
-
-
 }

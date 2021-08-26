@@ -28,31 +28,14 @@ class _ReceiptScreenState extends State<ReceiptScreen> {
   }
 
   Future<void> sendBooking() async{
-    showDialog(context: context, builder: (context){
-      return FutureBuilder(
-        future: HTTP_Requests.sendBookRequest(bookingModule.serviceModule.service_id.toString(), bookingModule.fromDate.toString(), bookingModule.toDate.toString()),
-        builder: (context,snapshot){
-          if(snapshot.connectionState == ConnectionState.done){
-            return AlertDialog(
-              titlePadding: EdgeInsets.only(top: 20),
-              title: Text("Booked successfully!",textAlign: TextAlign.center,),
-              actions: <Widget>[
-                TextButton(
-                  onPressed: () {
-                    Navigator.pushReplacementNamed(context, '/homeScreen');
-                  },
-                  child: Text('Return to home',style: TextStyle(fontSize: MainTheme.fontMedium),)
-                ),
-              ],
-            );
-          }
-          else{
-            return Center(
-              child: CircularProgressIndicator(),
-            );
-          }
-        });
-    });
+    LoadingDialog.showLoadingDialog(
+        context,
+        HTTP_Requests.sendBookRequest(bookingModule.serviceModule.service_id.toString(), bookingModule.fromDate.toString(), bookingModule.toDate.toString()),
+        Text("Booked successfully!",textAlign: TextAlign.center,),
+        (){
+          Navigator.of(context).popUntil((route) => route.isFirst);;
+        }
+    );
    }
 
   @override
