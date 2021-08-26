@@ -131,16 +131,17 @@ class _MainWidgetState extends State<MainWidget> {
         });
   }
 
-  Future<void> getDataFromDBForHome() async {
+  Future<void> getDataFromDBForHome(bool refresh) async {
+    if(refresh)
+      emptyPropertiesMap();
     MainWidget.databaseData['PropertyModules'] =
         await HTTP_Requests.getRecommendedProperties();
 
     MainWidget.databaseData['TrendingModules'] =
-        await HTTP_Requests.getTrendingProperties("Hotels");
+        await HTTP_Requests.getTrendingProperties();
 
     MainWidget.databaseData['CategoriesModules'] =
         await HTTP_Requests.createCategoriesModules();
-
     _homeGlobalKey.currentState?.refreshPage();
   }
 
@@ -159,17 +160,40 @@ class _MainWidgetState extends State<MainWidget> {
     _bookingsGlobalKey.currentState?.refreshPage();
   }
 
+  Future<void> changeCategory(String type) async {
+
+    emptyPropertiesMap();
+
+    MainWidget.databaseData['PropertyModules'] =
+    await HTTP_Requests.getRecommendedPropertiesWithType(type);
+
+    MainWidget.databaseData['TrendingModules'] =
+    await HTTP_Requests.getTrendingPropertiesWithType(type);
+
+    _homeGlobalKey.currentState?.refreshPage();
+  }
+
+  void emptyPropertiesMap(){
+    MainWidget.databaseData['PropertyModules'] =[];
+
+    MainWidget.databaseData['TrendingModules'] =[];
+
+    _homeGlobalKey.currentState?.refreshPage();
+
+  }
+
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     _MyHomePageState();
-    getDataFromDBForHome();
+    getDataFromDBForHome(false);
     getDataFromDBForFavorite();
     getDataFromDBForBookings();
     Screens = [
       Home(
         parentFunction: getDataFromDBForHome,
+        changeCategory: changeCategory,
         key: _homeGlobalKey,
       ),
       Favourites(

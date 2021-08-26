@@ -12,7 +12,8 @@ import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 class Home extends StatefulWidget {
   Function parentFunction;
-  Home({this.parentFunction, Key key}) : super(key: key);
+  Function changeCategory ;
+  Home({this.parentFunction , this.changeCategory, Key key}) : super(key: key);
   @override
   HomeState createState() => HomeState();
 }
@@ -112,6 +113,12 @@ class HomeState extends State<Home> {
                               MainWidget
                                   .databaseData['CategoriesModules'][index]
                                   .isSelected = true;
+                              if (index==0)
+                                widget.parentFunction(true) ;
+                              else
+                                widget.changeCategory(MainWidget
+                                    .databaseData['CategoriesModules'][index].title) ;
+
                             });
                           },
                           child: CategoryRadioButton(
@@ -149,7 +156,7 @@ class HomeState extends State<Home> {
                 ),
               ),
             ),
-            MainWidget.databaseData['TrendingModules'] != null
+            (MainWidget.databaseData['TrendingModules'] != null && MainWidget.databaseData['TrendingModules'].isNotEmpty)
                 ? SingleChildScrollView(
                     scrollDirection: Axis.horizontal,
                     child: Row(
