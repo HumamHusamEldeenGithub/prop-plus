@@ -732,7 +732,7 @@ class HTTP_Requests {
       },
     );
     var data = jsonDecode(response.body);
-    developer.log(data.toString());
+    return data['phone'].toString();
   }
 
   ////////////////////SEND/////////////////////////
@@ -751,6 +751,52 @@ class HTTP_Requests {
     categoriesModules
         .add(new CategoryModel(Icons.house_sharp, "Villas", false));
     return categoriesModules;
+  }
+  static Future<dynamic> updatePhoneNumber(
+      String userId, String phone) async {
+    final response = await http.put(
+        Uri.parse(
+          'https://propplus-production.herokuapp.com/users/phone/'+userId),
+          headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+          'Authorization': authorizationKey,
+        },
+          body: jsonEncode(<String, String>{
+            'phone': phone,
+          }),
+        );
+        if (response.statusCode == 201 ||  response.statusCode == 200) {
+      // If the server did return a 201 CREATED response,
+      // then parse the JSON.
+
+    } else {
+    // If the server did not return a 201 CREATED response,
+    // then throw an exception.
+    throw Exception('Failed to upadte the phone number  .');
+    }
+  }
+  static Future<dynamic> updateUserName(
+      String userId, String name) async {
+    final response = await http.put(
+        Uri.parse(
+          'https://propplus-production.herokuapp.com/users/name/'+userId),
+          headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+          'Authorization': authorizationKey,
+        },
+          body: jsonEncode(<String, String>{
+            'name': name,
+          }),
+        );
+        if (response.statusCode == 201 || response.statusCode == 200) {
+      // If the server did return a 201 CREATED response,
+      // then parse the JSON.
+
+    } else {
+    // If the server did not return a 201 CREATED response,
+    // then throw an exception.
+    throw Exception('Failed to post to Favourite table  .');
+    }
   }
 }
 

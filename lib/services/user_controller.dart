@@ -23,6 +23,7 @@ class UserController{
      _currentUser.dbId = await HTTP_Requests.getUserId(_currentUser.uid);
      _currentUser.userName=await HTTP_Requests.getUsernameById(_currentUser.dbId.toString());
      _currentUser.avatarURl =await HTTP_Requests.getAvatarUrlById(_currentUser.dbId.toString());
+     _currentUser.phoneNumber = await HTTP_Requests.getPhoneNumberById(_currentUser.dbId.toString());
      return _currentUser;
   }
 
@@ -49,6 +50,7 @@ class UserController{
     _currentUser.dbId = await HTTP_Requests.getUserId(_currentUser.uid);
     _currentUser.userName=await HTTP_Requests.getUsernameById(_currentUser.dbId.toString());
     _currentUser.avatarURl =await HTTP_Requests.getAvatarUrlById(_currentUser.dbId.toString());
+    _currentUser.phoneNumber = await HTTP_Requests.getPhoneNumberById(_currentUser.dbId.toString());
     return _currentUser.uid ;
     //TODO : check if null
    // _currentUser.avatarURl = await getDownloadUrl();

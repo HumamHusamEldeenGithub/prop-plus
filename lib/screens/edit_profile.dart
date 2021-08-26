@@ -173,7 +173,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
                   TextFormField(
                     decoration: InputDecoration(
                       labelText: "Phone" ,
-                      hintText: "Unknown",
+                      hintText: "${currentUser.phoneNumber}",
                       enabledBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(5),
                         borderSide: BorderSide(
