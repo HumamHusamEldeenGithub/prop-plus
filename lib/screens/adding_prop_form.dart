@@ -224,6 +224,39 @@ class _PropertyInputFormState extends State<PropertyInputForm> {
     });
   }
 
+
+  Future<void> uploadImage() async{
+    String imageUrl;
+    try {
+      imageUrl = await locater
+        .get<UserController>()
+        .uploadPropertyApprovalPhoto(File(image.path));
+    }
+    catch(e){
+      print("Failed to upload image");
+      return;
+    }
+    setState(() {
+      imagesUrls.add(imageUrl);
+      imageUrl = null;
+      image = null;
+    });
+  }
+
+  Future<void> submitForm() async {
+    PropertyToApprove module = new PropertyToApprove(
+        user_id:
+        locater<UserController>().currentUser.dbId,
+        title: _title,
+        phone: _phone,
+        city: _city,
+        street: _street,
+        type: _type,
+        description: _description,
+        approvalImagesUrls: imagesUrls);
+    await HTTP_Requests.sendApprovalRequest(module);
+  }
+
   @override
   Widget build(BuildContext context) {
     double _width = MediaQuery.of(context).size.width;
@@ -306,24 +339,15 @@ class _PropertyInputFormState extends State<PropertyInputForm> {
                             ElevatedButton.styleFrom(primary: Colors.grey[500]),
                         child: Text("Pick the Images one by one :"),
                         onPressed: () async {
+
                           image = await ImagePicker.platform
                               .pickImage(source: ImageSource.gallery);
-                          if (image != null)
-                            Loading.showLoaderDialog(
-                                context, "Uploading the photo");
-
+                          if(image!=null)
+                            LoadingDialog.showLoadingDialog(context, uploadImage(), Text("Uploaded image"), (){Navigator.pop(context);});
                           /*setState(() {
                                   loading = true;
                                 });*/
-                          String imageUrl = await locater
-                              .get<UserController>()
-                              .uploadPropertyApprovalPhoto(File(image.path));
-                          setState(() {
-                            imagesUrls.add(imageUrl);
-                            imageUrl = null;
-                            image = null;
-                            Navigator.pop(context);
-                          });
+
                         },
                       ),
                     ),
@@ -342,23 +366,7 @@ class _PropertyInputFormState extends State<PropertyInputForm> {
                         onPressed: () async {
                           final form = formKey.currentState;
                           form.save();
-                          Loading.showLoaderDialog(
-                              context, "Adding the property .....");
-                          //Create a property to approve model and send it to approval request
-                          PropertyToApprove model = new PropertyToApprove(
-                              user_id:
-                                  locater<UserController>().currentUser.dbId,
-                              title: _title,
-                              phone: _phone,
-                              city: _city,
-                              street: _street,
-                              type: _type,
-                              description: _description,
-                              approvalImagesUrls: imagesUrls);
-                          await HTTP_Requests.sendApprovalRequest(model);
-                          Navigator.pop(context);
-                          Loading.showCustomDialog(
-                              context, "Adding Confirmed ");
+                          LoadingDialog.showLoadingDialog(context, submitForm(), Text("You've successfully submitted your property!"), (){Navigator.pushReplacementNamed(context, '/homeScreen');});
                         },
                       ),
                     ),
