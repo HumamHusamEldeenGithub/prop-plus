@@ -18,7 +18,6 @@ class Profile extends StatefulWidget {
 
 class ProfileState extends State<Profile> {
   UserModule currentUser = locater.get<UserController>().currentUser;
-
   PickedFile image;
   RefreshController _refreshController =
       RefreshController(initialRefresh: false);
@@ -64,17 +63,16 @@ class ProfileState extends State<Profile> {
   }
 
   String getAvatarLink(){
+    print(locater
+        .get<UserController>()
+        .currentUser.avatarURl
+        );
+    //print("Image is " + _checkAvatarNotNull().toString());
     if(_checkAvatarNotNull()){
-      try{
-        return locater
-            .get<UserController>()
-            .currentUser
-            .avatarURl;
-      }
-      catch(e) {
-        print(e.message);
-        return "https://thumbs.dreamstime.com/b/creative-vector-illustration-default-avatar-profile-placeholder-isolated-background-art-design-grey-photo-blank-template-mo-107388687.jpg";
-      }
+      return locater
+          .get<UserController>()
+          .currentUser
+          .avatarURl;
     }
     else{
       return "https://thumbs.dreamstime.com/b/creative-vector-illustration-default-avatar-profile-placeholder-isolated-background-art-design-grey-photo-blank-template-mo-107388687.jpg";

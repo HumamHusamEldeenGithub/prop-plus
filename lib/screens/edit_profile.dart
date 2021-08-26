@@ -289,16 +289,10 @@ class _EditProfilePageState extends State<EditProfilePage> {
   }
   void submit() async {
     if (validate()) {
-      try {
-        await HTTP_Requests.updateUserName(currentUser.dbId.toString(), _name);
-        await HTTP_Requests.updatePhoneNumber(currentUser.dbId.toString(), _phone);
-        await locater.get<UserController>().InitializeUser();
-        currentUser = locater.get<UserController>().currentUser;
-      } catch (e) {
-        setState(() {
-          _warning = e.message;
-        });
-      }
+      await HTTP_Requests.updateUserName(currentUser.dbId.toString(), _name);
+      await HTTP_Requests.updatePhoneNumber(currentUser.dbId.toString(), _phone);
+      await locater.get<UserController>().InitializeUser();
+      currentUser = locater.get<UserController>().currentUser;
     }
   }
 

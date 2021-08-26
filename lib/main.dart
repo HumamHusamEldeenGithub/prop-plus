@@ -142,7 +142,6 @@ class _MainWidgetState extends State<MainWidget> {
         await HTTP_Requests.createCategoriesModules();
 
     _homeGlobalKey.currentState?.refreshPage();
-    _profileGlobalKey.currentState?.refreshPage();
   }
 
   Future<void> getDataFromDBForFavorite() async {
@@ -176,14 +175,16 @@ class _MainWidgetState extends State<MainWidget> {
       Favourites(
           parentFunction: getDataFromDBForFavorite, key: _favouritesGlobalKey),
       Bookings(
-          parentFunction: getDataFromDBForFavorite, key: _bookingsGlobalKey),
+          parentFunction: getDataFromDBForBookings, key: _bookingsGlobalKey),
+      //TODO
       Profile(parentFunction: getDataFromDBForBookings, key: _profileGlobalKey)
     ];
     screenDBDataGetter = [
       getDataFromDBForHome,
       getDataFromDBForFavorite,
       getDataFromDBForBookings,
-      getDataFromDBForBookings
+      //TODO
+      (){}
     ];
   }
 
