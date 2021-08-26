@@ -1,8 +1,13 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:prop_plus/constant/MainTheme.dart';
 import 'package:prop_plus/services/locater.dart';
 import 'package:prop_plus/services/user_controller.dart';
 import 'dart:developer' as developer;
+
+import 'package:prop_plus/shared/loading_widget.dart';
 
 class EditProfilePage extends StatefulWidget {
   @override
@@ -11,6 +16,10 @@ class EditProfilePage extends StatefulWidget {
 
 class _EditProfilePageState extends State<EditProfilePage> {
   bool showPassword = false;
+  PickedFile image;
+  final formKey = GlobalKey<FormState>();
+  String _name = locater.get<UserController>().currentUser.userName.toString();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -73,8 +82,22 @@ class _EditProfilePageState extends State<EditProfilePage> {
                         bottom: 0,
                         right: 0,
                         child: GestureDetector(
-                          onTap: (){
-                            developer.log(locater.get<UserController>().currentUser.userName);
+                          onTap: () async {
+                            image = await ImagePicker.platform
+                                .pickImage(source: ImageSource.gallery);
+                            if(image!=null)
+                              Loading.showLoaderDialog(context,"Uploading the photo");
+
+                            String imageUrl = await locater
+                                .get<UserController>()
+                                .uploadProfilePicture(File(image.path));
+                            setState(() {
+                              locater.get<UserController>().currentUser.avatarURl = imageUrl;
+                              imageUrl =null;
+                              image=null;
+                              Navigator.pop(context);
+                            });
+
                           },
                           child: Container(
                             height: 40,
@@ -99,7 +122,27 @@ class _EditProfilePageState extends State<EditProfilePage> {
               SizedBox(
                 height: 35,
               ),
-              buildTextField("Full Name", "${locater.get<UserController>().currentUser.userName.toString()}", false),
+            TextFormField(
+              decoration: InputDecoration(
+                labelText: "FullName" ,
+                hintText: "${_name}",
+                enabledBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(5),
+                  borderSide: BorderSide(
+                    color: Colors.black,
+                    width: 0.5,
+                  ),
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(15),
+                  borderSide: BorderSide(
+                    color: Color(0xFF00B9FF),
+                    width: 2.0,
+                  ),
+                ),
+              ),
+              onSaved: (value) => _name = value,
+            ),
 
 
               SizedBox(
@@ -120,7 +163,11 @@ class _EditProfilePageState extends State<EditProfilePage> {
                             color: Colors.black)),
                   ),
                   RaisedButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      final form = formKey.currentState;
+                      form.save();
+                      //TODO update the username in firebase and database
+                    },
                     color: MainTheme.mainColor,
                     padding: EdgeInsets.symmetric(horizontal: 50),
                     elevation: 2,
@@ -172,6 +219,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
               fontWeight: FontWeight.bold,
               color: Colors.black,
             )),
+
       ),
     );
   }
