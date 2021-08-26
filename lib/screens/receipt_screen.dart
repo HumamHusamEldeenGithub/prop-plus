@@ -31,7 +31,8 @@ class _ReceiptScreenState extends State<ReceiptScreen> {
     LoadingDialog.showLoadingDialog(
         context,
         HTTP_Requests.sendBookRequest(bookingModule.serviceModule.service_id.toString(), bookingModule.fromDate.toString(), bookingModule.toDate.toString()),
-        Text("Booked successfully!",textAlign: TextAlign.center,),
+        Text("Booked successfully!"),
+        Text("There was a problem booking, please try again."),
         (){
           Navigator.of(context).popUntil((route) => route.isFirst);;
         }

@@ -36,16 +36,10 @@ class _EditProfilePageState extends State<EditProfilePage> {
 
   Future<void> uploadImage() async{
     String imageUrl;
-    try {
-      imageUrl = await locater
-          .get<UserController>()
-          .uploadProfilePicture(File(image.path));
-      await HTTP_Requests.updateAvatarURL(currentUser.userName, imageUrl);
-    }
-    catch(E) {
-      print("Failed to upload image");
-      return;
-    }
+    imageUrl = await locater
+        .get<UserController>()
+        .uploadProfilePicture(File(image.path));
+    await HTTP_Requests.updateAvatarURL(currentUser.userName, imageUrl);
     setState(() {
       setStateCallback();
       locater.get<UserController>().currentUser.avatarURl = imageUrl;
@@ -121,7 +115,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
                             image = await ImagePicker.platform
                                 .pickImage(source: ImageSource.gallery);
                             if(image!=null)
-                              LoadingDialog.showLoadingDialog(context, uploadImage(), Text("Uploaded Image"), (){Navigator.pop(context);});
+                              LoadingDialog.showLoadingDialog(context, uploadImage(), Text("Uploaded Image"), Text("Failed to upload image"),(){Navigator.pop(context);});
                           },
                           child: Container(
                             height: 40,

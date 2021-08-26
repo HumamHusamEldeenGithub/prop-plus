@@ -80,15 +80,9 @@ class _AddNewServiceScreen extends State<AddNewServiceScreen> {
 
   Future<void> uploadImage() async{
     String url;
-    try {
-      url = await locater
-          .get<UserController>()
-          .uploadServicePhoto(File(image.path));
-    }
-    catch(e){
-      print("Failed to upload image");
-      return;
-    }
+    url = await locater
+        .get<UserController>()
+        .uploadServicePhoto(File(image.path));
     setState(() {
       _imagesUrls.add(url);
       url = null;
@@ -158,7 +152,7 @@ class _AddNewServiceScreen extends State<AddNewServiceScreen> {
                     image = await ImagePicker.platform
                         .pickImage(source: ImageSource.gallery);
                     if(image!=null){
-                      LoadingDialog.showLoadingDialog(context, uploadImage(), Text("Uploaded image"), (){Navigator.pop(context);});
+                      LoadingDialog.showLoadingDialog(context, uploadImage(), Text("Uploaded image"), Text("Failed to upload image"),(){Navigator.pop(context);});
                     }
                   },
                 ),
@@ -173,7 +167,7 @@ class _AddNewServiceScreen extends State<AddNewServiceScreen> {
                     final form = formKey.currentState;
                     form.save();
                     ///
-                    LoadingDialog.showLoadingDialog(context, submitForm(module), Text("You've successfully submitted your service!"), (){
+                    LoadingDialog.showLoadingDialog(context, submitForm(module), Text("You've successfully submitted your service!"), Text("There was a problem submitting your service, please try again"),(){
                       Navigator.of(context).popUntil((route) => route.isFirst);
                     });
                   },

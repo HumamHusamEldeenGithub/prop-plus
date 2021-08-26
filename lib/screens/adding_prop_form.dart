@@ -227,15 +227,9 @@ class _PropertyInputFormState extends State<PropertyInputForm> {
 
   Future<void> uploadImage() async{
     String imageUrl;
-    try {
-      imageUrl = await locater
-        .get<UserController>()
-        .uploadPropertyApprovalPhoto(File(image.path));
-    }
-    catch(e){
-      print("Failed to upload image");
-      return;
-    }
+    imageUrl = await locater
+      .get<UserController>()
+      .uploadPropertyApprovalPhoto(File(image.path));
     setState(() {
       imagesUrls.add(imageUrl);
       imageUrl = null;
@@ -343,7 +337,7 @@ class _PropertyInputFormState extends State<PropertyInputForm> {
                           image = await ImagePicker.platform
                               .pickImage(source: ImageSource.gallery);
                           if(image!=null)
-                            LoadingDialog.showLoadingDialog(context, uploadImage(), Text("Uploaded image"), (){Navigator.pop(context);});
+                            LoadingDialog.showLoadingDialog(context, uploadImage(), Text("Uploaded image"), Text("Failed to upload image"),(){Navigator.pop(context);});
                           /*setState(() {
                                   loading = true;
                                 });*/
@@ -366,7 +360,7 @@ class _PropertyInputFormState extends State<PropertyInputForm> {
                         onPressed: () async {
                           final form = formKey.currentState;
                           form.save();
-                          LoadingDialog.showLoadingDialog(context, submitForm(), Text("You've successfully submitted your property!"), (){Navigator.popUntil(context, ModalRoute.withName('/homeScreen'));});
+                          LoadingDialog.showLoadingDialog(context, submitForm(), Text("You've successfully submitted your property!"),Text("There was a problem submitting your property, please try again"), (){Navigator.popUntil(context, ModalRoute.withName('/homeScreen'));});
                         },
                       ),
                     ),

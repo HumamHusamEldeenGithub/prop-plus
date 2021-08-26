@@ -45,6 +45,35 @@ class ProfileState extends State<Profile> {
   }
 
 
+  bool _checkAvatarNotNull(){
+    try {
+      return locater
+          .get<UserController>()
+          .currentUser
+          .avatarURl != null;
+    }
+    catch(e){
+      return false;
+    }
+  }
+
+  String getAvatarLink(){
+    if(_checkAvatarNotNull()){
+      try{
+        return locater
+            .get<UserController>()
+            .currentUser
+            .avatarURl;
+      }
+      catch(e) {
+        return "https://thumbs.dreamstime.com/b/creative-vector-illustration-default-avatar-profile-placeholder-isolated-background-art-design-grey-photo-blank-template-mo-107388687.jpg";
+      }
+    }
+    else{
+      return "https://thumbs.dreamstime.com/b/creative-vector-illustration-default-avatar-profile-placeholder-isolated-background-art-design-grey-photo-blank-template-mo-107388687.jpg";
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     double _width = MediaQuery.of(context).size.width;
@@ -87,12 +116,11 @@ class ProfileState extends State<Profile> {
                 ),
                 Avatar(
                   size: 50,
-                    avatarURL: locater.get<UserController>().currentUser.avatarURl!=null ?
-                    locater.get<UserController>().currentUser.avatarURl.toString():
-                    "https://thumbs.dreamstime.com/b/creative-vector-illustration-default-avatar-profile-placeholder-isolated-background-art-design-grey-photo-blank-template-mo-107388687.jpg" ,
+                    avatarURL: "https://thumbs.dreamstime.com/b/creative-vector-illustration-default-avatar-profile-placeholder-isolated-background-art-design-grey-photo-blank-template-mo-107388687.jpg",
                     onTap: () async {
                       //TODO view Image
-                    }),
+                    }
+                  ),
                 SizedBox(height: 50,),
                 SizedBox(
                   width: _width * 0.5,
