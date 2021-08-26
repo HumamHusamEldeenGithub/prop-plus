@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:prop_plus/constant/MainTheme.dart';
@@ -25,6 +26,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
   String _name ,_phone;
   UserModule currentUser;
   Function setStateCallback;
+  String _warning;
 
   @override
   void initState() {
@@ -39,7 +41,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
     imageUrl = await locater
         .get<UserController>()
         .uploadProfilePicture(File(image.path));
-    await HTTP_Requests.updateAvatarURL(currentUser.userName, imageUrl);
+    await HTTP_Requests.updateAvatarURL(currentUser.dbId.toString(), imageUrl);
     setState(() {
       setStateCallback();
       locater.get<UserController>().currentUser.avatarURl = imageUrl;
@@ -74,6 +76,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
           },
           child: ListView(
             children: [
+              showAlert(),
               Text(
                 "Edit Profile",
                 style: TextStyle(fontSize: 25, fontWeight: FontWeight.w500),
@@ -215,9 +218,8 @@ class _EditProfilePageState extends State<EditProfilePage> {
                   ),
                   RaisedButton(
                     onPressed: () {
-                      final form = formKey.currentState;
-                      form.save();
                       //TODO update the username in firebase and database
+                      submit();
                     },
                     color: MainTheme.mainColor,
                     padding: EdgeInsets.symmetric(horizontal: 50),
@@ -241,7 +243,64 @@ class _EditProfilePageState extends State<EditProfilePage> {
     );
   }
 
+  bool validate() {
+    final form = formKey.currentState;
+    //form.save(); ////////////////////check
+    if (form.validate()) {
+      form.save();
+      return true;
+    } else
+      return false;
+  }
 
+  Widget showAlert() {
+    if (_warning != null) {
+      return Container(
+        color: Colors.amberAccent,
+        width: double.infinity,
+        padding: EdgeInsets.all(8),
+        child: Row(
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Icon(Icons.error_outline),
+            ),
+            Expanded(
+              child: AutoSizeText(
+                _warning,
+                maxLines: 3,
+              ),
+            ),
+            IconButton(
+              icon: Icon(Icons.close),
+              onPressed: () {
+                setState(() {
+                  _warning = null;
+                });
+              },
+            )
+          ],
+        ),
+      );
+    } else
+      return SizedBox(
+        height: 0,
+      );
+  }
+  void submit() async {
+    if (validate()) {
+      try {
+        await HTTP_Requests.updateUserName(currentUser.dbId.toString(), _name);
+        await HTTP_Requests.updatePhoneNumber(currentUser.dbId.toString(), _phone);
+        await locater.get<UserController>().InitializeUser();
+        currentUser = locater.get<UserController>().currentUser;
+      } catch (e) {
+        setState(() {
+          _warning = e.message;
+        });
+      }
+    }
+  }
 
 
 }

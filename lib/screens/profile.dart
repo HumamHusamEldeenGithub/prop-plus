@@ -23,6 +23,12 @@ class ProfileState extends State<Profile> {
   RefreshController _refreshController =
       RefreshController(initialRefresh: false);
 
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    locater.get<UserController>().InitializeUser();
+    currentUser = locater.get<UserController>().currentUser;
+  }
   void _onRefresh() async {
     // monitor network fetch
     await widget.parentFunction;
@@ -66,6 +72,7 @@ class ProfileState extends State<Profile> {
             .avatarURl;
       }
       catch(e) {
+        print(e.message);
         return "https://thumbs.dreamstime.com/b/creative-vector-illustration-default-avatar-profile-placeholder-isolated-background-art-design-grey-photo-blank-template-mo-107388687.jpg";
       }
     }
@@ -116,7 +123,7 @@ class ProfileState extends State<Profile> {
                 ),
                 Avatar(
                   size: 50,
-                    avatarURL: "https://thumbs.dreamstime.com/b/creative-vector-illustration-default-avatar-profile-placeholder-isolated-background-art-design-grey-photo-blank-template-mo-107388687.jpg",
+                    avatarURL: getAvatarLink(),
                     onTap: () async {
                       //TODO view Image
                     }
