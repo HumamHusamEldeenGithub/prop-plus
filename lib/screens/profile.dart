@@ -28,6 +28,8 @@ class ProfileState extends State<Profile> {
     await widget.parentFunction;
     // if failed,use refreshFailed()
     _refreshController.refreshCompleted();
+    locater.get<UserController>().InitializeUser();
+    currentUser = locater.get<UserController>().currentUser;
   }
 
   void _onLoading() async {

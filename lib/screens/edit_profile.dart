@@ -3,8 +3,11 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:prop_plus/constant/MainTheme.dart';
+import 'package:prop_plus/constant/Validator.dart';
+import 'package:prop_plus/modules/user_module.dart';
 import 'package:prop_plus/services/locater.dart';
 import 'package:prop_plus/services/user_controller.dart';
+import 'package:prop_plus/shared/http_requests.dart';
 import 'package:prop_plus/shared/loading_dialog.dart';
 import 'dart:developer' as developer;
 
@@ -19,8 +22,17 @@ class _EditProfilePageState extends State<EditProfilePage> {
   bool showPassword = false;
   PickedFile image;
   final formKey = GlobalKey<FormState>();
-  String _name = locater.get<UserController>().currentUser.userName.toString();
+  String _name ,_phone;
+  UserModule currentUser;
   Function setStateCallback;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    locater.get<UserController>().InitializeUser();
+    currentUser = locater.get<UserController>().currentUser;
+  }
 
   Future<void> uploadImage() async{
     String imageUrl;
@@ -28,6 +40,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
       imageUrl = await locater
           .get<UserController>()
           .uploadProfilePicture(File(image.path));
+      await HTTP_Requests.updateAvatarURL(currentUser.userName, imageUrl);
     }
     catch(E) {
       print("Failed to upload image");
@@ -133,26 +146,57 @@ class _EditProfilePageState extends State<EditProfilePage> {
               SizedBox(
                 height: 35,
               ),
-            TextFormField(
-              decoration: InputDecoration(
-                labelText: "FullName" ,
-                hintText: "${_name}",
-                enabledBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(5),
-                  borderSide: BorderSide(
-                    color: Colors.black,
-                    width: 0.5,
+
+            Form(
+              key: formKey,
+              child: Column(
+                children: [
+                  TextFormField(
+                    decoration: InputDecoration(
+                      labelText: "FullName" ,
+                      hintText: "${currentUser.userName}",
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(5),
+                        borderSide: BorderSide(
+                          color: Colors.black,
+                          width: 0.5,
+                        ),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(15),
+                        borderSide: BorderSide(
+                          color: Color(0xFF00B9FF),
+                          width: 2.0,
+                        ),
+                      ),
+                    ),
+                    validator: NameValidator.validate,
+                    onSaved: (value) => _name = value,
                   ),
-                ),
-                focusedBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(15),
-                  borderSide: BorderSide(
-                    color: Color(0xFF00B9FF),
-                    width: 2.0,
+                  TextFormField(
+                    decoration: InputDecoration(
+                      labelText: "Phone" ,
+                      hintText: "Unknown",
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(5),
+                        borderSide: BorderSide(
+                          color: Colors.black,
+                          width: 0.5,
+                        ),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(15),
+                        borderSide: BorderSide(
+                          color: Color(0xFF00B9FF),
+                          width: 2.0,
+                        ),
+                      ),
+                    ),
+                    validator: PhoneNumberValidator.validate,
+                    onSaved: (value) => _phone = value,
                   ),
-                ),
+                ],
               ),
-              onSaved: (value) => _name = value,
             ),
 
 
@@ -166,7 +210,9 @@ class _EditProfilePageState extends State<EditProfilePage> {
                     padding: EdgeInsets.symmetric(horizontal: 50),
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(20)),
-                    onPressed: () {},
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
                     child: Text("CANCEL",
                         style: TextStyle(
                             fontSize: 14,
@@ -201,37 +247,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
     );
   }
 
-  Widget buildTextField(
-      String labelText, String placeholder, bool isPasswordTextField) {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 35.0),
-      child: TextField(
-        obscureText: isPasswordTextField ? showPassword : false,
-        decoration: InputDecoration(
-            suffixIcon: isPasswordTextField
-                ? IconButton(
-              onPressed: () {
-                setState(() {
-                  showPassword = !showPassword;
-                });
-              },
-              icon: Icon(
-                Icons.remove_red_eye,
-                color: Colors.grey,
-              ),
-            )
-                : null,
-            contentPadding: EdgeInsets.only(bottom: 3),
-            labelText: labelText,
-            floatingLabelBehavior: FloatingLabelBehavior.always,
-            hintText: placeholder,
-            hintStyle: TextStyle(
-              fontSize: 16,
-              fontWeight: FontWeight.bold,
-              color: Colors.black,
-            )),
 
-      ),
-    );
-  }
+
+
 }
