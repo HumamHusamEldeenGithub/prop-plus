@@ -28,7 +28,7 @@ class _TrendingCardState extends State<TrendingCard> {
         child: GestureDetector(
           onTap: () {
             Navigator.pushNamed(context, DetailsScreen.path,
-                arguments: widget.module);
+                arguments: {'module':widget.module});
           },
           child: Container(
             child: Card(

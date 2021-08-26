@@ -446,14 +446,29 @@ class HTTP_Requests {
         'user_id': module.user_id.toString(),
         'phone': module.phone,
         'description': module.description,
+        'type':module.type
       }),
     );
+
 
     if (response.statusCode == 201 || response.statusCode == 200) {
       // If the server did return a 201 CREATED response,
       // then parse the JSON.
       Map<String, dynamic> propToApprove = jsonDecode(response.body);
       var propToApproveId = propToApprove['id'];
+      final location =await http.post(
+        Uri.parse(
+            'https://propplus-production.herokuapp.com/approve_locations'),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+          'Authorization': authorizationKey,
+        },
+        body: jsonEncode(<String, String>{
+          'property_id': propToApproveId.toString(),
+          'city': module.city,
+          'street': module.street,
+        }),
+      );
 
       //iterate over all photos url and create a string of urls to send it
       String jsonUrls = "";
@@ -473,7 +488,7 @@ class HTTP_Requests {
         }),
       );
 
-      if (imageResponse.statusCode == 201 || response.statusCode == 200) {
+      if ((imageResponse.statusCode == 201 || imageResponse.statusCode == 200)&&(location.statusCode == 201 || location.statusCode == 200)) {
         print("Send Successfully");
         return true;
       } else {
