@@ -21,6 +21,8 @@ class UserController{
   Future<UserModule>InitializeUser() async{
      _currentUser = await _authService.getUserModule();
      _currentUser.dbId = await HTTP_Requests.getUserId(_currentUser.uid);
+     _currentUser.userName=await HTTP_Requests.getUsernameById(_currentUser.dbId.toString());
+     _currentUser.avatarURl =await HTTP_Requests.getAvatarUrlById(_currentUser.dbId.toString());
      return _currentUser;
   }
 
@@ -44,6 +46,9 @@ class UserController{
   }
   Future<String>signInWithEmailAndPassword (String email ,String password) async{
     _currentUser =await _authService.signInWithEmailAndPassword(email, password);
+    _currentUser.dbId = await HTTP_Requests.getUserId(_currentUser.uid);
+    _currentUser.userName=await HTTP_Requests.getUsernameById(_currentUser.dbId.toString());
+    _currentUser.avatarURl =await HTTP_Requests.getAvatarUrlById(_currentUser.dbId.toString());
     return _currentUser.uid ;
     //TODO : check if null
    // _currentUser.avatarURl = await getDownloadUrl();
@@ -53,6 +58,7 @@ class UserController{
     _currentUser = await _authService.createUserWithEmailAndPassword(email, password, userName);
     int dbId = await HTTP_Requests.createNewUserInDB(userName,"",email,_currentUser.uid);
     _currentUser.dbId = dbId ;
+    _currentUser.userName=await HTTP_Requests.getUsernameById(dbId.toString());
     return _currentUser.uid;
   }
 

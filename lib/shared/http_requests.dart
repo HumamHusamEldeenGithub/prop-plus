@@ -722,4 +722,66 @@ class HTTP_Requests {
       // then throw an exception.
     }
   }
+  static Future<dynamic> updateAvatarURL(
+      String userId, String avatarURL) async {
+    final response = await http.put(
+        Uri.parse(
+          'https://propplus-production.herokuapp.com/users/avatarURL/'+userId),
+          headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+          'Authorization': authorizationKey,
+        },
+          body: jsonEncode(<String, String>{
+            'avatarURL': avatarURL,
+          }),
+        );
+        if (response.statusCode == 201 || response.statusCode == 200) {
+      // If the server did return a 201 CREATED response,
+      // then parse the JSON.
+
+    } else {
+    // If the server did not return a 201 CREATED response,
+    // then throw an exception.
+    throw Exception('Failed to post to Favourite table  .');
+    }
+  }
+  static Future getUsernameById(String userId) async {
+    http.Response response;
+    response = await http.get(
+      Uri.parse("https://propplus-production.herokuapp.com/users/" +
+          userId),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        'Authorization': authorizationKey,
+      },
+    );
+    var data = jsonDecode(response.body);
+    return data['name'].toString();
+  }
+  static Future getAvatarUrlById(String userId) async {
+    http.Response response;
+    response = await http.get(
+      Uri.parse("https://propplus-production.herokuapp.com/users/" +
+          userId),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        'Authorization': authorizationKey,
+      },
+    );
+    var data = jsonDecode(response.body);
+    return data['avatarURL'].toString();
+  }
+  static Future getPhoneNumberById(String userId) async {
+    http.Response response;
+    response = await http.get(
+      Uri.parse("https://propplus-production.herokuapp.com/users/" +
+          userId),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        'Authorization': authorizationKey,
+      },
+    );
+    var data = jsonDecode(response.body);
+    developer.log(data.toString());
+  }
 }
