@@ -88,7 +88,7 @@ class ProfileState extends State<Profile> {
                     locater.get<UserController>().currentUser.avatarURl.toString():
                     "https://thumbs.dreamstime.com/b/creative-vector-illustration-default-avatar-profile-placeholder-isolated-background-art-design-grey-photo-blank-template-mo-107388687.jpg" ,
                     onTap: () async {
-                      //TODO view Image 
+                      //TODO view Image
                     }),
                 SizedBox(height: 50,),
                 SizedBox(

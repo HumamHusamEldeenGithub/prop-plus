@@ -119,7 +119,8 @@ class HTTP_Requests {
     http.Response response;
     response = await http.get(
       Uri.parse(
-        "https://propplus-production.herokuapp.com/bookings/ByUserId/"+userId.toString(),
+        "https://propplus-production.herokuapp.com/bookings/ByUserId/" +
+            userId.toString(),
       ),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
@@ -131,7 +132,7 @@ class HTTP_Requests {
     List<BookingModule> list = <BookingModule>[];
     for (var i = 0; i < data.length; i++) {
       var property = PropertyModule.fromJson(data[i]);
-      var service = ServiceModule.fromJson2(data[i],property);
+      var service = ServiceModule.fromJson2(data[i], property);
       var booking = BookingModule.fromJson(data[i], service);
       try {
         if (booking != null) list.add(booking);
@@ -662,13 +663,54 @@ class HTTP_Requests {
             'user_name': name,
             'property_name': propertyName,
             'start_date': startDate,
-            'end_date':endDate,
-            'customer_name':customerName,
-            'customer_email':customerEmail,
-            'customer_phone':customerPhone,
-            'total_price':totalPrice,
+            'end_date': endDate,
+            'customer_name': customerName,
+            'customer_email': customerEmail,
+            'customer_phone': customerPhone,
+            'total_price': totalPrice,
             'user_email': email,
+          }
+        }));
+    if (response.statusCode == 201 || response.statusCode == 200) {
+      // If the server did return a 201 CREATED response,
+      // then parse the JSON.
+      //TODO : return a flag to show succeeded widget
+    } else {
+      // If the server did not return a 201 CREATED response,
+      // then throw an exception.
+    }
+  }
 
+  static sendBookingEmailToCustomer(
+      String customerName,
+      String customerEmail,
+      String propertyTitle,
+      String serviceDescription,
+      String startDate,
+      String endDate,
+      String totalPrice,
+      String propertyPhone) async {
+    final service_id = 'service_9jx63jf';
+    final template_id = 'template_ieb35pm';
+    final user_id = 'user_ajnKi0eDKQOl6ozAkEila';
+    final url = Uri.parse('https://api.emailjs.com/api/v1.0/email/send');
+    final response = await http.post(url,
+        headers: {
+          'origin': 'http://localhost',
+          'Content-Type': 'application/json'
+        },
+        body: jsonEncode({
+          'service_id': service_id,
+          'template_id': template_id,
+          'user_id': user_id,
+          'template_params': {
+            'customer_email': customerEmail,
+            'property_name': propertyTitle,
+            'start_date': startDate,
+            'end_date': endDate,
+            'customer_user_name': customerName,
+            'property_phone}': propertyPhone,
+            'total_price': totalPrice,
           }
         }));
     if (response.statusCode == 201 || response.statusCode == 200) {
