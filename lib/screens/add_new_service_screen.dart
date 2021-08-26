@@ -173,7 +173,9 @@ class _AddNewServiceScreen extends State<AddNewServiceScreen> {
                     final form = formKey.currentState;
                     form.save();
                     ///
-                    LoadingDialog.showLoadingDialog(context, submitForm(module), Text("You've successfully submitted your service!"), (){Navigator.pushReplacementNamed(context, '/homeScreen');});
+                    LoadingDialog.showLoadingDialog(context, submitForm(module), Text("You've successfully submitted your service!"), (){
+                      Navigator.of(context).popUntil((route) => route.isFirst);
+                    });
                   },
                 ),
               )

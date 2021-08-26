@@ -33,7 +33,7 @@ class _ReceiptScreenState extends State<ReceiptScreen> {
         HTTP_Requests.sendBookRequest(bookingModule.serviceModule.service_id.toString(), bookingModule.fromDate.toString(), bookingModule.toDate.toString()),
         Text("Booked successfully!",textAlign: TextAlign.center,),
         (){
-          Navigator.pushReplacementNamed(context, '/homeScreen');
+          Navigator.of(context).popUntil((route) => route.isFirst);;
         }
     );
    }

@@ -42,6 +42,7 @@ class ProfileState extends State<Profile> {
     setState(() {});
   }
 
+
   @override
   Widget build(BuildContext context) {
     double _width = MediaQuery.of(context).size.width;
@@ -126,7 +127,7 @@ class ProfileState extends State<Profile> {
                   width: _width * 0.5,
                   child: ElevatedButton(
                       onPressed: () {
-                        Navigator.of(context).pushNamed('/editProfilePage');
+                        Navigator.of(context).pushNamed('/editProfilePage',arguments: refreshPage);
                       },
                       child: Text("Edit Profile")),
                 ),

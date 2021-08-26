@@ -366,7 +366,7 @@ class _PropertyInputFormState extends State<PropertyInputForm> {
                         onPressed: () async {
                           final form = formKey.currentState;
                           form.save();
-                          LoadingDialog.showLoadingDialog(context, submitForm(), Text("You've successfully submitted your property!"), (){Navigator.pushReplacementNamed(context, '/homeScreen');});
+                          LoadingDialog.showLoadingDialog(context, submitForm(), Text("You've successfully submitted your property!"), (){Navigator.popUntil(context, ModalRoute.withName('/homeScreen'));});
                         },
                       ),
                     ),
