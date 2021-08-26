@@ -79,7 +79,7 @@ class FavouritesState extends State<Favourites> {
         onLoading: _onLoading,
         child: SingleChildScrollView(
           scrollDirection: Axis.vertical,
-          child: MainWidget.databaseData['FavouriteModules'] != null
+          child: (MainWidget.databaseData['FavouriteModules'] != null&& MainWidget.databaseData['FavouriteModules'].isNotEmpty)
               ? Center(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,

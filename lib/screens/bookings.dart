@@ -83,7 +83,7 @@ class BookingsState extends State<Bookings> {
         onLoading: _onLoading,
         child: SingleChildScrollView(
           scrollDirection: Axis.vertical,
-          child: MainWidget.databaseData['BookingsModules'] != null
+          child: (MainWidget.databaseData['BookingsModules'] != null&& MainWidget.databaseData['BookingsModules'].isNotEmpty)
               ? Center(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,

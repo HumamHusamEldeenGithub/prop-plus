@@ -170,7 +170,7 @@ class HomeState extends State<Home> {
                 ),
               ),
             ),
-            MainWidget.databaseData['PropertyModules'] != null
+            (MainWidget.databaseData['PropertyModules'] != null && MainWidget.databaseData['PropertyModules'].isNotEmpty)
                 ? Center(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
