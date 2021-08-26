@@ -137,18 +137,19 @@ class _RecommendedCardState extends State<RecommendedCard> {
                         : Icon(
                             Icons.favorite_border,
                           ),
-                    onPressed: ()async{
+                    onPressed: () async {
                       if (!favorite) {
-                        Loading.showLoaderDialog(context, "Adding property to favorite");
+                        Loading.showLoaderDialog(
+                            context, "Adding property to favorite");
                         await HTTP_Requests.addNewFavourite(
                             locater<UserController>()
                                 .currentUser
                                 .dbId
                                 .toString(),
                             widget.module.propertyModule.id.toString());
-
                       } else {
-                        Loading.showLoaderDialog(context, "Removing property from favorite");
+                        Loading.showLoaderDialog(
+                            context, "Removing property from favorite");
                         await HTTP_Requests.deleteFavourite(
                             locater<UserController>()
                                 .currentUser

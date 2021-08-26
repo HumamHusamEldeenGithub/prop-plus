@@ -1,8 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:prop_plus/constant/MainTheme.dart';
+import 'package:prop_plus/constant/TrendingTheme.dart';
 import 'package:prop_plus/shared/categories.dart';
 import 'package:prop_plus/shared/recommended_card.dart';
+import 'package:prop_plus/shared/shimmer_widget.dart';
 import 'package:prop_plus/shared/trending_card.dart';
 import 'package:prop_plus/constant/CategoryTheme.dart';
 import 'package:prop_plus/main.dart';
@@ -47,6 +49,8 @@ class HomeState extends State<Home> {
 
   @override
   Widget build(BuildContext context) {
+    double _width = MediaQuery.of(context).size.width;
+    double _height = MediaQuery.of(context).size.height;
     return SmartRefresher(
       enablePullDown: true,
       enablePullUp: true,
@@ -117,7 +121,25 @@ class HomeState extends State<Home> {
                       },
                     ),
                   )
-                : SizedBox(),
+                : SizedBox(
+                    height: 75,
+                    child: ListView.builder(
+                      shrinkWrap: true,
+                      scrollDirection: Axis.horizontal,
+                      itemCount: 6,
+                      itemBuilder: (context, index) {
+                        return Padding(
+                          padding:
+                              const EdgeInsets.all(CategoryTheme.iconPadding),
+                          child: ShimmerWidget.circle(
+                            width: 60,
+                            height: 1,
+                            shapeBorder: CategoryTheme.borderRadius,
+                          ),
+                        );
+                      },
+                    ),
+                  ),
             Padding(
               padding: const EdgeInsets.all(MainTheme.pagePadding),
               child: Center(
@@ -136,7 +158,9 @@ class HomeState extends State<Home> {
                         return TrendingCard(module: card);
                       })?.toList(),
                     ))
-                : SizedBox(),
+                : SingleChildScrollView(
+                    scrollDirection: Axis.horizontal,
+                    child: Row(children: ShimmerWidget.trendingCards)),
             Padding(
               padding: const EdgeInsets.all(MainTheme.pagePadding),
               child: Center(
@@ -156,7 +180,45 @@ class HomeState extends State<Home> {
                       }).toList(),
                     ),
                   )
-                : SizedBox(),
+                : Center(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.fromLTRB(0, 0, 0, 10),
+                          child: ShimmerWidget.rectangle(
+                            width: _width * 0.97,
+                            height: 200,
+                            shapeBorder: BorderRadius.circular(10),
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.fromLTRB(0, 0, 0, 10),
+                          child: ShimmerWidget.rectangle(
+                            width: _width * 0.97,
+                            height: 200,
+                            shapeBorder: BorderRadius.circular(10),
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.fromLTRB(0, 0, 0, 10),
+                          child: ShimmerWidget.rectangle(
+                            width: _width * 0.97,
+                            height: 200,
+                            shapeBorder: BorderRadius.circular(10),
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.fromLTRB(0, 0, 0, 10),
+                          child: ShimmerWidget.rectangle(
+                            width: _width * 0.97,
+                            height: 200,
+                            shapeBorder: BorderRadius.circular(10),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
           ],
         ),
       ),

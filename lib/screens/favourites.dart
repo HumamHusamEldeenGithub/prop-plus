@@ -1,9 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:prop_plus/constant/FavouriteTheme.dart';
 import 'package:prop_plus/modules/favourite_module.dart';
 import 'package:prop_plus/services/locater.dart';
 import 'package:prop_plus/services/user_controller.dart';
 import 'package:prop_plus/shared/favourite_card.dart';
+import 'package:prop_plus/shared/shimmer_widget.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 import '../main.dart';
@@ -77,17 +79,65 @@ class FavouritesState extends State<Favourites> {
         onLoading: _onLoading,
         child: SingleChildScrollView(
           scrollDirection: Axis.vertical,
-          child: MainWidget.databaseData['PropertyModules'] != null
+          child: MainWidget.databaseData['FavouriteModules'] != null
               ? Center(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children:
                         MainWidget.databaseData['FavouriteModules'].map((card) {
-                      return FavouriteCard(refreshFunction:widget.parentFunction,module: card);
+                      return FavouriteCard(
+                          refreshFunction: widget.parentFunction, module: card);
                     }).toList(),
                   ),
                 )
-              : SizedBox(),
+              : Container(
+                  child: Card(
+                      elevation: 8.0,
+                      margin:
+                          EdgeInsets.symmetric(horizontal: 10.0, vertical: 8.0),
+                      child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                ShimmerWidget.rectangle(
+                                  width: 100,
+                                  height: 100,
+                                  shapeBorder: BorderRadius.circular(8),
+                                ),
+                                SizedBox(
+                                  width: 20,
+                                ),
+                                Column(
+                                  children: [
+                                    SizedBox(
+                                      height: 15,
+                                    ),
+                                    ShimmerWidget.rectangle(
+                                      width: 200,
+                                      height: 10,
+                                      shapeBorder: BorderRadius.circular(10),
+                                    ),
+                                    SizedBox(
+                                      height: 20,
+                                    ),
+                                    ShimmerWidget.rectangle(
+                                      width: 200,
+                                      height: 10,
+                                      shapeBorder: BorderRadius.circular(10),
+                                    ),
+                                    SizedBox(
+                                      height: 20,
+                                    ),
+                                    ShimmerWidget.rectangle(
+                                      width: 200,
+                                      height: 10,
+                                      shapeBorder: BorderRadius.circular(10),
+                                    ),
+                                  ],
+                                ),
+                              ])))),
         ),
       ),
     );

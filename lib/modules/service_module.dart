@@ -25,7 +25,7 @@ class ServiceModule {
       Map<String, dynamic> json, PropertyModule propertyModule) {
     try {
       return new ServiceModule(
-          imageUrls: null,
+          imageUrls: [json['url'].toString()],
           propertyModule: propertyModule,
           service_id: int.parse(json['service_id']?.toString()),
           description: json['description']?.toString(),

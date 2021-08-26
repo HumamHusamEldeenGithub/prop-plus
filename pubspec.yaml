@@ -46,7 +46,7 @@ dependencies:
   progress_dialog: ^1.2.4
   intl: ^0.17.0
   carousel_pro: ^1.0.0
-
+  shimmer: ^2.0.0
 
 
 

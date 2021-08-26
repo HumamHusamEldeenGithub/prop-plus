@@ -7,6 +7,7 @@ import 'package:prop_plus/modules/service_module.dart';
 import 'package:prop_plus/shared/booking_card.dart';
 import 'package:prop_plus/shared/http_requests.dart';
 import 'package:prop_plus/shared/service_card.dart';
+import 'package:prop_plus/shared/shimmer_widget.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 class AllServices extends StatefulWidget {
@@ -58,6 +59,8 @@ class AllServicesState extends State<AllServices> {
 
   @override
   Widget build(BuildContext context) {
+    double _width = MediaQuery.of(context).size.width;
+    double _height = MediaQuery.of(context).size.height;
     return Scaffold(
       appBar: AppBar(
         flexibleSpace: Container(
@@ -80,7 +83,20 @@ class AllServicesState extends State<AllServices> {
           builder: (context, snapshot) {
             print(snapshot);
             if (snapshot.data == null) {
-              return CircularProgressIndicator();
+              return ListView.builder(
+                itemCount: 3,
+                itemBuilder: (context, index) {
+
+                  return Padding(
+                    padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
+                    child: ShimmerWidget.rectangle(
+                      width: _width * 0.97,
+                      height: 200,
+                      shapeBorder: BorderRadius.circular(10),
+                    ),
+                  );
+                },
+              );;
             }
             return ListView.builder(
               itemCount: snapshot.data.length,

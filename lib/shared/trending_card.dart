@@ -8,14 +8,10 @@ import 'package:prop_plus/services/user_controller.dart';
 import 'package:prop_plus/shared/http_requests.dart';
 import 'package:prop_plus/shared/loading_widget.dart';
 
-
 class TrendingCard extends StatefulWidget {
-
-  final MainModule module ;
+  final MainModule module;
 
   const TrendingCard({Key key, this.module}) : super(key: key);
-
-
 
   @override
   _TrendingCardState createState() => _TrendingCardState();
@@ -27,10 +23,12 @@ class _TrendingCardState extends State<TrendingCard> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-        padding: const EdgeInsets.fromLTRB(TrendingTheme.trendingPadding, 0, 0, 10),
+        padding:
+            const EdgeInsets.fromLTRB(TrendingTheme.trendingPadding, 0, 0, 10),
         child: GestureDetector(
-          onTap: (){
-            Navigator.pushNamed(context, DetailsScreen.path,arguments: widget.module) ;
+          onTap: () {
+            Navigator.pushNamed(context, DetailsScreen.path,
+                arguments: widget.module);
           },
           child: Container(
             child: Card(
@@ -42,26 +40,26 @@ class _TrendingCardState extends State<TrendingCard> {
                     width: 150,
                     height: 150,
                     decoration: BoxDecoration(
-                      image: DecorationImage(
-                        image: NetworkImage(widget.module.imgSrc),
-                        fit: BoxFit.cover,
-                      ),
-                    borderRadius: BorderRadius.only(topRight: TrendingTheme.borderRadius, topLeft: TrendingTheme.borderRadius)
-                    ),
+                        image: DecorationImage(
+                          image: NetworkImage(widget.module.imgSrc),
+                          fit: BoxFit.cover,
+                        ),
+                        borderRadius: BorderRadius.only(
+                            topRight: TrendingTheme.borderRadius,
+                            topLeft: TrendingTheme.borderRadius)),
                   ),
                   Container(
                     decoration: BoxDecoration(
-                      color: Colors.white,
-                      boxShadow: [
-                        BoxShadow(
-                          blurRadius: MainTheme.shadowBlurRadius,
-                          offset: MainTheme.shadowOffest,
-                          color: MainTheme.shadowColor
-                        )
-                      ],
-                      borderRadius: BorderRadius.only(bottomRight: TrendingTheme.borderRadius, bottomLeft: TrendingTheme.borderRadius)
-
-                    ),
+                        color: Colors.white,
+                        boxShadow: [
+                          BoxShadow(
+                              blurRadius: MainTheme.shadowBlurRadius,
+                              offset: MainTheme.shadowOffest,
+                              color: MainTheme.shadowColor)
+                        ],
+                        borderRadius: BorderRadius.only(
+                            bottomRight: TrendingTheme.borderRadius,
+                            bottomLeft: TrendingTheme.borderRadius)),
                     width: 150,
                     child: Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 8),
@@ -71,8 +69,6 @@ class _TrendingCardState extends State<TrendingCard> {
                           SizedBox(
                             height: 5,
                           ),
-
-
                           SizedBox(
                             height: 5,
                           ),
@@ -94,32 +90,35 @@ class _TrendingCardState extends State<TrendingCard> {
                                   color: MainTheme.mainColor,
                                   icon: favorite
                                       ? Icon(
-                                    Icons.favorite,
-                                    color: MainTheme.mainColor,
-                                    size: 20,
-                                  )
+                                          Icons.favorite,
+                                          color: MainTheme.mainColor,
+                                          size: 20,
+                                        )
                                       : Icon(
-                                    Icons.favorite_border,
-                                    size: 20,
-                                  ),
+                                          Icons.favorite_border,
+                                          size: 20,
+                                        ),
                                   onPressed: () async {
                                     if (!favorite) {
-                                      Loading.showLoaderDialog(context, "Adding property to favorite");
+                                      Loading.showLoaderDialog(context,
+                                          "Adding property to favorite");
                                       await HTTP_Requests.addNewFavourite(
                                           locater<UserController>()
                                               .currentUser
                                               .dbId
                                               .toString(),
-                                          widget.module.propertyModule.id.toString());
-
+                                          widget.module.propertyModule.id
+                                              .toString());
                                     } else {
-                                      Loading.showLoaderDialog(context, "Removing property from favorite");
+                                      Loading.showLoaderDialog(context,
+                                          "Removing property from favorite");
                                       await HTTP_Requests.deleteFavourite(
                                           locater<UserController>()
                                               .currentUser
                                               .dbId
                                               .toString(),
-                                          widget.module.propertyModule.id.toString());
+                                          widget.module.propertyModule.id
+                                              .toString());
                                     }
                                     setState(() {
                                       favorite = !favorite;
@@ -143,7 +142,6 @@ class _TrendingCardState extends State<TrendingCard> {
                   ),
                 ],
               ),
-
             ),
           ),
         ));

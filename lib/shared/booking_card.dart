@@ -24,13 +24,13 @@ class _BookingCardState extends State<BookingCard> {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        Navigator.pushNamed(context, DetailsScreen.path,
-            arguments: {'module': new MainModule(
-                propertyModule: widget.module.serviceModule.propertyModule,
-                service_id: widget.module.serviceModule.service_id,
-                imgSrc: "",
-                price: int.parse(widget.module.serviceModule.price.toString()))}
-        );
+        Navigator.pushNamed(context, DetailsScreen.path, arguments: {
+          'module': new MainModule(
+              propertyModule: widget.module.serviceModule.propertyModule,
+              service_id: widget.module.serviceModule.service_id,
+              imgSrc: widget.module.serviceModule.imageUrls[0],
+              price: int.parse(widget.module.serviceModule.price.toString()))
+        });
       },
       child: Container(
         child: Card(
@@ -47,7 +47,7 @@ class _BookingCardState extends State<BookingCard> {
                   height: 100,
                   decoration: BoxDecoration(
                       image: DecorationImage(
-                        image: AssetImage("assets/real-state.jpg"),
+                        image: NetworkImage(widget.module.serviceModule.imageUrls[0]),
                         fit: BoxFit.cover,
                       ),
                       borderRadius: BorderRadius.only(
