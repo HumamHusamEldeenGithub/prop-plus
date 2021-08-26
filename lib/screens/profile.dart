@@ -84,15 +84,11 @@ class ProfileState extends State<Profile> {
                 ),
                 Avatar(
                   size: 50,
-                    avatarURL:"https://media-exp1.licdn.com/dms/image/C4D03AQFtcr7InPL8Jg/profile-displayphoto-shrink_800_800/0/1589865922874?e=1635379200&v=beta&t=2igAfqyj7e7ZyW2NPK85Rh8DBvVhtYOpGqRSXc1WHZA" ,
+                    avatarURL: locater.get<UserController>().currentUser.avatarURl!=null ?
+                    locater.get<UserController>().currentUser.avatarURl.toString():
+                    "https://thumbs.dreamstime.com/b/creative-vector-illustration-default-avatar-profile-placeholder-isolated-background-art-design-grey-photo-blank-template-mo-107388687.jpg" ,
                     onTap: () async {
-                      //get the image from gallery using Image Picker
-                      image = await ImagePicker.platform
-                          .pickImage(source: ImageSource.gallery);
-                      // Upload the Image
-                      await locater
-                          .get<UserController>()
-                          .uploadProfilePicture(File(image.path));
+                      //TODO view Image
                     }),
                 SizedBox(height: 50,),
                 SizedBox(
