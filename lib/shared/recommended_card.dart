@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:rating_bar/rating_bar.dart';
+
 import 'package:prop_plus/constant/MainTheme.dart';
 import 'package:prop_plus/main.dart';
 import 'package:prop_plus/modules/main_module.dart';
@@ -97,24 +98,32 @@ class _RecommendedCardState extends State<RecommendedCard> {
                             ),
                             Row(
                               children: [
-                                RatingBar.builder(
-                                  initialRating:
-                                      widget.module.propertyModule.rating,
-                                  minRating: 1,
-                                  direction: Axis.horizontal,
-                                  allowHalfRating: true,
-                                  itemCount: 5,
-                                  itemSize: 20,
-                                  itemPadding:
-                                      EdgeInsets.symmetric(horizontal: 2),
-                                  itemBuilder: (context, _) => Icon(
-                                    Icons.star,
-                                    color: Colors.amber,
-                                  ),
-                                  onRatingUpdate: (rating) {
-                                    print(rating);
-                                  },
+                                RatingBar.readOnly(
+                                  size: 20,
+                                  initialRating: widget.module.propertyModule.rating,
+                                  isHalfAllowed: true,
+                                  halfFilledIcon: Icons.star_half,
+                                  filledIcon: Icons.star,
+                                  emptyIcon: Icons.star_border,
+                                  halfFilledColor: Colors.amberAccent,filledColor: Colors.amberAccent,
                                 ),
+                                // RatingBar.builder(
+                                //   initialRating:
+                                //       widget.module.propertyModule.rating,
+                                //   minRating: 1,
+                                //   direction: Axis.horizontal,
+                                //   itemCount: 5,
+                                //   itemSize: 20,
+                                //   itemPadding:
+                                //       EdgeInsets.symmetric(horizontal: 2),
+                                //   itemBuilder: (context, _) => Icon(
+                                //     Icons.star,
+                                //     color: Colors.amber,
+                                //   ),
+                                //   onRatingUpdate: (rating) {
+                                //
+                                //   },
+                                // ),
                                 Text(
                                   "${widget.module.propertyModule.rating} reviews",
                                   style: TextStyle(color: Colors.grey[600]),

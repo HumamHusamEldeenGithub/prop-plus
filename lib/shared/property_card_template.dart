@@ -80,24 +80,7 @@ class _PropertyCardState extends State<PropertyCard> {
                               ),
                               Row(
                                 children: [
-                                  RatingBar.builder(
-                                    ignoreGestures: true,
-                                    initialRating: widget.module.propertyModule.rating,
-                                    minRating: 1,
-                                    direction: Axis.horizontal,
-                                    allowHalfRating: true,
-                                    itemCount: 5,
-                                    itemSize: 20,
-                                    itemPadding:
-                                        EdgeInsets.symmetric(horizontal: 2),
-                                    itemBuilder: (context, _) => Icon(
-                                      Icons.star,
-                                      color: Colors.amber,
-                                    ),
-                                    onRatingUpdate: (rating) {
-                                      print(rating);
-                                    },
-                                  ),
+
                                   Text(
                                     "${widget.module.propertyModule.rating} reviews",
                                     style: RealStateTheme.reviewTextStyle,

@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:rating_bar/rating_bar.dart';
 import 'package:prop_plus/constant/MainTheme.dart';
 import 'package:prop_plus/modules/service_module.dart';
 import 'package:prop_plus/shared/custom_image_view.dart';
@@ -60,173 +60,6 @@ class _MyProperties_DetailsScreen extends State<MyProperties_DetailsScreen> {
     });
   }
 
-  // @override
-  // Widget build(BuildContext context) {
-  //   double _width = MediaQuery.of(context).size.width;
-  //   double _height = MediaQuery.of(context).size.height;
-  //   dynamic module = ModalRoute.of(context).settings.arguments  ;
-  //   return Scaffold(
-  //     bottomNavigationBar: RaisedButton(
-  //
-  //       color: MainTheme.mainColor,
-  //       textColor: Colors.white,
-  //       child: Text(
-  //         "Book Now",
-  //         style: TextStyle(fontWeight: FontWeight.normal),
-  //       ),
-  //       padding: const EdgeInsets.symmetric(
-  //         vertical: 16.0,
-  //         horizontal: 32.0,
-  //       ),
-  //       onPressed: () {
-  //       },
-  //     ),
-  //     body: ListView(
-  //       controller: _scrollController,
-  //       children: [
-  //         GestureDetector(
-  //           child: AnimatedContainer(
-  //             duration: const Duration(seconds: 1),
-  //             // child: Image.network(
-  //             //   module.imgSrc,
-  //             //   fit: BoxFit.cover,
-  //             // ),
-  //             height: imageVisible == true ? 300 : 0,
-  //             width: 600,
-  //           ),
-  //           onTap: (){
-  //             Navigator.push(
-  //                 context,
-  //                 MaterialPageRoute(builder:(context) =>PhotosSlider(imagesUrls: module.imageUrls ,))
-  //             );
-  //           },
-  //         ),
-  //         Column(
-  //           mainAxisAlignment: MainAxisAlignment.start,
-  //           children: [
-  //             Container(
-  //               padding: const EdgeInsets.all(10),
-  //               decoration: BoxDecoration(
-  //                 borderRadius: BorderRadius.circular(20),
-  //                 color: Colors.white,
-  //               ),
-  //               child: Column(
-  //                 crossAxisAlignment: CrossAxisAlignment.start,
-  //                 mainAxisSize: MainAxisSize.min,
-  //                 children: [
-  //                   Row(
-  //                     children: [
-  //                       Column(
-  //                         children: [
-  //                           Padding(
-  //                             padding: const EdgeInsets.only(left: 5),
-  //                             child: Text(
-  //                               module.title,
-  //                               style: TextStyle(
-  //                                   color: Colors.black,
-  //                                   fontSize: 20.0,
-  //                                   fontWeight: FontWeight.bold),
-  //                             ),
-  //                           ),
-  //                         ],
-  //                       ),
-  //                       SizedBox(
-  //                         width: _width*0.5,
-  //                       ),
-  //                       IconButton(
-  //                         icon: favorite
-  //                             ? Icon(
-  //                           Icons.favorite,
-  //                           color: MainTheme.mainColor,
-  //                         )
-  //                             : Icon(
-  //                           Icons.favorite_border,
-  //                         ),
-  //                         onPressed: () {
-  //                           setState(() {
-  //                             favorite = !favorite;
-  //                           });
-  //                         },
-  //                       )
-  //                     ],
-  //                   ),
-  //                   const SizedBox(height: 10.0),
-  //                   Text(
-  //                     module.description,
-  //                     textAlign: TextAlign.justify,
-  //                     style: TextStyle(
-  //                         fontWeight: FontWeight.w300, fontSize: 14.0),
-  //                   ),
-  //                   const SizedBox(height: 15),
-  //                   Row(
-  //                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-  //                     children: [
-  //                       Column(
-  //                         children: [
-  //                           Text(
-  //                             "Price".toUpperCase(),
-  //                             style: TextStyle(
-  //                                 fontWeight: FontWeight.w600,
-  //                                 fontSize: 14.0),
-  //                           ),
-  //                           SizedBox(
-  //                             height: 5,
-  //                           ),
-  //                           // Text(
-  //                           //     module.price.toString()
-  //                           // )
-  //                         ],
-  //                       ),
-  //                       Column(
-  //                         children: [
-  //                           Text(
-  //                             "Rating".toUpperCase(),
-  //                             style: TextStyle(
-  //                                 fontWeight: FontWeight.w600,
-  //                                 fontSize: 14.0),
-  //                           ),
-  //                           SizedBox(
-  //                             height: 5,
-  //                           ),
-  //                           CustomStarBar(
-  //                             starSize: 12,
-  //                             starPadding: 0.6,
-  //                             rating: module.rating,
-  //                           ),
-  //                         ],
-  //                       ),
-  //                       Column(
-  //                         children: [
-  //                           Text(
-  //                             "Location".toUpperCase(),
-  //                             style: TextStyle(
-  //                                 fontWeight: FontWeight.w600,
-  //                                 fontSize: 14.0),
-  //                           ),
-  //                           SizedBox(
-  //                             height: 5,
-  //                           ),
-  //                           Text(
-  //                               module.location
-  //                           )
-  //                         ],
-  //                       )
-  //                     ],
-  //                   ),
-  //                   Center(
-  //                     child: ElevatedButton(onPressed: ()=>{
-  //                     Navigator.pushNamed(context, AddNewServiceScreen.path,arguments: module)
-  //                     }, child: Text('Add a new Service')),
-  //                   )
-  //                 ],
-  //               ),
-  //             )
-  //           ],
-  //         )
-  //       ],
-  //     ),
-  //   );
-  // }
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
@@ -451,10 +284,14 @@ class _MyProperties_DetailsScreen extends State<MyProperties_DetailsScreen> {
                                 SizedBox(
                                   height: 5,
                                 ),
-                                CustomStarBar(
-                                  starSize: 1,
-                                  starPadding: 0.6,
-                                  rating: prevModule.propertyModule.rating,
+                                RatingBar.readOnly(
+                                  size: 20,
+                                  initialRating: prevModule.propertyModule.rating,
+                                  isHalfAllowed: true,
+                                  halfFilledIcon: Icons.star_half,
+                                  filledIcon: Icons.star,
+                                  emptyIcon: Icons.star_border,
+                                  halfFilledColor: Colors.amberAccent,filledColor: Colors.amberAccent,
                                 ),
                               ],
                             ),
@@ -535,42 +372,6 @@ class CustomAminitiesListView extends StatelessWidget {
           CustomAminitiesCard(icon: Icons.car_rental, title: "Parking"),
         ],
       ),
-    );
-  }
-}
-
-class CustomStarBar extends StatelessWidget {
-  final double starSize;
-  final double starPadding;
-  final double rating;
-
-  CustomStarBar({this.starSize, this.starPadding, this.rating});
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      children: [
-        RatingBar.builder(
-          initialRating: 5,
-          minRating: 1,
-          direction: Axis.horizontal,
-          allowHalfRating: true,
-          itemCount: 5,
-          itemSize: starSize,
-          itemPadding: EdgeInsets.symmetric(horizontal: starPadding),
-          itemBuilder: (context, _) => Icon(
-            Icons.star,
-            color: Colors.amber,
-          ),
-          onRatingUpdate: (rating) {
-            print(rating);
-          },
-        ),
-        Text(
-          "$rating reviews",
-          style: TextStyle(color: Colors.grey[600]),
-        )
-      ],
     );
   }
 }

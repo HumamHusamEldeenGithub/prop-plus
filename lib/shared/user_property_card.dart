@@ -3,7 +3,7 @@ import 'package:prop_plus/constant/FavouriteTheme.dart';
 import 'package:prop_plus/modules/main_module.dart';
 import 'package:prop_plus/modules/property_module.dart';
 import 'package:prop_plus/modules/user_properties_module.dart';
-import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:rating_bar/rating_bar.dart';
 import 'package:prop_plus/screens/all_services.dart';
 import 'package:prop_plus/screens/description.dart';
 import 'package:prop_plus/screens/user_property_description_screen.dart';
@@ -79,21 +79,14 @@ class _UserPropertyCardState extends State<UserPropertyCard> {
                               widget.module.location,
                               style: FavouriteTheme.locationTextStyle,
                             ),
-                            RatingBar.builder(
+                            RatingBar.readOnly(
+                              size: 20,
                               initialRating: widget.module.rating,
-                              minRating: 1,
-                              direction: Axis.horizontal,
-                              allowHalfRating: true,
-                              itemCount: 5,
-                              itemSize: 20,
-                              itemPadding: EdgeInsets.symmetric(horizontal: 2),
-                              itemBuilder: (context, _) => Icon(
-                                Icons.star,
-                                color: Colors.amber,
-                              ),
-                              onRatingUpdate: (rating) {
-                                print(rating);
-                              },
+                              isHalfAllowed: true,
+                              halfFilledIcon: Icons.star_half,
+                              filledIcon: Icons.star,
+                              emptyIcon: Icons.star_border,
+                              halfFilledColor: Colors.amberAccent,filledColor: Colors.amberAccent,
                             ),
                           ],
                         ),

@@ -4,7 +4,7 @@ import 'package:prop_plus/constant/MainTheme.dart';
 import 'package:prop_plus/constant/FavouriteTheme.dart';
 import 'package:prop_plus/main.dart';
 import 'package:prop_plus/modules/favourite_module.dart';
-import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:rating_bar/rating_bar.dart';
 import 'package:prop_plus/modules/main_module.dart';
 import 'package:prop_plus/screens/description.dart';
 import 'package:prop_plus/services/locater.dart';
@@ -98,23 +98,15 @@ class _FavouriteCardState extends State<FavouriteCard> {
                               widget.module.propertyModule.location,
                               style: FavouriteTheme.locationTextStyle,
                             ),
-                            RatingBar.builder(
-                              initialRating: widget.module.propertyModule.rating,
-                              minRating: 1,
-                              direction: Axis.horizontal,
-                              allowHalfRating: true,
-                              itemCount: 5,
-                              itemSize: 20,
-                              itemPadding:
-                              EdgeInsets.symmetric(horizontal: 2),
-                              itemBuilder: (context, _) => Icon(
-                                Icons.star,
-                                color: Colors.amber,
-                              ),
-                              onRatingUpdate: (rating) {
-                                print(rating);
-                              },
-                            ),
+                    RatingBar.readOnly(
+                      size: 20,
+                      initialRating: widget.module.propertyModule.rating,
+                      isHalfAllowed: true,
+                      halfFilledIcon: Icons.star_half,
+                      filledIcon: Icons.star,
+                      emptyIcon: Icons.star_border,
+                      halfFilledColor: Colors.amberAccent,filledColor: Colors.amberAccent,
+                    ),
                           ],
                         ),
                         Column(

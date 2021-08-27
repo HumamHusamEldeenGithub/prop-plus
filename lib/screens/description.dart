@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:rating_bar/rating_bar.dart';
 import 'package:prop_plus/constant/MainTheme.dart';
 import 'package:prop_plus/constant/MainTheme.dart';
 import 'package:prop_plus/main.dart';
@@ -348,10 +348,14 @@ class _DetailsScreenState extends State<DetailsScreen> {
                                 SizedBox(
                                   height: 5,
                                 ),
-                                CustomStarBar(
-                                  starSize: 1,
-                                  starPadding: 0.6,
-                                  rating: prevModule.propertyModule.rating,
+                                RatingBar.readOnly(
+                                  size: 20,
+                                  initialRating: prevModule.propertyModule.rating,
+                                  isHalfAllowed: true,
+                                  halfFilledIcon: Icons.star_half,
+                                  filledIcon: Icons.star,
+                                  emptyIcon: Icons.star_border,
+                                  halfFilledColor: Colors.amberAccent,filledColor: Colors.amberAccent,
                                 ),
                               ],
                             ),
@@ -437,42 +441,6 @@ class CustomAminitiesListView extends StatelessWidget {
           CustomAminitiesCard(icon: Icons.ac_unit, title: "Cooler"),
         ],
       ),
-    );
-  }
-}
-
-class CustomStarBar extends StatelessWidget {
-  final double starSize;
-  final double starPadding;
-  final double rating;
-
-  CustomStarBar({this.starSize, this.starPadding, this.rating});
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      children: [
-        RatingBar.builder(
-          initialRating: 5,
-          minRating: 1,
-          direction: Axis.horizontal,
-          allowHalfRating: true,
-          itemCount: 5,
-          itemSize: starSize,
-          itemPadding: EdgeInsets.symmetric(horizontal: starPadding),
-          itemBuilder: (context, _) => Icon(
-            Icons.star,
-            color: Colors.amber,
-          ),
-          onRatingUpdate: (rating) {
-            print(rating);
-          },
-        ),
-        Text(
-          "${rating} reviews",
-          style: TextStyle(color: Colors.grey[600]),
-        )
-      ],
     );
   }
 }

@@ -63,8 +63,8 @@ class _ShimmerWidgetState extends State<ShimmerWidget> {
   @override
   Widget build(BuildContext context) {
     return Shimmer.fromColors(
-      baseColor: Colors.grey[300],
-      highlightColor: Colors.grey[100],
+      baseColor: Colors.white,
+      highlightColor: Colors.grey[200],
       child: Container(
         decoration: BoxDecoration(
           borderRadius: widget.shapeBorder,
