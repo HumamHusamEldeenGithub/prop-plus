@@ -26,11 +26,15 @@ class _ReceiptScreenState extends State<ReceiptScreen> {
   void initState() {
     super.initState();
   }
+  Future makeBookingProcess()async{
+    dynamic bookingId = HTTP_Requests.sendBookRequest(bookingModule.serviceModule.service_id.toString(), bookingModule.fromDate.toString(), bookingModule.toDate.toString());
+    await HTTP_Requests.sendPaymentRequest(bookingId, 0, 'Cash') ;
+  }
 
   Future<void> sendBooking() async{
     LoadingDialog.showLoadingDialog(
         context,
-        HTTP_Requests.sendBookRequest(bookingModule.serviceModule.service_id.toString(), bookingModule.fromDate.toString(), bookingModule.toDate.toString()),
+        makeBookingProcess(),
         Text("Booked successfully!"),
         Text("There was a problem booking, please try again."),
         (){

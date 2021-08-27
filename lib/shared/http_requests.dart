@@ -607,7 +607,7 @@ class HTTP_Requests {
     }
   }
 
-  static Future<void> sendBookRequest(
+  static Future<dynamic> sendBookRequest(
       String serviceId, String fromDate, String toDate) async {
     //TODO : get user's database id
     String userId = MainWidget.userData['CurrentUser'].dbId.toString();
@@ -623,6 +623,33 @@ class HTTP_Requests {
         'user_id': userId,
         'start_date': fromDate,
         'end_date': toDate,
+      }),
+    );
+    if (response.statusCode == 201 || response.statusCode == 200) {
+      // If the server did return a 201 CREATED response,
+      // then parse the JSON.
+      Map<String, dynamic> data = jsonDecode(response.body);
+      var id = data['id'];
+      return id ;
+    } else {
+      // If the server did not return a 201 CREATED response,
+      // then throw an exception.
+      throw Exception('Failed to post to  properties_to_approve table  .');
+    }
+  }
+  static Future<void> sendPaymentRequest(
+      String bookingId,  int amount,String type) async {
+    final response = await http.post(
+      Uri.parse('https://propplus-production.herokuapp.com/payments'),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        'Authorization': authorizationKey,
+      },
+      body: jsonEncode(<String, String>{
+        'booking_id': bookingId,
+        'amount': amount.toString(),
+        'payment_type': type,
+        'payment_date': DateTime.now().toString(),
       }),
     );
     if (response.statusCode == 201 || response.statusCode == 200) {
