@@ -170,15 +170,24 @@ class _MainWidgetState extends State<MainWidget> {
   Future<void> getDataFromDBForHome(bool refresh,int pageIndex) async {
 
     if (refresh) emptyPropertiesMap();
-    MainWidget.databaseData['PropertyModules'] =
-        await HTTP_Requests.getRecommendedProperties(pageIndex);
+    if (pageIndex ==0) {
+      MainWidget.databaseData['PropertyModules'] =
+      await HTTP_Requests.getRecommendedProperties(pageIndex);
 
-    MainWidget.databaseData['TrendingModules'] =
-        await HTTP_Requests.getTrendingProperties();
+      MainWidget.databaseData['TrendingModules'] =
+      await HTTP_Requests.getTrendingProperties();
 
-    MainWidget.databaseData['CategoriesModules'] =
-        await HTTP_Requests.createCategoriesModules();
-    _homeGlobalKey.currentState?.refreshPage();
+      MainWidget.databaseData['CategoriesModules'] =
+      await HTTP_Requests.createCategoriesModules();
+      _homeGlobalKey.currentState?.refreshPage();
+    }
+    else {
+      var list = await HTTP_Requests.getRecommendedProperties(pageIndex) ;
+      list.forEach((element) {MainWidget.databaseData['PropertyModules'].add(element); });
+
+      MainWidget.databaseData['TrendingModules'] =
+      await HTTP_Requests.getTrendingProperties();
+    }
   }
 
   Future<void> getDataFromDBForFavorite() async {
