@@ -50,7 +50,7 @@ class _PropertyInputFormState extends State<PropertyInputForm> {
           _type = newValue;
         });
       },
-      items: <String>['Hotel', 'Private Property']
+      items: <String>['Flat','Villa','Hotel']
           .map<DropdownMenuItem<String>>((String value) {
         return DropdownMenuItem<String>(
           value: value,
@@ -176,56 +176,6 @@ class _PropertyInputFormState extends State<PropertyInputForm> {
     return textFields;
   }
 
-  //TODO loading bar to upload the photo
-  Future showProgressBar(ProgressDialog pr) async {
-    double percentage = 0.0;
-    await pr.show();
-
-    await Future.delayed(Duration(seconds: 2)).then((onvalue) {
-      percentage = percentage + 30.0;
-      print(percentage);
-
-      pr.update(
-        progress: percentage,
-        message: "Please wait...",
-        progressWidget: Container(
-            padding: EdgeInsets.all(8.0), child: CircularProgressIndicator()),
-        maxProgress: 100.0,
-        progressTextStyle: TextStyle(
-            color: Colors.black, fontSize: 13.0, fontWeight: FontWeight.w400),
-        messageTextStyle: TextStyle(
-            color: Colors.black, fontSize: 19.0, fontWeight: FontWeight.w600),
-      );
-
-      Future.delayed(Duration(seconds: 2)).then((value) {
-        percentage = percentage + 30.0;
-        pr.update(progress: percentage, message: "Few more seconds...");
-        print(percentage);
-        Future.delayed(Duration(seconds: 2)).then((value) {
-          percentage = percentage + 30.0;
-          pr.update(progress: percentage, message: "Almost done...");
-          print(percentage);
-
-          Future.delayed(Duration(seconds: 2)).then((value) {
-            pr.hide().whenComplete(() {
-              print(pr.isShowing());
-            });
-            percentage = 0.0;
-          });
-        });
-      });
-    });
-
-    await Future.delayed(Duration(seconds: 6)).then((onValue) {
-      print("PR status  ${pr.isShowing()}");
-      if (pr.isShowing())
-        pr.hide().then((isHidden) {
-          print(isHidden);
-        });
-      print("PR status  ${pr.isShowing()}");
-    });
-  }
-
 
   Future<void> uploadImage() async{
     String imageUrl;
@@ -257,34 +207,6 @@ class _PropertyInputFormState extends State<PropertyInputForm> {
   Widget build(BuildContext context) {
     double _width = MediaQuery.of(context).size.width;
     double _height = MediaQuery.of(context).size.height;
-    ProgressDialog pr = ProgressDialog(context);
-
-    pr = ProgressDialog(
-      context,
-      type: ProgressDialogType.Download,
-      textDirection: TextDirection.rtl,
-      isDismissible: false,
-      //  customBody: LinearProgressIndicator(
-      //   valueColor: AlwaysStoppedAnimation<Color>(Colors.blueAccent),
-      //   backgroundColor: Colors.white,
-      // ),
-    );
-
-    pr.style(
-//      message: 'Downloading file...',
-      message: 'Please wait ...',
-      borderRadius: 10.0,
-      backgroundColor: Colors.white,
-      elevation: 10.0,
-      insetAnimCurve: Curves.easeInOut,
-      progress: 0.0,
-      progressWidgetAlignment: Alignment.center,
-      maxProgress: 100.0,
-      progressTextStyle: TextStyle(
-          color: Colors.black, fontSize: 13.0, fontWeight: FontWeight.w400),
-      messageTextStyle: TextStyle(
-          color: Colors.black, fontSize: 19.0, fontWeight: FontWeight.w600),
-    );
 
     return Scaffold(
       appBar: AppBar(

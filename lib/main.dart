@@ -190,7 +190,7 @@ class _MainWidgetState extends State<MainWidget> {
         await HTTP_Requests.getRecommendedPropertiesWithType(type);
 
     MainWidget.databaseData['TrendingModules'] =
-        await HTTP_Requests.getTrendingPropertiesWithType(type);
+        await HTTP_Requests.getTrendingProperties();
 
     _homeGlobalKey.currentState?.refreshPage();
   }

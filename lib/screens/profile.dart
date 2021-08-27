@@ -58,7 +58,6 @@ class ProfileState extends State<Profile> {
   }
 
   String getAvatarLink() {
-    print(currentUser.avatarURl);
     //print("Image is " + _checkAvatarNotNull().toString());
     if (_checkAvatarNotNull()) {
       return currentUser.avatarURl;
@@ -117,11 +116,11 @@ class ProfileState extends State<Profile> {
                 SizedBox(
                   height: 10,
                 ),
-                Text('Name'),
+                Text(currentUser.userName!=null?currentUser.userName:'Name',style: TextStyle(fontSize: 25),),
                 SizedBox(
                   height: 2,
                 ),
-                Text('EMAIL'),
+                Text(currentUser.email!=null?currentUser.email:'Email',style: TextStyle(fontSize: 17,color: Colors.grey)),
                 SizedBox(
                   height: 50,
                 ),
