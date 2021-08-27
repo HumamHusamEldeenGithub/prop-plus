@@ -119,7 +119,7 @@ class ProfileState extends State<Profile> {
                 SizedBox(
                   height: 10,
                 ),
-                Text(currentUser.userName!=null?currentUser.userName:'Name',style: TextStyle(fontSize: 25),),
+                Text(currentUser?.userName!=null?currentUser.userName:'Name',style: TextStyle(fontSize: 25),),
                 SizedBox(
                   height: 2,
                 ),

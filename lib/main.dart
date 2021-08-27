@@ -317,7 +317,7 @@ class _MainWidgetState extends State<MainWidget> {
                 setState(() {
                   _selectedIndex = index;
                   if (_selectedIndex == 0)
-                    screenDBDataGetter[index](false);
+                    screenDBDataGetter[index](false,0);
                   else
                     screenDBDataGetter[index]();
                   print(index);
