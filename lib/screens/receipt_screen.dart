@@ -49,7 +49,10 @@ class _ReceiptScreenState extends State<ReceiptScreen> {
         Text("Booked successfully!"),
         Text("There was a problem booking, please try again."),
         (){
-          Navigator.of(context).popUntil((route) => route.isFirst);;
+          Navigator.of(context).popUntil((route) => route.isFirst);
+        },
+            (){
+          Navigator.of(context).pop(context);
         },
       true
     );

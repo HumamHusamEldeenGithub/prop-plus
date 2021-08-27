@@ -263,7 +263,7 @@ class _PropertyInputFormState extends State<PropertyInputForm> {
                           image = await ImagePicker.platform
                               .pickImage(source: ImageSource.gallery);
                           if(image!=null)
-                            LoadingDialog.showLoadingDialog(context, uploadImage(), Text("Uploaded image"), Text("Failed to upload image"),(){}, false);
+                            LoadingDialog.showLoadingDialog(context, uploadImage(), Text("Uploaded image"), Text("Failed to upload image"),(){}, (){},false);
                           /*setState(() {
                                   loading = true;
                                 });*/
@@ -286,7 +286,7 @@ class _PropertyInputFormState extends State<PropertyInputForm> {
                         onPressed: () async {
                           final form = formKey.currentState;
                           form.save();
-                          LoadingDialog.showLoadingDialog(context, submitForm(), Text("You've successfully submitted your property!"),Text("There was a problem submitting your property, please try again"), (){}, false);
+                          LoadingDialog.showLoadingDialog(context, submitForm(), Text("You've successfully submitted your property!"),Text("There was a problem submitting your property, please try again"), (){}, (){},false);
                         },
                       ),
                     ),

@@ -54,14 +54,19 @@ class ProfileState extends State<Profile> {
 
   bool _checkAvatarNotNull() {
     try {
-      return MainWidget.userData['CurrentUser'].avatarURl != null;
+      bool imageIsNotNull = MainWidget.userData['CurrentUser']?.avatarURl != null && MainWidget.userData['CurrentUser']?.avatarURl != "null" ;
+      bool imageIsNotEmpty = MainWidget.userData['CurrentUser'].avatarURl.length!=0;
+      print("1 + " + imageIsNotNull.toString());
+      print("2 + " + imageIsNotEmpty.toString());
+      return (imageIsNotNull &&
+          imageIsNotEmpty);
     } catch (e) {
       return false;
     }
   }
 
   String getAvatarLink() {
-    //print("Image is " + _checkAvatarNotNull().toString());
+    print("Image is " + _checkAvatarNotNull().toString());
     if (_checkAvatarNotNull()) {
       return currentUser.avatarURl;
     } else {

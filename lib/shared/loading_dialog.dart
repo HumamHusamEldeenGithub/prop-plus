@@ -16,7 +16,7 @@ class LoadingDialog {
     _isSuccessful = true;
   }
 
-  static dynamic showLoadingDialog(BuildContext context,Future future,Widget onSuccessTitle,Widget onFailedTitle, Function onClose, bool useOnClose){
+  static dynamic showLoadingDialog(BuildContext context,Future future,Widget onSuccessTitle,Widget onFailedTitle, Function onCloseSuccess,Function onCloseFailed, bool useOnClose){
     _isSuccessful = false;
     showDialog(context: context, builder: (context){
       return FutureBuilder(future: _runFuture(future), builder: (context,snapshot){
@@ -25,7 +25,7 @@ class LoadingDialog {
           return AlertDialog(
             title: _isSuccessful? onSuccessTitle : onFailedTitle,
             content: TextButton(
-              onPressed: useOnClose? onClose : (){
+              onPressed: useOnClose?( _isSuccessful? onCloseSuccess: onCloseFailed ): (){
                 Navigator.pop(context);
               },
               child: Text("Close"),
@@ -63,7 +63,6 @@ class LoadingDialog {
 
   static double showRatingDialog(BuildContext context,Future future(dynamic)) {
     double _rating = 0;
-    print("STARTED");
     showDialog(context: context, builder: (context) {
       return AlertDialog(
         title: Text("Please give us your rating"),
@@ -87,7 +86,7 @@ class LoadingDialog {
                   Navigator.pop(context);
                   showLoadingDialog(context, future(_rating),
                       Text("Thank you for your rating!"),
-                      Text("There was a problem."), (){}, false);
+                      Text("There was a problem."), (){}, (){},false);
                 }, child: Text("Rate"))
               ],
             ),

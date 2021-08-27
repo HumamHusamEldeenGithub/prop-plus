@@ -56,7 +56,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
   @override
   Widget build(BuildContext context) {
     currentUser = MainWidget.userData['CurrentUser'];
-    avatarURL = currentUser.avatarURl!=null ? currentUser.avatarURl
+    avatarURL = (currentUser.avatarURl!=null&& currentUser.avatarURl!="null")? currentUser.avatarURl
     : "https://thumbs.dreamstime.com/b/creative-vector-illustration-default-avatar-profile-placeholder-isolated-background-art-design-grey-photo-blank-template-mo-107388687.jpg";
     setStateCallback = ModalRoute.of(context).settings.arguments;
     return Scaffold(
@@ -127,7 +127,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
                             var compressedImage = new File('$path/img_temporary.jpg')..writeAsBytesSync(BinaryImages.encodeJpg(smallerImage, quality: 15));
 
                             if(image!=null)
-                              LoadingDialog.showLoadingDialog(context, uploadImage(compressedImage.path), Text("Uploaded Image"), Text("Failed to upload image"),(){}, false);
+                              LoadingDialog.showLoadingDialog(context, uploadImage(compressedImage.path), Text("Uploaded Image"), Text("Failed to upload image"),(){}, (){},false);
                           },
                           child: Container(
                             height: 40,
@@ -234,7 +234,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
                   RaisedButton(
                     onPressed: () {
                       //TODO update the username in firebase and database
-                      LoadingDialog.showLoadingDialog(context, submit(), Text("Changed successfully."), Text("A problem has occured."), (){}, false);
+                      LoadingDialog.showLoadingDialog(context, submit(), Text("Changed successfully."), Text("A problem has occured."), (){},(){}, false);
                     },
                     color: MainTheme.mainColor,
                     padding: EdgeInsets.symmetric(horizontal: 50),

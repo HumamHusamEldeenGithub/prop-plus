@@ -84,14 +84,15 @@ class _SignUpScreenState extends State<SignUpScreen> {
   void submit() async {
     if (validate()) {
       LoadingDialog.showLoadingDialog(
-        context,
-        initializeUser(),
-        Text("You've successfully signed up!"),
-        Text("A problem has occured"), () {
-          Navigator.pop(context);
-          Navigator.of(context).pushReplacementNamed('/home');
-        },
-        true);
+          context,
+          initializeUser(),
+          Text("You've successfully signed up!"),
+          Text("A problem has occured"), () {
+        Navigator.pop(context);
+        Navigator.of(context).pushReplacementNamed('/home');
+      }, () {
+        Navigator.pop(context);
+      }, true);
     }
   }
 

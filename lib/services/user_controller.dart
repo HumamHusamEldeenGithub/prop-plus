@@ -20,6 +20,7 @@ class UserController{
 
   Future<UserModule>InitializeUser() async{
     _currentUser = await _authService.getUserModule();
+    print("SIGN IN" +_currentUser.uid.toString() );
     _currentUser = await HTTP_Requests.getUserByFirebase(_currentUser.uid);
     UserModule newUser  = UserModule();
     newUser.dbId = _currentUser?.dbId;
@@ -52,6 +53,7 @@ class UserController{
   Future<String>signInWithEmailAndPassword (String email ,String password) async{
     _currentUser =await _authService.signInWithEmailAndPassword(email, password);
     _currentUser = await HTTP_Requests.getUserByFirebase(_currentUser.uid);
+    print("asd " + _currentUser.toString());
     return _currentUser.uid ;
     //TODO : check if null
    // _currentUser.avatarURl = await getDownloadUrl();
@@ -62,6 +64,7 @@ class UserController{
     int dbId = await HTTP_Requests.createNewUserInDB(userName,"",email,_currentUser.uid);
     _currentUser.dbId = dbId ;
     _currentUser = await HTTP_Requests.getUserById(_currentUser.dbId.toString());
+    locater.get<UserController>().InitializeUser();
     return _currentUser.uid;
   }
 

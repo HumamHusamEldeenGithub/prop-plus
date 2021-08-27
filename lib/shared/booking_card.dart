@@ -31,7 +31,6 @@ class _BookingCardState extends State<BookingCard> {
 
   Future sendRating(dynamic rating) async{
     await HTTP_Requests.updateRating(widget.module.serviceModule.propertyModule.id.toString(),rating);
-    print("Finished updating rating");
   }
 
   @override
@@ -134,7 +133,7 @@ class _BookingCardState extends State<BookingCard> {
                                           cancelBooking(),
                                           Text("You've canceled the booking."),
                                           Text("A problem occured while canceling the booking."),
-                                                (){}, false
+                                                (){}, (){},false
                                         );
                                       },
                                       child: Text("CANCEL",style: TextStyle(color: Colors.red)),
