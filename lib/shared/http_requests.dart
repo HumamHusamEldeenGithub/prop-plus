@@ -69,7 +69,6 @@ class HTTP_Requests {
 
     if (type == "Best Price") type = "best_price";
 
-
     http.Response response;
     response = await http.get(
       Uri.parse(
@@ -205,7 +204,6 @@ class HTTP_Requests {
 
   static Future<List<ServiceModule>> getAllService(
       PropertyModule propertyModule) async {
-    print(propertyModule.id);
     http.Response response;
     response = await http.get(
       Uri.parse(
@@ -217,7 +215,6 @@ class HTTP_Requests {
       },
     );
     var data = jsonDecode(response.body) as List;
-    print(data);
     List<ServiceModule> list = <ServiceModule>[];
     for (var i = 0; i < data.length; i++) {
       var item = ServiceModule.fromJson(data[i], propertyModule);
@@ -735,8 +732,7 @@ class HTTP_Requests {
     }
   }
 
-  static Future<dynamic> updateRating(
-      String propertyId,double rating) async {
+  static Future<dynamic> updateRating(String propertyId, double rating) async {
     final response = await http.put(
       Uri.parse('https://propplus-production.herokuapp.com/properties/rating/' +
           propertyId),
@@ -749,7 +745,6 @@ class HTTP_Requests {
       }),
     );
     if (response.statusCode == 201 || response.statusCode == 200) {
-
     } else {
       throw Exception('Failed to post to Favourite table  .');
     }

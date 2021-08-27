@@ -252,7 +252,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                   Container(
                     padding: const EdgeInsets.all(10),
                     decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(20),
+                      borderRadius: BorderRadius.circular(10),
                       color: Colors.white,
                     ),
                     child: Column(
@@ -260,6 +260,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Column(
                               children: [
@@ -275,9 +276,6 @@ class _DetailsScreenState extends State<DetailsScreen> {
                                 ),
                               ],
                             ),
-                            SizedBox(
-                              width: 0.45 * width,
-                            ),
                             IconButton(
                                 icon: favorite
                                     ? Icon(
@@ -292,6 +290,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                                       context, onTapFavorite());
                                 })
                           ],
+
                         ),
                         const SizedBox(height: 10.0),
                         Center(

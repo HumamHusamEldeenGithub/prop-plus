@@ -147,6 +147,13 @@ class ProfileState extends State<Profile> {
                   },
                 ),
                 CustomProfileButton(
+                  text: "Report a problem",
+                  customIcon: Icons.report,
+                  onPressed: () async {
+                    Navigator.of(context).pushNamed('/report_problem');
+                  },
+                ),
+                CustomProfileButton(
                   text: "Logout",
                   customIcon: Icons.power_settings_new,
                   onPressed: () async {
@@ -184,47 +191,51 @@ class _CustomProfileButtonState extends State<CustomProfileButton> {
     double _width = MediaQuery.of(context).size.width;
     double _height = MediaQuery.of(context).size.height;
     Function on_pressed = widget.onPressed;
-    return SizedBox(
-      width: _width * 0.8,
-      child: ElevatedButton(
-        style: ButtonStyle(
-            elevation: MaterialStateProperty.all<double>(0),
-            shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(18.0),
-            )),
-            backgroundColor:
-                MaterialStateColor.resolveWith((states) => Color(0xeef3f6fb))),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Container(
-              child: Row(
-                children: [
-                  Icon(
-                    widget.customIcon,
-                    color: Colors.black,
-                  ),
-                  SizedBox(
-                    width: 8,
-                  ),
-                  Text(
-                    widget.text,
-                    style: TextStyle(color: Colors.black),
-                  )
-                ],
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 10),
+      child: SizedBox(
+        height: 65,
+        width: _width * 0.85,
+        child: ElevatedButton(
+          style: ButtonStyle(
+              elevation: MaterialStateProperty.all<double>(0),
+              shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                  RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(18.0),
+              )),
+              backgroundColor:
+                  MaterialStateColor.resolveWith((states) => Color(0xeef3f6fb))),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Container(
+                child: Row(
+                  children: [
+                    Icon(
+                      widget.customIcon,
+                      color: Colors.black,
+                    ),
+                    SizedBox(
+                      width: 8,
+                    ),
+                    Text(
+                      widget.text,
+                      style: TextStyle(color: Colors.black),
+                    )
+                  ],
+                ),
               ),
-            ),
-            Container(
-              child: Icon(
-                Icons.arrow_forward_ios_sharp,
-                color: Colors.grey,
-                size: 20,
-              ),
-            )
-          ],
+              Container(
+                child: Icon(
+                  Icons.arrow_forward_ios_sharp,
+                  color: Colors.grey,
+                  size: 20,
+                ),
+              )
+            ],
+          ),
+          onPressed: on_pressed,
         ),
-        onPressed: on_pressed,
       ),
     );
   }

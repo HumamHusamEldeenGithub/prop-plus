@@ -15,6 +15,7 @@ import 'package:prop_plus/screens/bookings.dart';
 import 'package:prop_plus/screens/favourites.dart';
 import 'package:prop_plus/screens/profile.dart';
 import 'package:prop_plus/screens/receipt_screen.dart';
+import 'package:prop_plus/screens/report_problem.dart';
 import 'package:prop_plus/screens/sign_in.dart';
 import 'package:prop_plus/screens/sign_up.dart';
 import 'package:prop_plus/screens/user_property_description_screen.dart';
@@ -92,6 +93,7 @@ class MyApp extends StatelessWidget {
           '/all_services': (BuildContext context) => AllServices(),
           '/receipt': (BuildContext context) => ReceiptScreen(),
           '/editProfilePage': (BuildContext context) => EditProfilePage(),
+          '/report_problem': (BuildContext context) => ReportProblem(),
         },
       ),
     );
