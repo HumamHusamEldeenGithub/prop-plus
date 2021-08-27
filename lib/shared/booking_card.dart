@@ -8,17 +8,26 @@ import 'package:prop_plus/modules/main_module.dart';
 import 'package:prop_plus/screens/description.dart';
 import 'package:intl/intl.dart';
 import 'package:prop_plus/screens/description.dart';
+import 'package:prop_plus/shared/http_requests.dart';
+import 'package:prop_plus/shared/loading_dialog.dart';
 
 class BookingCard extends StatefulWidget {
-  final dynamic module;
-  const BookingCard({Key key, this.module}) : super(key: key);
+  final BookingModule module;
+  final refreshFunction;
+  const BookingCard({Key key, this.module, this.refreshFunction}) : super(key: key);
 
   @override
   _BookingCardState createState() => _BookingCardState();
 }
 
 class _BookingCardState extends State<BookingCard> {
-  bool favorite = false;
+
+  Future cancelBooking() async {
+    await HTTP_Requests.deleteBooking(widget.module.id.toString());
+    setState(() {
+      widget.refreshFunction();
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -119,8 +128,34 @@ class _BookingCardState extends State<BookingCard> {
                                         .toString(),
                                 style: FavouriteTheme.locationTextStyle
                             ),
-                            (DateTime.now().isBefore(widget.module.fromDate))? Text("PENDING"): SizedBox(),
-                          ],
+                            (DateTime.now().isBefore(widget.module.fromDate))? Center(
+                              child: Column(
+                                children: [
+                                  Padding(
+                                    padding: const EdgeInsets.only(top: 2.0),
+                                    child: Text("PENDING",style: TextStyle(color: MainTheme.mainColor),),
+                                  ),
+                                  SizedBox(
+                                    height: 40,
+                                    child: TextButton(
+                                      onPressed: (){
+                                        LoadingDialog.showLoadingDialog(
+                                            context,
+                                            cancelBooking(),
+                                            Text("You've canceled the booking."),
+                                            Text("A problem occured while canceling the booking."),
+                                                (){
+                                              Navigator.pop(context);
+                                            }
+                                        );
+                                      },
+                                      child: Text("CANCEL",style: TextStyle(color: Colors.red)),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ): SizedBox(),
+                          ]
                         ),
                       ],
                     ),

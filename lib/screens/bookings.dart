@@ -38,7 +38,9 @@ class BookingsState extends State<Bookings> {
     _refreshController.loadComplete();
   }
   void refreshPage() {
-    setState(() {});
+    widget.parentFunction();
+    setState(() {
+    });
   }
 
   void finishLoading(){
@@ -90,20 +92,20 @@ class BookingsState extends State<Bookings> {
           scrollDirection: Axis.vertical,
           child: (_finishedLoading)
               ? Center(
-            child: (MainWidget.databaseData['BookingsModules']!=null && MainWidget.databaseData['BookingsModules'].isNotEmpty )?Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children:
-              MainWidget.databaseData['BookingsModules'].map((card) {
-                return BookingCard(module: card);
-              }).toList(),
-            ):
+                child: (MainWidget.databaseData['BookingsModules']!=null && MainWidget.databaseData['BookingsModules'].isNotEmpty )?Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children:
+                  MainWidget.databaseData['BookingsModules'].map((card) {
+                    return BookingCard(module: card,refreshFunction: refreshPage,);
+                  }).toList(),
+                ):
                 Center(
                   child: Padding(
                     padding: EdgeInsets.only(top: 40),
                     child: Text("You have no bookings yet!"),
                   ),
                 )
-          )
+              )
               : Container(
               child: Card(
                   elevation: 8.0,

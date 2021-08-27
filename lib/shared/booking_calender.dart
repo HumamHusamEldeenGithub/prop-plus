@@ -30,7 +30,6 @@ class _BookingCalenderState extends State<BookingCalender> {
 
 
   void onSelectionChanged(DateRangePickerSelectionChangedArgs args) {
-
     startDateToBook = _controller.selectedRange.startDate;
     endDateToBook = _controller.selectedRange.endDate;
     if(_controller.selectedRange.startDate == null)
@@ -109,6 +108,7 @@ class _BookingCalenderState extends State<BookingCalender> {
           Container(
             height: 500,
             child: SfDateRangePicker(
+              enablePastDates: false,
               controller: _controller,
               startRangeSelectionColor: MainTheme.mainColor,
               endRangeSelectionColor: MainTheme.mainColor,
