@@ -126,7 +126,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
                             var compressedImage = new File('$path/img_temporary.jpg')..writeAsBytesSync(BinaryImages.encodeJpg(smallerImage, quality: 15));
 
                             if(image!=null)
-                              LoadingDialog.showLoadingDialog(context, uploadImage(compressedImage.path), Text("Uploaded Image"), Text("Failed to upload image"),(){Navigator.pop(context);});
+                              LoadingDialog.showLoadingDialog(context, uploadImage(compressedImage.path), Text("Uploaded Image"), Text("Failed to upload image"),(){}, false);
                           },
                           child: Container(
                             height: 40,

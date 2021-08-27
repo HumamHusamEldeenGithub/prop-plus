@@ -1,5 +1,6 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
+import 'package:rating_bar/rating_bar.dart';
 
 
 class LoadingDialog {
@@ -15,7 +16,7 @@ class LoadingDialog {
     _isSuccessful = true;
   }
 
-  static dynamic showLoadingDialog(BuildContext context,Future future,Widget onSuccessTitle,Widget onFailedTitle, Function onClose){
+  static dynamic showLoadingDialog(BuildContext context,Future future,Widget onSuccessTitle,Widget onFailedTitle, Function onClose, bool useOnClose){
     _isSuccessful = false;
     showDialog(context: context, builder: (context){
       return FutureBuilder(future: _runFuture(future), builder: (context,snapshot){
@@ -24,7 +25,9 @@ class LoadingDialog {
           return AlertDialog(
             title: _isSuccessful? onSuccessTitle : onFailedTitle,
             content: TextButton(
-              onPressed: onClose,
+              onPressed: useOnClose? onClose : (){
+                Navigator.pop(context);
+              },
               child: Text("Close"),
             ),
           );
@@ -54,5 +57,43 @@ class LoadingDialog {
       print(E);
     }
     Navigator.pop(context);
+  }
+
+
+
+  static double showRatingDialog(BuildContext context,Future future(dynamic)) {
+    double _rating = 0;
+    print("STARTED");
+    showDialog(context: context, builder: (context) {
+      return AlertDialog(
+        title: Text("Please give us your rating"),
+        content: Container(
+          height: 100,
+          child: Center(
+            child: Column(
+              children: [
+                RatingBar(
+                  onRatingChanged: (rating) => _rating = rating,
+                  filledIcon: Icons.star,
+                  emptyIcon: Icons.star_border,
+                  halfFilledIcon: Icons.star_half,
+                  isHalfAllowed: true,
+                  filledColor: Colors.yellow,
+                  emptyColor: Colors.yellow,
+                  halfFilledColor: Colors.yellow,
+                  size: 48,
+                ),
+                TextButton(onPressed: () {
+                  Navigator.pop(context);
+                  showLoadingDialog(context, future(_rating),
+                      Text("Thank you for your rating!"),
+                      Text("There was a problem."), (){}, false);
+                }, child: Text("Rate"))
+              ],
+            ),
+          ),
+        ),
+      );
+    });
   }
 }

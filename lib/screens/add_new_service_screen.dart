@@ -152,7 +152,7 @@ class _AddNewServiceScreen extends State<AddNewServiceScreen> {
                     image = await ImagePicker.platform
                         .pickImage(source: ImageSource.gallery);
                     if(image!=null){
-                      LoadingDialog.showLoadingDialog(context, uploadImage(), Text("Uploaded image"), Text("Failed to upload image"),(){Navigator.pop(context);});
+                      LoadingDialog.showLoadingDialog(context, uploadImage(), Text("Uploaded image"), Text("Failed to upload image"), (){}, false);
                     }
                   },
                 ),
@@ -169,7 +169,7 @@ class _AddNewServiceScreen extends State<AddNewServiceScreen> {
                     ///
                     LoadingDialog.showLoadingDialog(context, submitForm(module), Text("You've successfully submitted your service!"), Text("There was a problem submitting your service, please try again"),(){
                       Navigator.of(context).popUntil((route) => route.isFirst);
-                    });
+                    }, true);
                   },
                 ),
               )

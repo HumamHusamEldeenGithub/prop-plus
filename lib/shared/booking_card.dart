@@ -29,6 +29,11 @@ class _BookingCardState extends State<BookingCard> {
     });
   }
 
+  Future sendRating(dynamic rating) async{
+    await HTTP_Requests.updateRating(widget.module.serviceModule.propertyModule.id.toString(),rating);
+    print("Finished updating rating");
+  }
+
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -129,9 +134,7 @@ class _BookingCardState extends State<BookingCard> {
                                           cancelBooking(),
                                           Text("You've canceled the booking."),
                                           Text("A problem occured while canceling the booking."),
-                                              (){
-                                            Navigator.pop(context);
-                                          }
+                                                (){}, false
                                         );
                                       },
                                       child: Text("CANCEL",style: TextStyle(color: Colors.red)),
@@ -143,7 +146,8 @@ class _BookingCardState extends State<BookingCard> {
                               padding: const EdgeInsets.only(top: 2.0),
                               child: TextButton(
                                 onPressed: (){
-                                  //LoadingDialog.showRatingDialog()
+                                  print("Try rate");
+                                  LoadingDialog.showRatingDialog(context, sendRating);
                                 },
                                 child: Text("RATE",style: TextStyle(color: Colors.yellow[700]),)
                               ),
