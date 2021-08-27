@@ -11,7 +11,7 @@ import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 class Profile extends StatefulWidget {
   Function parentFunction;
-  Profile({this.parentFunction,Key key}) : super(key: key);
+  Profile({this.parentFunction, Key key}) : super(key: key);
   @override
   ProfileState createState() => ProfileState();
 }
@@ -28,6 +28,7 @@ class ProfileState extends State<Profile> {
     locater.get<UserController>().InitializeUser();
     currentUser = locater.get<UserController>().currentUser;
   }
+
   void _onRefresh() async {
     // monitor network fetch
     await widget.parentFunction;
@@ -49,32 +50,20 @@ class ProfileState extends State<Profile> {
     setState(() {});
   }
 
-
-  bool _checkAvatarNotNull(){
+  bool _checkAvatarNotNull() {
     try {
-      return locater
-          .get<UserController>()
-          .currentUser
-          .avatarURl != null;
-    }
-    catch(e){
+      return locater.get<UserController>().currentUser.avatarURl != null;
+    } catch (e) {
       return false;
     }
   }
 
-  String getAvatarLink(){
-    print(locater
-        .get<UserController>()
-        .currentUser.avatarURl
-        );
+  String getAvatarLink() {
+    print(locater.get<UserController>().currentUser.avatarURl);
     //print("Image is " + _checkAvatarNotNull().toString());
-    if(_checkAvatarNotNull()){
-      return locater
-          .get<UserController>()
-          .currentUser
-          .avatarURl;
-    }
-    else{
+    if (_checkAvatarNotNull()) {
+      return locater.get<UserController>().currentUser.avatarURl;
+    } else {
       return "https://thumbs.dreamstime.com/b/creative-vector-illustration-default-avatar-profile-placeholder-isolated-background-art-design-grey-photo-blank-template-mo-107388687.jpg";
     }
   }
@@ -117,60 +106,125 @@ class ProfileState extends State<Profile> {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 SizedBox(
-                  height: 30,
+                  height: 20,
                 ),
                 Avatar(
-                  size: 50,
+                    size: 60,
                     avatarURL: getAvatarLink(),
                     onTap: () async {
                       //TODO view Image
+                    }),
+                SizedBox(
+                  height: 10,
+                ),
+                Text('Name'),
+                SizedBox(
+                  height: 2,
+                ),
+                Text('EMAIL'),
+                SizedBox(
+                  height: 50,
+                ),
+                CustomProfileButton(
+                  text: "Edit Profile",
+                  customIcon: Icons.person,
+                  onPressed: () {
+                    Navigator.of(context)
+                        .pushNamed('/editProfilePage', arguments: refreshPage);
+                  },
+                ),
+                CustomProfileButton(
+                  text: "My Properties",
+                  customIcon: Icons.home_work_rounded,
+                  onPressed: () {
+                    Navigator.of(context).pushNamed('/myProperties');
+                  },
+                ),
+                CustomProfileButton(
+                  text: "Adding Property",
+                  customIcon: Icons.add,
+                  onPressed: () {
+                    Navigator.of(context).pushNamed('/propInputForm');
+                  },
+                ),
+                CustomProfileButton(
+                  text: "Logout",
+                  customIcon: Icons.power_settings_new,
+                  onPressed: () async {
+                    try {
+                      locater.get<UserController>().signOut();
+                    } catch (e) {
+                      print(e);
                     }
-                  ),
-                SizedBox(height: 50,),
-                SizedBox(
-                  width: _width * 0.5,
-                  child: ElevatedButton(
-                    child: Text("log Out "),
-                    onPressed: () async {
-                      try {
-                        locater.get<UserController>().signOut();
-                      } catch (e) {
-                        print(e);
-                      }
-                    },
-                  ),
+                  },
                 ),
-                SizedBox(
-                  width: _width * 0.5,
-                  child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(),
-                    child: Text("Adding property "),
-                    onPressed: () {
-                      Navigator.of(context).pushNamed('/propInputForm');
-                    },
-                  ),
-                ),
-                SizedBox(
-                  width: _width * 0.5,
-                  child: ElevatedButton(
-                      onPressed: () {
-                        Navigator.of(context).pushNamed('/myProperties');
-                      },
-                      child: Text("My Properties")),
-                ),
-                SizedBox(
-                  width: _width * 0.5,
-                  child: ElevatedButton(
-                      onPressed: () {
-                        Navigator.of(context).pushNamed('/editProfilePage',arguments: refreshPage);
-                      },
-                      child: Text("Edit Profile")),
-                ),
-
               ],
             ),
           ],
         ),
+      ),
+    );
+  }
+}
+
+class CustomProfileButton extends StatefulWidget {
+  final String text;
+  final IconData customIcon;
+  final Function onPressed;
+  const CustomProfileButton(
+      {Key key, this.text, this.customIcon, this.onPressed})
+      : super(key: key);
+
+  @override
+  _CustomProfileButtonState createState() => _CustomProfileButtonState();
+}
+
+class _CustomProfileButtonState extends State<CustomProfileButton> {
+  @override
+  Widget build(BuildContext context) {
+    double _width = MediaQuery.of(context).size.width;
+    double _height = MediaQuery.of(context).size.height;
+    Function on_pressed = widget.onPressed;
+    return SizedBox(
+      width: _width * 0.8,
+      child: ElevatedButton(
+        style: ButtonStyle(
+            elevation: MaterialStateProperty.all<double>(0),
+            shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(18.0),
+            )),
+            backgroundColor:
+                MaterialStateColor.resolveWith((states) => Color(0xeef3f6fb))),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Container(
+              child: Row(
+                children: [
+                  Icon(
+                    widget.customIcon,
+                    color: Colors.black,
+                  ),
+                  SizedBox(
+                    width: 8,
+                  ),
+                  Text(
+                    widget.text,
+                    style: TextStyle(color: Colors.black),
+                  )
+                ],
+              ),
+            ),
+            Container(
+              child: Icon(
+                Icons.arrow_forward_ios_sharp,
+                color: Colors.black,
+              ),
+            )
+          ],
+        ),
+        onPressed: on_pressed,
       ),
     );
   }
