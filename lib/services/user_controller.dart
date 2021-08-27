@@ -19,16 +19,16 @@ class UserController{
   }
 
   Future<UserModule>InitializeUser() async{
-     _currentUser = await _authService.getUserModule();
-     _currentUser = await HTTP_Requests.getUserByFirebase(_currentUser.uid);
-     UserModule newUser  = UserModule();
-     newUser.dbId = _currentUser?.dbId;
-     newUser.favouriteServices = await HTTP_Requests.getFavouriteServicesById(_currentUser.dbId);
-     newUser.userName = _currentUser.userName;
-     newUser.avatarURl = _currentUser.avatarURl;
-     newUser.phoneNumber = _currentUser.phoneNumber;
-     MainWidget.userData['CurrentUser'] = newUser;
-     return _currentUser;
+    _currentUser = await _authService.getUserModule();
+    _currentUser = await HTTP_Requests.getUserByFirebase(_currentUser.uid);
+    UserModule newUser  = UserModule();
+    newUser.dbId = _currentUser?.dbId;
+    newUser.favouriteServices = await HTTP_Requests.getFavouriteServicesById(_currentUser.dbId);
+    newUser.userName = _currentUser.userName;
+    newUser.avatarURl = _currentUser.avatarURl;
+    newUser.phoneNumber = _currentUser.phoneNumber;
+    MainWidget.userData['CurrentUser'] = newUser;
+    return _currentUser;
   }
 
   Future<void>getUserDBId() async{
@@ -51,7 +51,7 @@ class UserController{
   }
   Future<String>signInWithEmailAndPassword (String email ,String password) async{
     _currentUser =await _authService.signInWithEmailAndPassword(email, password);
-    _currentUser.dbId = await HTTP_Requests.getUserByFirebase(_currentUser.uid);
+    _currentUser = await HTTP_Requests.getUserByFirebase(_currentUser.uid);
     return _currentUser.uid ;
     //TODO : check if null
    // _currentUser.avatarURl = await getDownloadUrl();

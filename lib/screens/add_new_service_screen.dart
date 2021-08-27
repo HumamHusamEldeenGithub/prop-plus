@@ -118,7 +118,10 @@ class _AddNewServiceScreen extends State<AddNewServiceScreen> {
             ),
           ),
         ),
-        title: Text("New Service"),
+        title: SizedBox(
+            width: 65,
+            child: Image.asset("assets/logo.png")
+        ),
       ),
       body: SingleChildScrollView(
         child: SafeArea(

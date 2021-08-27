@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:prop_plus/constant/MainTheme.dart';
 import 'package:prop_plus/modules/main_module.dart';
 import 'package:prop_plus/shared/http_requests.dart';
 import 'package:prop_plus/shared/recommended_card.dart';
@@ -28,7 +29,22 @@ class _ExploreState extends State<Explore> {
     double _height = MediaQuery.of(context).size.height;
     return Scaffold(
         appBar: AppBar(
-          title: Text("Results for " + searchText),
+          flexibleSpace: Container(
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                begin: Alignment.centerLeft,
+                end: Alignment.centerRight,
+                colors: [
+                  MainTheme.mainColor,
+                  MainTheme.secondaryColor,
+                ],
+              ),
+            ),
+          ),
+          title: SizedBox(
+              width: 65,
+              child: Image.asset("assets/logo.png")
+          ),
         ),
         body: Center(
           child: FutureBuilder(

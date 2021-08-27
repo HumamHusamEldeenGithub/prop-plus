@@ -24,7 +24,7 @@ class PropertyInputForm extends StatefulWidget {
 }
 
 class _PropertyInputFormState extends State<PropertyInputForm> {
-  String _title, _description, _city, _street, _phone, _type = "Hotel";
+  String _title, _description, _city, _street, _phone, _type = "Flat";
   PickedFile image;
   List<String> imagesUrls = List<String>();
   bool loading = false;
@@ -37,13 +37,16 @@ class _PropertyInputFormState extends State<PropertyInputForm> {
     ));
     textFields.add(DropdownButton<String>(
       value: _type,
-      icon: const Icon(Icons.arrow_downward),
+      icon: Icon(
+        Icons.arrow_drop_down,
+        color: MainTheme.mainColor,
+      ),
       iconSize: 20,
-      elevation: 16,
+      elevation: 2,
       style: TextStyle(color: MainTheme.mainColor),
       underline: Container(
-        height: 2,
-        color: Colors.black,
+        height: 1,
+        color: MainTheme.mainColor,
       ),
       onChanged: (String newValue) {
         setState(() {
@@ -64,15 +67,15 @@ class _PropertyInputFormState extends State<PropertyInputForm> {
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(5),
           borderSide: BorderSide(
-            color: Colors.black,
+            color: MainTheme.greyFontColor,
             width: 0.5,
           ),
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(15),
           borderSide: BorderSide(
-            color: Color(0xFF00B9FF),
-            width: 2.0,
+            color: MainTheme.greyFontColor,
+            width: 0.5,
           ),
         ),
       ),
@@ -87,15 +90,15 @@ class _PropertyInputFormState extends State<PropertyInputForm> {
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(5),
           borderSide: BorderSide(
-            color: Colors.black,
-            width: 0.5,
+            color: MainTheme.greyFontColor,
+            width: 0.3,
           ),
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(15),
           borderSide: BorderSide(
-            color: Color(0xFF00B9FF),
-            width: 2.0,
+            color: MainTheme.greyFontColor,
+            width: 0.3,
           ),
         ),
       ),
@@ -110,15 +113,15 @@ class _PropertyInputFormState extends State<PropertyInputForm> {
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(5),
           borderSide: BorderSide(
-            color: Colors.black,
-            width: 0.5,
+            color: MainTheme.greyFontColor,
+            width: 0.3,
           ),
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(15),
           borderSide: BorderSide(
-            color: Color(0xFF00B9FF),
-            width: 2.0,
+            color: MainTheme.greyFontColor,
+            width: 0.3,
           ),
         ),
       ),
@@ -133,15 +136,15 @@ class _PropertyInputFormState extends State<PropertyInputForm> {
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(5),
           borderSide: BorderSide(
-            color: Colors.black,
-            width: 0.5,
+            color: MainTheme.greyFontColor,
+            width: 0.3,
           ),
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(15),
           borderSide: BorderSide(
-            color: Color(0xFF00B9FF),
-            width: 2.0,
+            color: MainTheme.greyFontColor,
+            width: 0.3,
           ),
         ),
       ),
@@ -156,15 +159,15 @@ class _PropertyInputFormState extends State<PropertyInputForm> {
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(5),
           borderSide: BorderSide(
-            color: Colors.black,
-            width: 0.5,
+            color: MainTheme.greyFontColor,
+            width: 0.3,
           ),
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(15),
           borderSide: BorderSide(
-            color: Color(0xFF00B9FF),
-            width: 2.0,
+            color: MainTheme.greyFontColor,
+            width: 0.3,
           ),
         ),
       ),
@@ -222,7 +225,6 @@ class _PropertyInputFormState extends State<PropertyInputForm> {
             ),
           ),
         ),
-        title: Text("Add the information of your Prop"),
       ),
       body: SingleChildScrollView(
         child: SafeArea(
@@ -233,7 +235,7 @@ class _PropertyInputFormState extends State<PropertyInputForm> {
                   padding: EdgeInsets.symmetric(vertical: 20, horizontal: 25),
                   width: _width * 0.8,
                   child: Text(
-                    "Please enter all the information for adding a new property :",
+                    "Enter all the information for adding a new property :",
                     style: TextStyle(fontWeight: FontWeight.bold),
                   )),
               Container(

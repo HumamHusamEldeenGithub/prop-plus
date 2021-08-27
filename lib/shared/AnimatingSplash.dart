@@ -9,36 +9,49 @@ class AnimatingSplash extends StatefulWidget {
 }
 
 class AnimatingSplashState extends State<AnimatingSplash> {
-
   Color backgroundColor = MainTheme.mainColor;
-
-  void animate(){
-    print("Animating");
+  double _opacity = 0;
+  void animate() {
     setState(() {
-      if(backgroundColor == MainTheme.mainColor)
+      if (backgroundColor == MainTheme.mainColor)
         backgroundColor = MainTheme.secondaryColor;
       else
         backgroundColor = MainTheme.mainColor;
     });
   }
 
+  Future<void> finishSplash() async{
+    setState(() {
+      _opacity = 1;
+    });
+    await Future.delayed(Duration(seconds: 1));
+  }
+
   @override
   Widget build(BuildContext context) {
-    return AnimatedContainer(
-      duration: Duration(milliseconds: 600),
-      color: backgroundColor,
-      child: Center(
-          child: Center(
-            child: Container(
-              height: 200,
-              width: 300,
-              child: Image.asset("assets/logo.png")
-            )
-          )
+    return Stack(children: [
+      AnimatedContainer(
+        duration: Duration(milliseconds: 600),
+        color: backgroundColor,
+        child: Center(
+            child: Center(
+                child: Container(
+                    height: 200,
+                    width: 300,
+                    child: Image.asset("assets/logo.png")))),
+        onEnd: () {
+          animate();
+        },
       ),
-      onEnd: (){
-        animate();
-      },
-    );
+      AnimatedOpacity(
+        duration: Duration(seconds: 1),
+        opacity: _opacity,
+        child: Container(
+          decoration: BoxDecoration(
+            color: Colors.black
+          ),
+        )
+      )
+    ]);
   }
 }

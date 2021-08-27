@@ -46,7 +46,10 @@ class ProfileState extends State<Profile> {
   }
 
   void refreshPage() {
-    setState(() {});
+    setState(() {
+      print("Refresh Profile");
+      currentUser = MainWidget.userData['CurrentUser'];
+    });
   }
 
   bool _checkAvatarNotNull() {
@@ -108,7 +111,7 @@ class ProfileState extends State<Profile> {
                   height: 20,
                 ),
                 Avatar(
-                    size: 60,
+                    size: 65,
                     avatarURL: getAvatarLink(),
                     onTap: () async {
                       //TODO view Image
@@ -120,7 +123,6 @@ class ProfileState extends State<Profile> {
                 SizedBox(
                   height: 2,
                 ),
-                Text(currentUser.email!=null?currentUser.email:'Email',style: TextStyle(fontSize: 17,color: Colors.grey)),
                 SizedBox(
                   height: 50,
                 ),

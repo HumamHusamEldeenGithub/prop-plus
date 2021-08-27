@@ -10,6 +10,7 @@ import 'package:prop_plus/services/user_controller.dart';
 import 'package:prop_plus/shared/custom_text_field.dart';
 import 'package:http/http.dart' as http;
 import 'package:prop_plus/shared/http_requests.dart';
+import 'package:prop_plus/shared/loading_dialog.dart';
 import 'package:prop_plus/shared/loading_widget.dart';
 
 import '../main.dart';
@@ -114,11 +115,10 @@ class _SignInScreenState extends State<SignInScreen> {
           },
         ),
       ),
+      SizedBox(
+        height: 200,
+      ),
       FlatButton(
-        child: Text(
-          "Forgot Your Password ?!",
-          style: TextStyle(fontSize: 20.0, color: Colors.white),
-        ),
         onPressed: () {},
       ),
       FlatButton(
@@ -145,28 +145,25 @@ class _SignInScreenState extends State<SignInScreen> {
         SizedBox(
           height: 10,
         ),
-        GoogleSignInButton(
-          onPressed: () {},
-        ),
       ],
     );
   }
 
   Future<void> getUserFromDB(String userID) async {
-    final response = await http.get(Uri.parse(
-        'https://propplus-production.herokuapp.com/users/ByFirebase/' +
-            userID),
+    final response = await http.get(
+      Uri.parse('https://propplus-production.herokuapp.com/users/ByFirebase/' +
+          userID),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
         'Authorization': HTTP_Requests.authorizationKey,
-      },);
+      },
+    );
 
     if (response.statusCode == 201 || response.statusCode == 200) {
       // If the server did return a 201 CREATED response,
       // then parse the JSON.
-      MainWidget.userData['CurrentUser'].dbId =
-          jsonDecode(response.body)['id'];
-      Navigator.of(context).pushReplacementNamed('/home');
+      locater.get<UserController>().currentUser.uid = jsonDecode(response.body)['firebase_id'];
+      await locater.get<UserController>().InitializeUser();
     } else {
       // If the server did not return a 201 CREATED response,
       // then throw an exception.
@@ -185,23 +182,23 @@ class _SignInScreenState extends State<SignInScreen> {
       return false;
   }
 
+  Future initializeUser() async {
+    dynamic userID = await locater
+        .get<UserController>()
+        .signInWithEmailAndPassword(_email, _password);
+    await getUserFromDB(userID);
+  }
+
   void submit() async {
     if (validate()) {
-      //call the auth methods
-      //SignIn
-      try {
-        Loading.showLoaderDialog(context, "Signing In...");
-        dynamic userID = await locater
-            .get<UserController>()
-            .signInWithEmailAndPassword(_email, _password);
-        await getUserFromDB(userID);
+      LoadingDialog.showLoadingDialog(
+          context,
+          initializeUser(),
+          Text("You've successfully signed in!"),
+          Text("A problem has occured"), () {
         Navigator.pop(context);
         Navigator.of(context).pushReplacementNamed('/home');
-      } catch (e) {
-        setState(() {
-          _warning = e.toString();
-        });
-      }
+      }, true);
     }
   }
 

@@ -84,7 +84,6 @@ class _ReportProblemState extends State<ReportProblem> {
             ),
           ),
         ),
-        title: Text("Report Problem"),
       ),
       body: SingleChildScrollView(
         child: SafeArea(

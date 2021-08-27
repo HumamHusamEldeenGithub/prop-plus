@@ -81,7 +81,10 @@ class AllServicesState extends State<AllServices> {
             ),
           ),
         ),
-        title: Text("All Services"),
+        title: SizedBox(
+            width: 65,
+            child: Image.asset("assets/logo.png")
+        ),
       ),
       body: Center(
         child: FutureBuilder(

@@ -78,7 +78,6 @@ class _MyPropertiesState extends State<MyProperties> {
             ),
           ),
         ),
-        title: Text("My Properties"),
       ),
       body: Center(
         child: SmartRefresher(

@@ -52,7 +52,6 @@ class WelcomeView extends StatelessWidget {
                       description:"" ,
                       primaryButtonText: "Create an account ",
                       primaryButtonRoute: "/signUp",
-                      secondaryButtonText: "Maybe Later",
                       secondaryButtonRoute: "/anonymousScreen",
                     )
                 );
@@ -63,7 +62,7 @@ class WelcomeView extends StatelessWidget {
             FlatButton(
               child: Text("Sign in", style: TextStyle(color: Colors.white,fontSize: 20),),
               onPressed: (){
-                Navigator.of(context).pushNamed('/signIn');
+                Navigator.of(context).pushReplacementNamed('/signIn');
               },
 
             ),

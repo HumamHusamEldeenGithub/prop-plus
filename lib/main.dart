@@ -40,15 +40,24 @@ import 'modules/user_module.dart';
 }
 */
 Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
   runApp(SplashScreen());
-
   await Firebase.initializeApp();
-  await setupServices();
+  try {
+    await setupServices();
+  }
+  catch(e){
+
+  }
   runApp(MyApp());
 }
 
-class SplashScreen extends StatelessWidget {
+class SplashScreen extends StatefulWidget {
+  @override
+  _SplashScreenState createState() => _SplashScreenState();
+}
 
+class _SplashScreenState extends State<SplashScreen> {
   GlobalKey<AnimatingSplashState> animatingKey = new GlobalKey<AnimatingSplashState>();
   @override
   Widget build(BuildContext context) {
@@ -133,7 +142,10 @@ class _MainWidgetState extends State<MainWidget> {
             ),
           ),
         ),
-        title: Text("Prop+"),
+        title: SizedBox(
+          width: 65,
+          child: Image.asset("assets/logo.png")
+        ),
         actions: [searchBar.getSearchAction(context)]);
   }
 
@@ -156,6 +168,7 @@ class _MainWidgetState extends State<MainWidget> {
   }
 
   Future<void> getDataFromDBForHome(bool refresh) async {
+
     if (refresh) emptyPropertiesMap();
     MainWidget.databaseData['PropertyModules'] =
         await HTTP_Requests.getRecommendedProperties();
@@ -271,18 +284,30 @@ class _MainWidgetState extends State<MainWidget> {
               color: Colors.black,
               tabs: [
                 GButton(
+                  iconColor: Colors.black,
+                  iconActiveColor: MainTheme.mainColor,
+                  backgroundColor: Colors.white,
                   icon: Icons.home,
                   text: 'Home',
                 ),
                 GButton(
+                  iconColor: Colors.black,
+                  iconActiveColor: MainTheme.mainColor,
+                  backgroundColor: Colors.white,
                   icon: Icons.favorite_border,
                   text: 'Likes',
                 ),
                 GButton(
+                  iconColor: Colors.black,
+                  iconActiveColor: MainTheme.mainColor,
+                  backgroundColor: Colors.white,
                   icon: Icons.calendar_today,
                   text: 'Bookings',
                 ),
                 GButton(
+                  iconColor: Colors.black,
+                  backgroundColor: Colors.white,
+                  iconActiveColor: MainTheme.mainColor,
                   icon: Icons.person,
                   text: 'Profile',
                 ),

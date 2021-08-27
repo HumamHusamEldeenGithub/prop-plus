@@ -119,7 +119,7 @@ class _BookingCalenderState extends State<BookingCalender> {
                 blackoutDateTextStyle: TextStyle(color: Colors.white),
                 blackoutDatesDecoration: BoxDecoration(
                     shape: BoxShape.rectangle,
-                    color: Color(0xFFA86A6A),
+                    color: Colors.grey[400],
                     borderRadius: BorderRadius.circular(10),
                 ),
               ),

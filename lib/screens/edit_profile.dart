@@ -45,6 +45,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
         .get<UserController>()
         .uploadProfilePicture(File(imagePath));
     await HTTP_Requests.updateAvatarURL(currentUser.dbId.toString(), imageUrl);
+    locater.get<UserController>().InitializeUser();
     MainWidget.userData['CurrentUser'].avatarURl = imageUrl;
     setStateCallback();
     setState(() {
@@ -156,49 +157,55 @@ class _EditProfilePageState extends State<EditProfilePage> {
               key: formKey,
               child: Column(
                 children: [
-                  TextFormField(
-                    decoration: InputDecoration(
-                      labelText: "Full Name" ,
-                      hintText: "${currentUser?.userName}",
-                      enabledBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(5),
-                        borderSide: BorderSide(
-                          color: Colors.grey,
-                          width: 0.5,
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: TextFormField(
+                      decoration: InputDecoration(
+                        labelText: "Full Name" ,
+                        hintText: "${currentUser?.userName}",
+                        enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(5),
+                          borderSide: BorderSide(
+                            color: Colors.grey,
+                            width: 0.5,
+                          ),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(15),
+                          borderSide: BorderSide(
+                            color: Color(0xFF00B9FF),
+                            width: 2.0,
+                          ),
                         ),
                       ),
-                      focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(15),
-                        borderSide: BorderSide(
-                          color: Color(0xFF00B9FF),
-                          width: 2.0,
-                        ),
-                      ),
+                      validator: NameValidator.validate,
+                      onSaved: (value) => _name = value,
                     ),
-                    validator: NameValidator.validate,
-                    onSaved: (value) => _name = value,
                   ),
-                  TextFormField(
-                    decoration: InputDecoration(
-                      labelText: "Phone" ,
-                      hintText: "${currentUser?.phoneNumber}",
-                      enabledBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(5),
-                        borderSide: BorderSide(
-                          color: Colors.grey,
-                          width: 0.5,
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: TextFormField(
+                      decoration: InputDecoration(
+                        labelText: "Phone" ,
+                        hintText: "${currentUser?.phoneNumber}",
+                        enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(5),
+                          borderSide: BorderSide(
+                            color: Colors.grey,
+                            width: 0.5,
+                          ),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(15),
+                          borderSide: BorderSide(
+                            color: Color(0xFF00B9FF),
+                            width: 2.0,
+                          ),
                         ),
                       ),
-                      focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(15),
-                        borderSide: BorderSide(
-                          color: Color(0xFF00B9FF),
-                          width: 2.0,
-                        ),
-                      ),
+                      validator: PhoneNumberValidator.validate,
+                      onSaved: (value) => _phone = value,
                     ),
-                    validator: PhoneNumberValidator.validate,
-                    onSaved: (value) => _phone = value,
                   ),
                 ],
               ),
@@ -227,7 +234,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
                   RaisedButton(
                     onPressed: () {
                       //TODO update the username in firebase and database
-                      submit();
+                      LoadingDialog.showLoadingDialog(context, submit(), Text("Changed successfully."), Text("A problem has occured."), (){}, false);
                     },
                     color: MainTheme.mainColor,
                     padding: EdgeInsets.symmetric(horizontal: 50),
@@ -295,11 +302,16 @@ class _EditProfilePageState extends State<EditProfilePage> {
         height: 0,
       );
   }
-  void submit() async {
+  Future<void> submit() async {
     if (validate()) {
       await HTTP_Requests.updateUserName(currentUser.dbId.toString(), _name);
       await HTTP_Requests.updatePhoneNumber(currentUser.dbId.toString(), _phone);
+      await locater.get<UserController>().InitializeUser();
       currentUser = MainWidget.userData['CurrentUser'];
+      setStateCallback();
+      setState(() {
+
+      });
     }
   }
 
