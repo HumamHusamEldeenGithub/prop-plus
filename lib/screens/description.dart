@@ -19,7 +19,6 @@ import '../shared/http_requests.dart';
 
 class DetailsScreen extends StatefulWidget {
   static String path = "/description";
-
   @override
   _DetailsScreenState createState() => _DetailsScreenState();
 }
@@ -30,6 +29,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
   bool imageVisible = true;
   bool favorite = false;
   bool initialized = false;
+  Function refreshFunction;
   dynamic prevModule;
   Future<ServiceModule> loadService(dynamic prevModule) async {
     serviceModule = await HTTP_Requests.getService(
@@ -37,10 +37,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
     var urls =
         await HTTP_Requests.getAllImagesForService(prevModule.service_id);
     serviceModule.imageUrls = urls;
-    favorite = locater
-        .get<UserController>()
-        .currentUser
-        .favourite_services
+    favorite = MainWidget.databaseData['FavouriteServices']
         .contains(serviceModule.service_id);
     return serviceModule;
   }
@@ -71,13 +68,16 @@ class _DetailsScreenState extends State<DetailsScreen> {
       await HTTP_Requests.addNewFavourite(
           locater<UserController>().currentUser.dbId.toString(),
           serviceModule.service_id.toString());
+      MainWidget.databaseData['FavouriteServices'].add(serviceModule.service_id);
     } else {
       await HTTP_Requests.deleteFavourite(
           locater<UserController>().currentUser.dbId.toString(),
           serviceModule.service_id.toString());
+      MainWidget.databaseData['FavouriteServices'].remove(serviceModule.service_id);
     }
     setState(() {
       favorite = !favorite;
+      refreshFunction();
     });
   }
 
@@ -85,6 +85,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
   Widget build(BuildContext context) {
     var args = ModalRoute.of(context).settings.arguments as Map;
     prevModule = args['module'];
+    refreshFunction = args['refreshFunction'];
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
 

@@ -40,6 +40,8 @@ class FavouritesState extends State<Favourites> {
   }
 
   void refreshPage() {
+    _finishedLoading = false;
+    widget.parentFunction();
     setState(() {});
   }
 
@@ -93,7 +95,7 @@ class FavouritesState extends State<Favourites> {
                     children:
                         MainWidget.databaseData['FavouriteModules'].map((card) {
                       return FavouriteCard(
-                          refreshFunction: widget.parentFunction, module: card);
+                          refreshFunction: refreshPage, module: card,);
                     }).toList(),
                   ):
                   Center(

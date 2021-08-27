@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:prop_plus/constant/MainTheme.dart';
 import 'package:prop_plus/constant/FavouriteTheme.dart';
+import 'package:prop_plus/main.dart';
 import 'package:prop_plus/modules/favourite_module.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:prop_plus/modules/main_module.dart';
@@ -26,7 +27,7 @@ class FavouriteCard extends StatefulWidget {
 
 class _FavouriteCardState extends State<FavouriteCard> {
 
-  bool favorite = true;
+  bool _favorite = true;
 
   Future<void> onTapFavorite() async{
     await HTTP_Requests.deleteFavourite(
@@ -35,8 +36,8 @@ class _FavouriteCardState extends State<FavouriteCard> {
           .dbId
           .toString(),
       widget.module.service_id.toString());
+    MainWidget.databaseData['FavouriteServices'].remove(widget.module.service_id);
     setState(() {
-      favorite = !favorite;
       widget.refreshFunction();
     });
   }
@@ -126,7 +127,7 @@ class _FavouriteCardState extends State<FavouriteCard> {
                               width: 35,
                               child: IconButton(
                                 color: MainTheme.mainColor,
-                                icon: favorite
+                                icon: _favorite
                                     ? Icon(
                                   Icons.favorite,
                                   color: MainTheme.mainColor,

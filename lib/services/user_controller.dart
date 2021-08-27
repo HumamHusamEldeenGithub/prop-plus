@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:prop_plus/main.dart';
 import 'package:prop_plus/modules/user_module.dart';
 import 'package:prop_plus/services/auth_repo.dart';
 import 'package:prop_plus/services/locater.dart';
@@ -20,7 +21,7 @@ class UserController{
   Future<UserModule>InitializeUser() async{
      _currentUser = await _authService.getUserModule();
      _currentUser.dbId = await HTTP_Requests.getUserId(_currentUser.uid);
-     _currentUser.favourite_services = await HTTP_Requests.getFavouriteServicesById(_currentUser.dbId);
+     MainWidget.databaseData['FavouriteServices'] = await HTTP_Requests.getFavouriteServicesById(_currentUser.dbId);
      _currentUser.userName=await HTTP_Requests.getUsernameById(_currentUser.dbId.toString());
      _currentUser.avatarURl =await HTTP_Requests.getAvatarUrlById(_currentUser.dbId.toString());
      _currentUser.phoneNumber = await HTTP_Requests.getPhoneNumberById(_currentUser.dbId.toString());

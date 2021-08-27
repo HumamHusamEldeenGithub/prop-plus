@@ -183,7 +183,6 @@ class _MainWidgetState extends State<MainWidget> {
   }
 
   Future initializeFromDB() async{
-    print(locater.get<UserController>().currentUser.favourite_services);
     getDataFromDBForHome(false);
     getDataFromDBForFavorite();
     getDataFromDBForBookings();

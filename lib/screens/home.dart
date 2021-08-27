@@ -41,8 +41,9 @@ class HomeState extends State<Home> {
   }
 
   void refreshPage() {
-    setState(() {});
-    print("Fav" + locater.get<UserController>().currentUser.favourite_services.toString());
+    setState(() {
+      print(MainWidget.databaseData['FavouriteServices']);
+    });
   }
 
   @override
