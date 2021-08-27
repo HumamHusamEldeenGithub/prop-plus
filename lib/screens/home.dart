@@ -26,7 +26,10 @@ class HomeState extends State<Home> {
 
   void _onRefresh() async {
     // monitor network fetch
+    if (MainWidget.currentHomeStatus == "All")
     await widget.parentFunction();
+    else
+      await widget.changeCategory(MainWidget.currentHomeStatus);
     // if failed,use refreshFailed()
     _refreshController.refreshCompleted();
     refreshPage();
@@ -117,10 +120,14 @@ class HomeState extends State<Home> {
                                   .databaseData['CategoriesModules'][index]
                                   .isSelected = true;
                               if (index==0)
-                                widget.parentFunction(true) ;
+                                widget.parentFunction(true);
+
                               else
                                 widget.changeCategory(MainWidget
                                     .databaseData['CategoriesModules'][index].title) ;
+
+                              MainWidget.currentHomeStatus = MainWidget
+                                  .databaseData['CategoriesModules'][index].title ;
 
                             });
                           },

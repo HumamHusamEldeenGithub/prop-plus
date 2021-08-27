@@ -101,6 +101,7 @@ class MyApp extends StatelessWidget {
 class MainWidget extends StatefulWidget {
   static var databaseData = new Map<String, List<dynamic>>();
   static var userData = new Map<String, UserModule>();
+  static var currentHomeStatus="All" ;
   @override
   _MainWidgetState createState() => _MainWidgetState();
 }
