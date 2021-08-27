@@ -132,7 +132,7 @@ print(MainWidget.currentHomeStatus) ;
                               else
                                 widget.changeCategory(MainWidget
                                     .databaseData['CategoriesModules'][index]
-                                    .title);
+                                    .title,0);
 
                               MainWidget.currentHomeStatus = MainWidget
                                   .databaseData['CategoriesModules'][index]

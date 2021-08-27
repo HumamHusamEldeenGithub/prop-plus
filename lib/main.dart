@@ -210,12 +210,21 @@ class _MainWidgetState extends State<MainWidget> {
 
   Future<void> changeCategory(String type,int pageIndex) async {
     emptyPropertiesMap();
+    if (pageIndex ==0) {
+      MainWidget.databaseData['PropertyModules'] =
+      await HTTP_Requests.getRecommendedPropertiesWithType(type, pageIndex);
 
-    MainWidget.databaseData['PropertyModules'] =
-        await HTTP_Requests.getRecommendedPropertiesWithType(type,pageIndex);
+      MainWidget.databaseData['TrendingModules'] =
+      await HTTP_Requests.getTrendingProperties();
+    }
+    else {
 
-    MainWidget.databaseData['TrendingModules'] =
-        await HTTP_Requests.getTrendingProperties();
+      var list = await HTTP_Requests.getRecommendedPropertiesWithType(type, pageIndex) ;
+      list.forEach((element) {MainWidget.databaseData['PropertyModules'].add(element); });
+      print(MainWidget.databaseData['PropertyModules'].length);
+      MainWidget.databaseData['TrendingModules'] =
+      await HTTP_Requests.getTrendingProperties();
+    }
 
     _homeGlobalKey.currentState?.refreshPage();
   }
