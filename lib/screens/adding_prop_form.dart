@@ -360,7 +360,7 @@ class _PropertyInputFormState extends State<PropertyInputForm> {
                         onPressed: () async {
                           final form = formKey.currentState;
                           form.save();
-                          LoadingDialog.showLoadingDialog(context, submitForm(), Text("You've successfully submitted your property!"),Text("There was a problem submitting your property, please try again"), (){Navigator.popUntil(context, ModalRoute.withName('/homeScreen'));});
+                          LoadingDialog.showLoadingDialog(context, submitForm(), Text("You've successfully submitted your property!"),Text("There was a problem submitting your property, please try again"), (){Navigator.of(context).popUntil((route) => route.isFirst);});
                         },
                       ),
                     ),

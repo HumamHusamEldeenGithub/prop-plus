@@ -447,7 +447,7 @@ class HTTP_Requests {
   }
 
   static Future<dynamic> deleteBooking(
-      String bookingId, String serviceId) async {
+      String bookingId) async {
     final response = await http.delete(
       Uri.parse(
           'https://propplus-production.herokuapp.com/booking/'+bookingId),
