@@ -140,13 +140,13 @@ class _BookingCardState extends State<BookingCard> {
                                     child: TextButton(
                                       onPressed: (){
                                         LoadingDialog.showLoadingDialog(
-                                            context,
-                                            cancelBooking(),
-                                            Text("You've canceled the booking."),
-                                            Text("A problem occured while canceling the booking."),
-                                                (){
-                                              Navigator.pop(context);
-                                            }
+                                          context,
+                                          cancelBooking(),
+                                          Text("You've canceled the booking."),
+                                          Text("A problem occured while canceling the booking."),
+                                              (){
+                                            Navigator.pop(context);
+                                          }
                                         );
                                       },
                                       child: Text("CANCEL",style: TextStyle(color: Colors.red)),
@@ -154,7 +154,15 @@ class _BookingCardState extends State<BookingCard> {
                                   ),
                                 ],
                               ),
-                            ): SizedBox(),
+                            ): Padding(
+                              padding: const EdgeInsets.only(top: 2.0),
+                              child: TextButton(
+                                onPressed: (){
+                                  //LoadingDialog.showRatingDialog()
+                                },
+                                child: Text("RATE",style: TextStyle(color: Colors.yellow[700]),)
+                              ),
+                            ),
                           ]
                         ),
                       ],

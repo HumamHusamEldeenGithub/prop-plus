@@ -27,8 +27,19 @@ class _ReceiptScreenState extends State<ReceiptScreen> {
     super.initState();
   }
   Future makeBookingProcess()async{
-    dynamic bookingId = HTTP_Requests.sendBookRequest(bookingModule.serviceModule.service_id.toString(), bookingModule.fromDate.toString(), bookingModule.toDate.toString());
-    await HTTP_Requests.sendPaymentRequest(bookingId, 0, 'Cash') ;
+    dynamic bookingId = await HTTP_Requests.sendBookRequest(bookingModule.serviceModule.service_id.toString(), bookingModule.fromDate.toString(), bookingModule.toDate.toString());
+    double totalPrice = 0;
+    for(int i = 0 ;i <= bookingModule.toDate.difference(bookingModule.fromDate).inDays; i++ ){
+      totalPrice += bookingModule.serviceModule.price;
+    }
+    try {
+      await HTTP_Requests.sendPaymentRequest(
+          bookingId.toString(), totalPrice, 0.toString());
+    }
+    catch(e){
+      await HTTP_Requests.deleteBooking(bookingId.toString());
+      throw e;
+    }
   }
 
   Future<void> sendBooking() async{

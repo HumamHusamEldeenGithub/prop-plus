@@ -638,14 +638,14 @@ class HTTP_Requests {
     }
   }
   static Future<void> sendPaymentRequest(
-      String bookingId,  int amount,String type) async {
+      String bookingId,  double amount,String type) async {
     final response = await http.post(
       Uri.parse('https://propplus-production.herokuapp.com/payments'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
         'Authorization': authorizationKey,
       },
-      body: jsonEncode(<String, String>{
+      body: jsonEncode(<String, dynamic>{
         'booking_id': bookingId,
         'amount': amount.toString(),
         'payment_type': type,
