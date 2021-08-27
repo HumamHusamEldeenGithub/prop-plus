@@ -38,11 +38,11 @@ class HTTP_Requests {
     return item;
   }
 
-  static Future<List> getRecommendedProperties() async {
+  static Future<List> getRecommendedProperties(int pageIndex) async {
     http.Response response;
     response = await http.get(
       Uri.parse(
-        "https://propplus-production.herokuapp.com/properties/home",
+        "https://propplus-production.herokuapp.com/properties/home/"+pageIndex.toString()
       ),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
@@ -64,7 +64,7 @@ class HTTP_Requests {
     return list;
   }
 
-  static Future<List> getRecommendedPropertiesWithType(String type) async {
+  static Future<List> getRecommendedPropertiesWithType(String type,int pageIndex) async {
     if (type == "Top Rated") type = "top_rated";
 
     if (type == "Best Price") type = "best_price";
@@ -72,7 +72,7 @@ class HTTP_Requests {
     http.Response response;
     response = await http.get(
       Uri.parse(
-        "https://propplus-production.herokuapp.com/properties/type/" + type,
+        "https://propplus-production.herokuapp.com/properties/type/" + type+"/"+pageIndex.toString(),
       ),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
@@ -404,6 +404,26 @@ class HTTP_Requests {
       // If the server did not return a 201 CREATED response,
       // then throw an exception.
       throw Exception('Failed to delete favorite service.');
+    }
+  }
+
+  static Future<dynamic> deleteService(
+      String serviceId) async {
+    final response = await http.delete(
+      Uri.parse(
+          'https://propplus-production.herokuapp.com/services/'),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        'Authorization': authorizationKey,
+      },
+    );
+    if (response.statusCode == 201 || response.statusCode == 200) {
+      // If the server did return a 201 CREATED response,
+      // then parse the JSON.
+    } else {
+      // If the server did not return a 201 CREATED response,
+      // then throw an exception.
+      throw Exception('Failed to delete service.');
     }
   }
 

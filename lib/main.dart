@@ -167,11 +167,11 @@ class _MainWidgetState extends State<MainWidget> {
         });
   }
 
-  Future<void> getDataFromDBForHome(bool refresh) async {
+  Future<void> getDataFromDBForHome(bool refresh,int pageIndex) async {
 
     if (refresh) emptyPropertiesMap();
     MainWidget.databaseData['PropertyModules'] =
-        await HTTP_Requests.getRecommendedProperties();
+        await HTTP_Requests.getRecommendedProperties(pageIndex);
 
     MainWidget.databaseData['TrendingModules'] =
         await HTTP_Requests.getTrendingProperties();
@@ -199,11 +199,11 @@ class _MainWidgetState extends State<MainWidget> {
     _bookingsGlobalKey.currentState?.finishLoading();
   }
 
-  Future<void> changeCategory(String type) async {
+  Future<void> changeCategory(String type,int pageIndex) async {
     emptyPropertiesMap();
 
     MainWidget.databaseData['PropertyModules'] =
-        await HTTP_Requests.getRecommendedPropertiesWithType(type);
+        await HTTP_Requests.getRecommendedPropertiesWithType(type,pageIndex);
 
     MainWidget.databaseData['TrendingModules'] =
         await HTTP_Requests.getTrendingProperties();
@@ -220,7 +220,7 @@ class _MainWidgetState extends State<MainWidget> {
   }
 
   Future initializeFromDB() async{
-    getDataFromDBForHome(false);
+    getDataFromDBForHome(false,0);
     getDataFromDBForFavorite();
     getDataFromDBForBookings();
   }
@@ -233,7 +233,7 @@ class _MainWidgetState extends State<MainWidget> {
     initializeFromDB();
     Screens = [
       Home(
-        parentFunction: getDataFromDBForHome,
+        getData: getDataFromDBForHome,
         changeCategory: changeCategory,
         key: _homeGlobalKey,
       ),

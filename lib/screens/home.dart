@@ -13,23 +13,26 @@ import 'package:prop_plus/main.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 class Home extends StatefulWidget {
-  Function parentFunction;
-  Function changeCategory ;
-  Home({this.parentFunction , this.changeCategory, Key key}) : super(key: key);
+  Function getData;
+  Function changeCategory;
+  Home({this.getData, this.changeCategory, Key key}) : super(key: key);
   @override
   HomeState createState() => HomeState();
 }
 
 class HomeState extends State<Home> {
+  int pageIndex = 0;
   RefreshController _refreshController =
       RefreshController(initialRefresh: false);
 
   void _onRefresh() async {
     // monitor network fetch
+    pageIndex =0;
+print(MainWidget.currentHomeStatus) ;
     if (MainWidget.currentHomeStatus == "All")
-    await widget.parentFunction();
+      await widget.getData(false,pageIndex);
     else
-      await widget.changeCategory(MainWidget.currentHomeStatus);
+      await widget.changeCategory(MainWidget.currentHomeStatus,pageIndex);
     // if failed,use refreshFailed()
     _refreshController.refreshCompleted();
     refreshPage();
@@ -37,15 +40,19 @@ class HomeState extends State<Home> {
 
   void _onLoading() async {
     // monitor network fetch
-    await Future.delayed(Duration(milliseconds: 1000));
+    pageIndex++ ;
+
+    if (MainWidget.currentHomeStatus == "All")
+      await widget.getData(false , pageIndex);
+    else
+      await widget.changeCategory(MainWidget.currentHomeStatus,pageIndex);
     // if failed,use loadFailed(),if no data return,use LoadNodata()
     if (mounted) setState(() {});
     _refreshController.loadComplete();
   }
 
   void refreshPage() {
-    setState(() {
-    });
+    setState(() {});
   }
 
   @override
@@ -56,6 +63,7 @@ class HomeState extends State<Home> {
 
   @override
   Widget build(BuildContext context) {
+    print(pageIndex);
     double _width = MediaQuery.of(context).size.width;
     double _height = MediaQuery.of(context).size.height;
     return SmartRefresher(
@@ -119,16 +127,16 @@ class HomeState extends State<Home> {
                               MainWidget
                                   .databaseData['CategoriesModules'][index]
                                   .isSelected = true;
-                              if (index==0)
-                                widget.parentFunction(true);
-
+                              if (index == 0)
+                                widget.getData(true,0);
                               else
                                 widget.changeCategory(MainWidget
-                                    .databaseData['CategoriesModules'][index].title) ;
+                                    .databaseData['CategoriesModules'][index]
+                                    .title);
 
                               MainWidget.currentHomeStatus = MainWidget
-                                  .databaseData['CategoriesModules'][index].title ;
-
+                                  .databaseData['CategoriesModules'][index]
+                                  .title;
                             });
                           },
                           child: CategoryRadioButton(
@@ -166,13 +174,17 @@ class HomeState extends State<Home> {
                 ),
               ),
             ),
-            (MainWidget.databaseData['TrendingModules'] != null && MainWidget.databaseData['TrendingModules'].isNotEmpty)
+            (MainWidget.databaseData['TrendingModules'] != null &&
+                    MainWidget.databaseData['TrendingModules'].isNotEmpty)
                 ? SingleChildScrollView(
                     scrollDirection: Axis.horizontal,
                     child: Row(
                       children: MainWidget.databaseData['TrendingModules']
                           ?.map((card) {
-                        return TrendingCard(module: card,refreshFunction: refreshPage,);
+                        return TrendingCard(
+                          module: card,
+                          refreshFunction: refreshPage,
+                        );
                       })?.toList(),
                     ))
                 : SingleChildScrollView(
@@ -187,13 +199,17 @@ class HomeState extends State<Home> {
                 ),
               ),
             ),
-            (MainWidget.databaseData['PropertyModules'] != null && MainWidget.databaseData['PropertyModules'].isNotEmpty)
+            (MainWidget.databaseData['PropertyModules'] != null &&
+                    MainWidget.databaseData['PropertyModules'].isNotEmpty)
                 ? Center(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: MainWidget.databaseData['PropertyModules']
                           .map((card) {
-                        return RecommendedCard(module: card,refreshFunction: refreshPage,);
+                        return RecommendedCard(
+                          module: card,
+                          refreshFunction: refreshPage,
+                        );
                       }).toList(),
                     ),
                   )

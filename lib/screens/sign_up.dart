@@ -24,38 +24,40 @@ class _SignUpScreenState extends State<SignUpScreen> {
     final _height = MediaQuery.of(context).size.height;
     final _width = MediaQuery.of(context).size.width;
     return Scaffold(
-      body: Container(
-        height: _height,
-        width: _width,
-        color: primaryColor,
-        child: SafeArea(
-          child: Column(
-            children: [
-              SizedBox(
-                height: _height * 0.025,
-              ),
-              showAlert(),
-              AutoSizeText(
-                "Create An Account",
-                maxLines: 1,
-                minFontSize: 30,
-                style: TextStyle(
-                  color: Colors.white,
+      body: SingleChildScrollView(
+        child: Container(
+          height: _height,
+          width: _width,
+          color: primaryColor,
+          child: SafeArea(
+            child: Column(
+              children: [
+                SizedBox(
+                  height: _height * 0.025,
                 ),
-              ),
-              SizedBox(
-                height: _height * 0.05,
-              ),
-              Padding(
-                padding: const EdgeInsets.all(12.0),
-                child: Form(
-                  key: formKey,
-                  child: Column(
-                    children: buildInputsFields() + buildButtons(),
+                showAlert(),
+                AutoSizeText(
+                  "Create An Account",
+                  maxLines: 1,
+                  minFontSize: 30,
+                  style: TextStyle(
+                    color: Colors.white,
                   ),
                 ),
-              ),
-            ],
+                SizedBox(
+                  height: _height * 0.05,
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(12.0),
+                  child: Form(
+                    key: formKey,
+                    child: Column(
+                      children: buildInputsFields() + buildButtons(),
+                    ),
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       ),

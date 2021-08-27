@@ -32,34 +32,37 @@ class _SignInScreenState extends State<SignInScreen> {
     final _width = MediaQuery.of(context).size.width;
 
     return Scaffold(
-      body: Container(
-        height: _height,
-        width: _width,
-        color: primaryColor,
-        child: Column(
-          children: [
-            SizedBox(
-              height: _height * 0.1,
-            ),
-            Text(
-              "SignIn",
-              style: TextStyle(
-                fontSize: 30,
-                color: Colors.white,
+      body: SingleChildScrollView(
+
+        child: Container(
+          height: _height,
+          width: _width,
+          color: primaryColor,
+          child: Column(
+            children: [
+              SizedBox(
+                height: _height * 0.1,
               ),
-            ),
-            showAlert(),
-            SizedBox(
-              height: _height * 0.05,
-            ),
-            Padding(
-              padding: const EdgeInsets.all(12.0),
-              child: Form(
-                key: formKey,
-                child: Column(children: buildInputsFields() + buildButtons()),
+              Text(
+                "SignIn",
+                style: TextStyle(
+                  fontSize: 30,
+                  color: Colors.white,
+                ),
               ),
-            ),
-          ],
+              showAlert(),
+              SizedBox(
+                height: _height * 0.05,
+              ),
+              Padding(
+                padding: const EdgeInsets.all(12.0),
+                child: Form(
+                  key: formKey,
+                  child: Column(children: buildInputsFields() + buildButtons()),
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );

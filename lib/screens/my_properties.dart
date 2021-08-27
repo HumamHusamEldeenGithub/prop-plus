@@ -23,7 +23,6 @@ class _MyPropertiesState extends State<MyProperties> {
   List<MainModule> userPropertyModules = <MainModule>[];
 
   Future<List<PropertyModule>> getUserPropertiesFromDB() async {
-    print('ENTER MY PROPERTIES');
     var modules = await HTTP_Requests.getUserProperties(
         MainWidget.userData['CurrentUser'].dbId);
     return modules;
