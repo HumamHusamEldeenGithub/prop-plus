@@ -446,6 +446,26 @@ class HTTP_Requests {
     }
   }
 
+  static Future<dynamic> deleteBooking(
+      String bookingId, String serviceId) async {
+    final response = await http.delete(
+      Uri.parse(
+          'https://propplus-production.herokuapp.com/booking/'+bookingId),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        'Authorization': authorizationKey,
+      },
+    );
+    if (response.statusCode == 201 || response.statusCode == 200) {
+      // If the server did return a 201 CREATED response,
+      // then parse the JSON.
+    } else {
+      // If the server did not return a 201 CREATED response,
+      // then throw an exception.
+      throw Exception('Failed to delete favorite service.');
+    }
+  }
+
   static Future<void> addNewServiceToDB(ServiceModule module) async {
     final response = await http.post(
       Uri.parse('https://propplus-production.herokuapp.com/services'),
