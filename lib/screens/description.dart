@@ -37,7 +37,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
     var urls =
         await HTTP_Requests.getAllImagesForService(prevModule.service_id);
     serviceModule.imageUrls = urls;
-    favorite = MainWidget.databaseData['FavouriteServices']
+    favorite = MainWidget.userData['CurrentUser'].favouriteServices
         .contains(serviceModule.service_id);
     return serviceModule;
   }
@@ -68,12 +68,12 @@ class _DetailsScreenState extends State<DetailsScreen> {
       await HTTP_Requests.addNewFavourite(
           locater<UserController>().currentUser.dbId.toString(),
           serviceModule.service_id.toString());
-      MainWidget.databaseData['FavouriteServices'].add(serviceModule.service_id);
+      MainWidget.userData['CurrentUser'].favouriteServices.add(serviceModule.service_id);
     } else {
       await HTTP_Requests.deleteFavourite(
           locater<UserController>().currentUser.dbId.toString(),
           serviceModule.service_id.toString());
-      MainWidget.databaseData['FavouriteServices'].remove(serviceModule.service_id);
+      MainWidget.userData['CurrentUser'].favouriteServices.remove(serviceModule.service_id);
     }
     setState(() {
       favorite = !favorite;

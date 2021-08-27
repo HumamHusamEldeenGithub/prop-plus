@@ -39,10 +39,28 @@ import 'modules/user_module.dart';
 */
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  runApp(Splash());
   await Firebase.initializeApp();
   await setupServices();
   runApp(MyApp());
 }
+
+class Splash extends StatelessWidget {
+  const Splash({Key key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      home: Scaffold(
+        body: Center(
+          child:
+          Text("SPLASH")
+        ),
+      ),
+    );
+  }
+}
+
 
 class MyApp extends StatelessWidget {
   @override

@@ -7,6 +7,7 @@ import 'package:prop_plus/modules/main_module.dart';
 import 'package:prop_plus/modules/property_module.dart';
 import 'package:prop_plus/modules/property_to_approve_model.dart';
 import 'package:prop_plus/modules/service_module.dart';
+import 'package:prop_plus/modules/user_module.dart';
 import 'package:prop_plus/modules/user_properties_module.dart';
 import 'package:prop_plus/services/locater.dart';
 import 'package:prop_plus/services/user_controller.dart';
@@ -521,7 +522,7 @@ class HTTP_Requests {
     }
   }
 
-  static Future<int> getUserId(String firebaseId) async {
+  static Future getUserByFirebase(String firebaseId) async {
     http.Response response;
     response = await http.get(
       Uri.parse("https://propplus-production.herokuapp.com/users/ByFirebase/" +
@@ -531,9 +532,10 @@ class HTTP_Requests {
         'Authorization': authorizationKey,
       },
     );
+
     var data = jsonDecode(response.body);
-    print(data);
-    return data['id'];
+    UserModule userModule = UserModule.fromJson(data);
+    return userModule;
   }
 
   static Future<bool> sendApprovalRequest(PropertyToApprove module) async {
@@ -744,7 +746,9 @@ class HTTP_Requests {
       throw Exception('Failed to post to Favourite table  .');
     }
   }
-  static Future getUsernameById(String userId) async {
+
+
+  static Future getUserById(String userId) async {
     http.Response response;
     response = await http.get(
       Uri.parse("https://propplus-production.herokuapp.com/users/" +
@@ -754,34 +758,10 @@ class HTTP_Requests {
         'Authorization': authorizationKey,
       },
     );
+
     var data = jsonDecode(response.body);
-    return data['name'].toString();
-  }
-  static Future getAvatarUrlById(String userId) async {
-    http.Response response;
-    response = await http.get(
-      Uri.parse("https://propplus-production.herokuapp.com/users/" +
-          userId),
-      headers: <String, String>{
-        'Content-Type': 'application/json; charset=UTF-8',
-        'Authorization': authorizationKey,
-      },
-    );
-    var data = jsonDecode(response.body);
-    return data['avatarURL'].toString();
-  }
-  static Future getPhoneNumberById(String userId) async {
-    http.Response response;
-    response = await http.get(
-      Uri.parse("https://propplus-production.herokuapp.com/users/" +
-          userId),
-      headers: <String, String>{
-        'Content-Type': 'application/json; charset=UTF-8',
-        'Authorization': authorizationKey,
-      },
-    );
-    var data = jsonDecode(response.body);
-    return data['phone'].toString();
+    UserModule userModule = UserModule.fromJson(data);
+    return userModule;
   }
 
   ////////////////////SEND/////////////////////////

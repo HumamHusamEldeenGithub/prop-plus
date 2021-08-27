@@ -55,7 +55,6 @@ class _EditProfilePageState extends State<EditProfilePage> {
   @override
   Widget build(BuildContext context) {
     currentUser = MainWidget.userData['CurrentUser'];
-    print("HEYEYERY "+ currentUser.avatarURl.toString());
     avatarURL = currentUser.avatarURl!=null ? currentUser.avatarURl
     : "https://thumbs.dreamstime.com/b/creative-vector-illustration-default-avatar-profile-placeholder-isolated-background-art-design-grey-photo-blank-template-mo-107388687.jpg";
     setStateCallback = ModalRoute.of(context).settings.arguments;
