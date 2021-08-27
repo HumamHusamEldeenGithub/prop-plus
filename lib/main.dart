@@ -25,6 +25,7 @@ import 'package:prop_plus/services/provider.dart';
 import 'package:flutter_search_bar/flutter_search_bar.dart';
 import 'package:prop_plus/screens/description.dart';
 import 'package:prop_plus/services/user_controller.dart';
+import 'package:prop_plus/shared/AnimatingSplash.dart';
 import 'dart:developer' as developer;
 import 'dart:async';
 import 'package:prop_plus/shared/http_requests.dart';
@@ -38,28 +39,27 @@ import 'modules/user_module.dart';
 }
 */
 Future<void> main() async {
-  WidgetsFlutterBinding.ensureInitialized();
-  runApp(Splash());
+  runApp(SplashScreen());
+
   await Firebase.initializeApp();
   await setupServices();
   runApp(MyApp());
 }
 
-class Splash extends StatelessWidget {
-  const Splash({Key key}) : super(key: key);
+class SplashScreen extends StatelessWidget {
 
+  GlobalKey<AnimatingSplashState> animatingKey = new GlobalKey<AnimatingSplashState>();
   @override
   Widget build(BuildContext context) {
+    Future.delayed(Duration(seconds: 1),() => animatingKey.currentState.animate());
     return MaterialApp(
       home: Scaffold(
-        body: Center(
-          child:
-          Text("SPLASH")
-        ),
-      ),
+        body: AnimatingSplash(key: animatingKey)
+      )
     );
   }
 }
+
 
 
 class MyApp extends StatelessWidget {
