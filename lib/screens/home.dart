@@ -15,24 +15,25 @@ import 'package:pull_to_refresh/pull_to_refresh.dart';
 class Home extends StatefulWidget {
   Function getData;
   Function changeCategory;
+  int pageIndex = 0;
   Home({this.getData, this.changeCategory, Key key}) : super(key: key);
   @override
   HomeState createState() => HomeState();
 }
 
 class HomeState extends State<Home> {
-  int pageIndex = 0;
+
   RefreshController _refreshController =
       RefreshController(initialRefresh: false);
 
   void _onRefresh() async {
     // monitor network fetch
-    pageIndex =0;
+    widget.pageIndex =0;
 print(MainWidget.currentHomeStatus) ;
     if (MainWidget.currentHomeStatus == "All")
-      await widget.getData(false,pageIndex);
+      await widget.getData(false,widget.pageIndex);
     else
-      await widget.changeCategory(MainWidget.currentHomeStatus,pageIndex);
+      await widget.changeCategory(MainWidget.currentHomeStatus,widget.pageIndex);
     // if failed,use refreshFailed()
     _refreshController.refreshCompleted();
     refreshPage();
@@ -40,12 +41,13 @@ print(MainWidget.currentHomeStatus) ;
 
   void _onLoading() async {
     // monitor network fetch
-    pageIndex++ ;
+    widget.pageIndex++ ;
 
     if (MainWidget.currentHomeStatus == "All")
-      await widget.getData(false , pageIndex);
-    else
-      await widget.changeCategory(MainWidget.currentHomeStatus,pageIndex);
+      await widget.getData(false , widget.pageIndex);
+    else {
+     await widget.changeCategory(MainWidget.currentHomeStatus, widget.pageIndex);
+    }
     // if failed,use loadFailed(),if no data return,use LoadNodata()
     if (mounted) setState(() {});
     _refreshController.loadComplete();
@@ -63,7 +65,6 @@ print(MainWidget.currentHomeStatus) ;
 
   @override
   Widget build(BuildContext context) {
-    print(pageIndex);
     double _width = MediaQuery.of(context).size.width;
     double _height = MediaQuery.of(context).size.height;
     return SmartRefresher(

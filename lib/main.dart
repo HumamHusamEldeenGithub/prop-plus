@@ -209,8 +209,9 @@ class _MainWidgetState extends State<MainWidget> {
   }
 
   Future<void> changeCategory(String type,int pageIndex) async {
-    emptyPropertiesMap();
+
     if (pageIndex ==0) {
+      emptyPropertiesMap();
       MainWidget.databaseData['PropertyModules'] =
       await HTTP_Requests.getRecommendedPropertiesWithType(type, pageIndex);
 
@@ -221,7 +222,6 @@ class _MainWidgetState extends State<MainWidget> {
 
       var list = await HTTP_Requests.getRecommendedPropertiesWithType(type, pageIndex) ;
       list.forEach((element) {MainWidget.databaseData['PropertyModules'].add(element); });
-      print(MainWidget.databaseData['PropertyModules'].length);
       MainWidget.databaseData['TrendingModules'] =
       await HTTP_Requests.getTrendingProperties();
     }
