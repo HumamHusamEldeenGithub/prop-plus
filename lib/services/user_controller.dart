@@ -10,17 +10,17 @@ import 'dart:developer' as developer;
 class UserController{
   UserModule _currentUser;
   AuthService _authService =  locater.get<AuthService>();
-  Future init;
   StorageRepo _storageRepo = locater.get<StorageRepo>();
 
   UserController(){
-    init = InitializeUser();
+    InitializeUser();
     //getUserDBId() ;
   }
 
   Future<UserModule>InitializeUser() async{
      _currentUser = await _authService.getUserModule();
      _currentUser.dbId = await HTTP_Requests.getUserId(_currentUser.uid);
+     _currentUser.favourite_services = await HTTP_Requests.getFavouriteServicesById(_currentUser.dbId);
      _currentUser.userName=await HTTP_Requests.getUsernameById(_currentUser.dbId.toString());
      _currentUser.avatarURl =await HTTP_Requests.getAvatarUrlById(_currentUser.dbId.toString());
      _currentUser.phoneNumber = await HTTP_Requests.getPhoneNumberById(_currentUser.dbId.toString());
@@ -62,6 +62,10 @@ class UserController{
     _currentUser.dbId = dbId ;
     _currentUser.userName=await HTTP_Requests.getUsernameById(dbId.toString());
     return _currentUser.uid;
+  }
+
+  Future getUserFavourites() async{
+    return await HTTP_Requests.getFavouriteServicesWithDetails(_currentUser.dbId);
   }
 
   signOut(){

@@ -10,12 +10,13 @@ import 'package:prop_plus/services/locater.dart';
 import 'package:prop_plus/services/user_controller.dart';
 
 import 'http_requests.dart';
+import 'loading_dialog.dart';
 import 'loading_widget.dart';
 
 
 
 class FavouriteCard extends StatefulWidget {
-  Function refreshFunction ;
+  final refreshFunction ;
   final MainModule module ;
   FavouriteCard({this.refreshFunction,Key key,this.module}) : super(key: key);
 
@@ -26,6 +27,19 @@ class FavouriteCard extends StatefulWidget {
 class _FavouriteCardState extends State<FavouriteCard> {
 
   bool favorite = true;
+
+  Future<void> onTapFavorite() async{
+    await HTTP_Requests.deleteFavourite(
+      locater<UserController>()
+          .currentUser
+          .dbId
+          .toString(),
+      widget.module.service_id.toString());
+    setState(() {
+      favorite = !favorite;
+      widget.refreshFunction();
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -122,31 +136,7 @@ class _FavouriteCardState extends State<FavouriteCard> {
                                   Icons.favorite_border,
                                   size: 20,
                                 ),
-                                onPressed: ()async {
-                                  if (!favorite) {
-                                    Loading.showLoaderDialog(context, "Adding property to favorite");
-                                    await HTTP_Requests.addNewFavourite(
-                                        locater<UserController>()
-                                            .currentUser
-                                            .dbId
-                                            .toString(),
-                                        widget.module.service_id.toString());
-
-                                  } else {
-                                    Loading.showLoaderDialog(context, "Removing property from favorite");
-                                    await HTTP_Requests.deleteFavourite(
-                                        locater<UserController>()
-                                            .currentUser
-                                            .dbId
-                                            .toString(),
-                                        widget.module.service_id.toString());
-                                  }
-                                  setState(() {
-                                    favorite = !favorite;
-                                    Navigator.pop(context);
-                                    widget.refreshFunction();
-                                  });
-                                },
+                                onPressed: () {LoadingDialog.showSelfDestroyedDialog(context, onTapFavorite());}
                               ),
                             ),
                           ],

@@ -37,4 +37,22 @@ class LoadingDialog {
       });
     });
   }
+
+  static showSelfDestroyedDialog(BuildContext context,Future future) async{
+    showDialog(context: context, builder: (context){
+      return AlertDialog(
+        content: Container(
+          height: 100,
+          child: Center(child: CircularProgressIndicator())
+        ),
+      );
+    });
+    try {
+      await future;
+    }
+    catch(E){
+      print(E);
+    }
+    Navigator.pop(context);
+  }
 }

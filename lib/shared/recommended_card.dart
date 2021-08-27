@@ -9,10 +9,13 @@ import 'package:prop_plus/services/user_controller.dart';
 import 'package:prop_plus/shared/http_requests.dart';
 import 'package:prop_plus/shared/loading_widget.dart';
 
+import 'loading_dialog.dart';
+
 class RecommendedCard extends StatefulWidget {
   final MainModule module;
 
-  const RecommendedCard({Key key, this.module}) : super(key: key);
+  final refreshFunction ;
+  const RecommendedCard({Key key, this.module,this.refreshFunction}) : super(key: key);
 
   @override
   _RecommendedCardState createState() => _RecommendedCardState();
@@ -20,6 +23,28 @@ class RecommendedCard extends StatefulWidget {
 
 class _RecommendedCardState extends State<RecommendedCard> {
   bool favorite = false;
+
+  Future<void> onTapFavorite() async {
+    if (!favorite) {
+      await HTTP_Requests.addNewFavourite(
+          locater<UserController>().currentUser.dbId.toString(),
+          widget.module.service_id.toString());
+    } else {
+      await HTTP_Requests.deleteFavourite(
+          locater<UserController>().currentUser.dbId.toString(),
+          widget.module.service_id.toString());
+    }
+    setState(() {
+      favorite = !favorite;
+      widget.refreshFunction();
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    favorite = locater.get<UserController>().currentUser.favourite_services.contains(widget.module.service_id);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -129,40 +154,18 @@ class _RecommendedCardState extends State<RecommendedCard> {
                   ),
                   child: Center(
                       child: IconButton(
-                    icon: favorite
-                        ? Icon(
-                            Icons.favorite,
-                            color: MainTheme.mainColor,
-                          )
-                        : Icon(
-                            Icons.favorite_border,
-                          ),
-                    onPressed: () async {
-                      if (!favorite) {
-                        Loading.showLoaderDialog(
-                            context, "Adding property to favorite");
-                        await HTTP_Requests.addNewFavourite(
-                            locater<UserController>()
-                                .currentUser
-                                .dbId
-                                .toString(),
-                            widget.module.service_id.toString());
-                      } else {
-                        Loading.showLoaderDialog(
-                            context, "Removing property from favorite");
-                        await HTTP_Requests.deleteFavourite(
-                            locater<UserController>()
-                                .currentUser
-                                .dbId
-                                .toString(),
-                            widget.module.service_id.toString());
-                      }
-                      setState(() {
-                        favorite = !favorite;
-                        Navigator.pop(context);
-                      });
-                    },
-                  )),
+                          icon: favorite
+                              ? Icon(
+                                  Icons.favorite,
+                                  color: MainTheme.mainColor,
+                                )
+                              : Icon(
+                                  Icons.favorite_border,
+                                ),
+                          onPressed: () {
+                            LoadingDialog.showSelfDestroyedDialog(
+                                context, onTapFavorite());
+                          })),
                 )),
           ]),
         ),

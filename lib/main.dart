@@ -38,7 +38,7 @@ import 'package:prop_plus/shared/http_requests.dart';
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
-  setupServices();
+  await setupServices();
   runApp(MyApp());
 }
 
@@ -146,10 +146,11 @@ class _MainWidgetState extends State<MainWidget> {
 
   Future<void> getDataFromDBForFavorite() async {
     MainWidget.databaseData['FavouriteModules'] =
-        await HTTP_Requests.getFavouriteServices(
+        await HTTP_Requests.getFavouriteServicesWithDetails(
             locater<UserController>().currentUser.dbId);
 
     _favouritesGlobalKey.currentState?.refreshPage();
+    _favouritesGlobalKey.currentState?.finishLoading();
   }
 
   Future<void> getDataFromDBForBookings() async {
@@ -158,6 +159,7 @@ class _MainWidgetState extends State<MainWidget> {
             locater<UserController>().currentUser.dbId);
 
     _bookingsGlobalKey.currentState?.refreshPage();
+    _bookingsGlobalKey.currentState?.finishLoading();
   }
 
   Future<void> changeCategory(String type) async {
@@ -180,14 +182,19 @@ class _MainWidgetState extends State<MainWidget> {
     _homeGlobalKey.currentState?.refreshPage();
   }
 
+  Future initializeFromDB() async{
+    print(locater.get<UserController>().currentUser.favourite_services);
+    getDataFromDBForHome(false);
+    getDataFromDBForFavorite();
+    getDataFromDBForBookings();
+  }
+
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     _MyHomePageState();
-    getDataFromDBForHome(false);
-    getDataFromDBForFavorite();
-    getDataFromDBForBookings();
+    initializeFromDB();
     Screens = [
       Home(
         parentFunction: getDataFromDBForHome,

@@ -18,6 +18,8 @@ class Favourites extends StatefulWidget {
 }
 
 class FavouritesState extends State<Favourites> {
+
+  bool _finishedLoading;
   RefreshController _refreshController =
       RefreshController(initialRefresh: false);
 
@@ -41,10 +43,15 @@ class FavouritesState extends State<Favourites> {
     setState(() {});
   }
 
+  void finishLoading(){
+    _finishedLoading = true;
+  }
+
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
+    _finishedLoading = false;
   }
 
   @override
@@ -79,16 +86,22 @@ class FavouritesState extends State<Favourites> {
         onLoading: _onLoading,
         child: SingleChildScrollView(
           scrollDirection: Axis.vertical,
-          child: (MainWidget.databaseData['FavouriteModules'] != null&& MainWidget.databaseData['FavouriteModules'].isNotEmpty)
+          child: (_finishedLoading)
               ? Center(
-                  child: Column(
+                  child: (MainWidget.databaseData['FavouriteModules'] != null&& MainWidget.databaseData['FavouriteModules'].isNotEmpty) ?Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children:
                         MainWidget.databaseData['FavouriteModules'].map((card) {
                       return FavouriteCard(
                           refreshFunction: widget.parentFunction, module: card);
                     }).toList(),
-                  ),
+                  ):
+                  Center(
+                    child: Padding(
+                      padding: EdgeInsets.only(top: 40),
+                      child: Text("You have no favourite services yet!"),
+                    ),
+                  )
                 )
               : Container(
                   child: Card(

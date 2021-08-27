@@ -2,6 +2,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:prop_plus/constant/MainTheme.dart';
 import 'package:prop_plus/constant/TrendingTheme.dart';
+import 'package:prop_plus/services/locater.dart';
+import 'package:prop_plus/services/user_controller.dart';
 import 'package:prop_plus/shared/categories.dart';
 import 'package:prop_plus/shared/recommended_card.dart';
 import 'package:prop_plus/shared/shimmer_widget.dart';
@@ -40,6 +42,7 @@ class HomeState extends State<Home> {
 
   void refreshPage() {
     setState(() {});
+    print("Fav" + locater.get<UserController>().currentUser.favourite_services.toString());
   }
 
   @override
@@ -162,7 +165,7 @@ class HomeState extends State<Home> {
                     child: Row(
                       children: MainWidget.databaseData['TrendingModules']
                           ?.map((card) {
-                        return TrendingCard(module: card);
+                        return TrendingCard(module: card,refreshFunction: refreshPage,);
                       })?.toList(),
                     ))
                 : SingleChildScrollView(
@@ -183,7 +186,7 @@ class HomeState extends State<Home> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: MainWidget.databaseData['PropertyModules']
                           .map((card) {
-                        return RecommendedCard(module: card);
+                        return RecommendedCard(module: card,refreshFunction: refreshPage,);
                       }).toList(),
                     ),
                   )

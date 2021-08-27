@@ -4,9 +4,14 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:prop_plus/constant/MainTheme.dart';
 import 'package:prop_plus/constant/MainTheme.dart';
+import 'package:prop_plus/main.dart';
 import 'package:prop_plus/modules/service_module.dart';
+import 'package:prop_plus/modules/user_module.dart';
 import 'package:prop_plus/screens/all_services.dart';
 import 'package:prop_plus/screens/booking_calender_screen.dart';
+import 'package:prop_plus/services/locater.dart';
+import 'package:prop_plus/services/user_controller.dart';
+import 'package:prop_plus/shared/loading_dialog.dart';
 import 'package:prop_plus/shared/photos_slider_show.dart';
 import 'package:prop_plus/shared/shimmer_widget.dart';
 import '../shared/custom_image_view.dart';
@@ -32,6 +37,11 @@ class _DetailsScreenState extends State<DetailsScreen> {
     var urls =
         await HTTP_Requests.getAllImagesForService(prevModule.service_id);
     serviceModule.imageUrls = urls;
+    favorite = locater
+        .get<UserController>()
+        .currentUser
+        .favourite_services
+        .contains(serviceModule.service_id);
     return serviceModule;
   }
 
@@ -53,6 +63,21 @@ class _DetailsScreenState extends State<DetailsScreen> {
           });
         }
       }
+    });
+  }
+
+  Future<void> onTapFavorite() async {
+    if (!favorite) {
+      await HTTP_Requests.addNewFavourite(
+          locater<UserController>().currentUser.dbId.toString(),
+          serviceModule.service_id.toString());
+    } else {
+      await HTTP_Requests.deleteFavourite(
+          locater<UserController>().currentUser.dbId.toString(),
+          serviceModule.service_id.toString());
+    }
+    setState(() {
+      favorite = !favorite;
     });
   }
 
@@ -247,20 +272,18 @@ class _DetailsScreenState extends State<DetailsScreen> {
                               width: 0.45 * width,
                             ),
                             IconButton(
-                              icon: favorite
-                                  ? Icon(
-                                      Icons.favorite,
-                                      color: MainTheme.mainColor,
-                                    )
-                                  : Icon(
-                                      Icons.favorite_border,
-                                    ),
-                              onPressed: () {
-                                setState(() {
-                                  favorite = !favorite;
-                                });
-                              },
-                            )
+                                icon: favorite
+                                    ? Icon(
+                                        Icons.favorite,
+                                        color: MainTheme.mainColor,
+                                      )
+                                    : Icon(
+                                        Icons.favorite_border,
+                                      ),
+                                onPressed: () {
+                                  LoadingDialog.showSelfDestroyedDialog(
+                                      context, onTapFavorite());
+                                })
                           ],
                         ),
                         const SizedBox(height: 10.0),

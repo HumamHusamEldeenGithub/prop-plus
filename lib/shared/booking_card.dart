@@ -110,13 +110,16 @@ class _BookingCardState extends State<BookingCard> {
                                     DateFormat('yyyy-MM-dd')
                                         .format(widget.module.fromDate)
                                         .toString(),
-                                style: FavouriteTheme.locationTextStyle),
+                                style: FavouriteTheme.locationTextStyle
+                            ),
                             Text(
                                 "TO : " +
                                     DateFormat('yyyy-MM-dd')
                                         .format(widget.module.toDate)
                                         .toString(),
-                                style: FavouriteTheme.locationTextStyle)
+                                style: FavouriteTheme.locationTextStyle
+                            ),
+                            (DateTime.now().isBefore(widget.module.fromDate))? Text("PENDING"): SizedBox(),
                           ],
                         ),
                       ],

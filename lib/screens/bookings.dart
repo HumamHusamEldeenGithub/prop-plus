@@ -16,6 +16,7 @@ class Bookings extends StatefulWidget {
 
 class BookingsState extends State<Bookings> {
 
+  bool _finishedLoading = false;
   RefreshController _refreshController =
   RefreshController(initialRefresh: false);
 
@@ -38,6 +39,10 @@ class BookingsState extends State<Bookings> {
   }
   void refreshPage() {
     setState(() {});
+  }
+
+  void finishLoading(){
+    _finishedLoading = true;
   }
 
   @override
@@ -83,15 +88,21 @@ class BookingsState extends State<Bookings> {
         onLoading: _onLoading,
         child: SingleChildScrollView(
           scrollDirection: Axis.vertical,
-          child: (MainWidget.databaseData['BookingsModules'] != null&& MainWidget.databaseData['BookingsModules'].isNotEmpty)
+          child: (_finishedLoading)
               ? Center(
-            child: Column(
+            child: (MainWidget.databaseData['BookingsModules']!=null && MainWidget.databaseData['BookingsModules'].isNotEmpty )?Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children:
               MainWidget.databaseData['BookingsModules'].map((card) {
                 return BookingCard(module: card);
               }).toList(),
-            ),
+            ):
+                Center(
+                  child: Padding(
+                    padding: EdgeInsets.only(top: 40),
+                    child: Text("You have no bookings yet!"),
+                  ),
+                )
           )
               : Container(
               child: Card(

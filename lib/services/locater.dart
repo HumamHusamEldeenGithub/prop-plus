@@ -9,5 +9,4 @@ void setupServices(){
  locater.registerSingleton<AuthService>(AuthService());
  locater.registerSingleton<StorageRepo>(StorageRepo());
  locater.registerSingleton<UserController>(UserController());
-
 }

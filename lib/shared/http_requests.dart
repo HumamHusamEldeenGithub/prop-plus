@@ -88,7 +88,7 @@ class HTTP_Requests {
     return list;
   }
 
-  static Future<List> getFavouriteServices(int userId) async {
+  static Future<List> getFavouriteServicesWithDetails(int userId) async {
     http.Response response;
     response = await http.get(
       Uri.parse(
@@ -106,6 +106,33 @@ class HTTP_Requests {
     for (var i = 0; i < data.length; i++) {
       var property = PropertyModule.fromJson(data[i]);
       var item = MainModule.fromJson(property, data[i]);
+      try {
+        if (item != null) list.add(item);
+      } catch (e) {
+        print(e);
+      }
+    }
+    return list;
+  }
+
+  static Future<List> getFavouriteServicesById(int userId) async {
+    http.Response response;
+    response = await http.get(
+      Uri.parse(
+        "https://propplus-production.herokuapp.com/favourite_services/ByUserId/" +
+            userId.toString(),
+      ),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        'Authorization': authorizationKey,
+      },
+    );
+    var data = jsonDecode(response.body) as List;
+    List<int> list = <int>[];
+
+    for (var i = 0; i < data.length; i++) {
+
+      var item = data[i]['service_id'];
       try {
         if (item != null) list.add(item);
       } catch (e) {
@@ -415,7 +442,7 @@ class HTTP_Requests {
     } else {
       // If the server did not return a 201 CREATED response,
       // then throw an exception.
-      throw Exception('Failed to post to users table  .');
+      throw Exception('Failed to delete favorite service.');
     }
   }
 
