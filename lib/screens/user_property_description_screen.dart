@@ -3,14 +3,18 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:prop_plus/constant/MainTheme.dart';
+import 'package:prop_plus/modules/service_module.dart';
 import 'package:prop_plus/shared/custom_image_view.dart';
+import 'package:prop_plus/shared/http_requests.dart';
 import 'package:prop_plus/shared/photos_slider_show.dart';
+import 'package:prop_plus/shared/shimmer_widget.dart';
+import '../main.dart';
 import 'add_new_service_screen.dart';
+import 'all_services.dart';
 
 // ignore: camel_case_types
 class MyProperties_DetailsScreen extends StatefulWidget {
-
-  static String path = "/my_property_description" ;
+  static String path = "/my_property_description";
 
   @override
   _MyProperties_DetailsScreen createState() => _MyProperties_DetailsScreen();
@@ -19,18 +23,34 @@ class MyProperties_DetailsScreen extends StatefulWidget {
 // ignore: camel_case_types
 class _MyProperties_DetailsScreen extends State<MyProperties_DetailsScreen> {
   ScrollController _scrollController = ScrollController();
+  ServiceModule serviceModule;
   bool imageVisible = true;
   bool favorite = false;
+  bool initialized = false;
+  Function refreshFunction;
+  dynamic prevModule;
+
+  Future<ServiceModule> loadService(dynamic prevModule) async {
+    serviceModule = await HTTP_Requests.getService(
+        prevModule.service_id, prevModule.propertyModule);
+    var urls =
+        await HTTP_Requests.getAllImagesForService(prevModule.service_id);
+    serviceModule.imageUrls = urls;
+    return serviceModule;
+  }
+
   void initState() {
     super.initState();
     _scrollController.addListener(() {
-      if (_scrollController.position.userScrollDirection == ScrollDirection.forward) {
+      if (_scrollController.position.userScrollDirection ==
+          ScrollDirection.forward) {
         if (imageVisible) {
           setState(() {
             imageVisible = false;
           });
         }
-      } else if(_scrollController.position.userScrollDirection == ScrollDirection.reverse) {
+      } else if (_scrollController.position.userScrollDirection ==
+          ScrollDirection.reverse) {
         if (!imageVisible) {
           setState(() {
             imageVisible = true;
@@ -40,171 +60,435 @@ class _MyProperties_DetailsScreen extends State<MyProperties_DetailsScreen> {
     });
   }
 
-  @override
+  // @override
+  // Widget build(BuildContext context) {
+  //   double _width = MediaQuery.of(context).size.width;
+  //   double _height = MediaQuery.of(context).size.height;
+  //   dynamic module = ModalRoute.of(context).settings.arguments  ;
+  //   return Scaffold(
+  //     bottomNavigationBar: RaisedButton(
+  //
+  //       color: MainTheme.mainColor,
+  //       textColor: Colors.white,
+  //       child: Text(
+  //         "Book Now",
+  //         style: TextStyle(fontWeight: FontWeight.normal),
+  //       ),
+  //       padding: const EdgeInsets.symmetric(
+  //         vertical: 16.0,
+  //         horizontal: 32.0,
+  //       ),
+  //       onPressed: () {
+  //       },
+  //     ),
+  //     body: ListView(
+  //       controller: _scrollController,
+  //       children: [
+  //         GestureDetector(
+  //           child: AnimatedContainer(
+  //             duration: const Duration(seconds: 1),
+  //             // child: Image.network(
+  //             //   module.imgSrc,
+  //             //   fit: BoxFit.cover,
+  //             // ),
+  //             height: imageVisible == true ? 300 : 0,
+  //             width: 600,
+  //           ),
+  //           onTap: (){
+  //             Navigator.push(
+  //                 context,
+  //                 MaterialPageRoute(builder:(context) =>PhotosSlider(imagesUrls: module.imageUrls ,))
+  //             );
+  //           },
+  //         ),
+  //         Column(
+  //           mainAxisAlignment: MainAxisAlignment.start,
+  //           children: [
+  //             Container(
+  //               padding: const EdgeInsets.all(10),
+  //               decoration: BoxDecoration(
+  //                 borderRadius: BorderRadius.circular(20),
+  //                 color: Colors.white,
+  //               ),
+  //               child: Column(
+  //                 crossAxisAlignment: CrossAxisAlignment.start,
+  //                 mainAxisSize: MainAxisSize.min,
+  //                 children: [
+  //                   Row(
+  //                     children: [
+  //                       Column(
+  //                         children: [
+  //                           Padding(
+  //                             padding: const EdgeInsets.only(left: 5),
+  //                             child: Text(
+  //                               module.title,
+  //                               style: TextStyle(
+  //                                   color: Colors.black,
+  //                                   fontSize: 20.0,
+  //                                   fontWeight: FontWeight.bold),
+  //                             ),
+  //                           ),
+  //                         ],
+  //                       ),
+  //                       SizedBox(
+  //                         width: _width*0.5,
+  //                       ),
+  //                       IconButton(
+  //                         icon: favorite
+  //                             ? Icon(
+  //                           Icons.favorite,
+  //                           color: MainTheme.mainColor,
+  //                         )
+  //                             : Icon(
+  //                           Icons.favorite_border,
+  //                         ),
+  //                         onPressed: () {
+  //                           setState(() {
+  //                             favorite = !favorite;
+  //                           });
+  //                         },
+  //                       )
+  //                     ],
+  //                   ),
+  //                   const SizedBox(height: 10.0),
+  //                   Text(
+  //                     module.description,
+  //                     textAlign: TextAlign.justify,
+  //                     style: TextStyle(
+  //                         fontWeight: FontWeight.w300, fontSize: 14.0),
+  //                   ),
+  //                   const SizedBox(height: 15),
+  //                   Row(
+  //                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+  //                     children: [
+  //                       Column(
+  //                         children: [
+  //                           Text(
+  //                             "Price".toUpperCase(),
+  //                             style: TextStyle(
+  //                                 fontWeight: FontWeight.w600,
+  //                                 fontSize: 14.0),
+  //                           ),
+  //                           SizedBox(
+  //                             height: 5,
+  //                           ),
+  //                           // Text(
+  //                           //     module.price.toString()
+  //                           // )
+  //                         ],
+  //                       ),
+  //                       Column(
+  //                         children: [
+  //                           Text(
+  //                             "Rating".toUpperCase(),
+  //                             style: TextStyle(
+  //                                 fontWeight: FontWeight.w600,
+  //                                 fontSize: 14.0),
+  //                           ),
+  //                           SizedBox(
+  //                             height: 5,
+  //                           ),
+  //                           CustomStarBar(
+  //                             starSize: 12,
+  //                             starPadding: 0.6,
+  //                             rating: module.rating,
+  //                           ),
+  //                         ],
+  //                       ),
+  //                       Column(
+  //                         children: [
+  //                           Text(
+  //                             "Location".toUpperCase(),
+  //                             style: TextStyle(
+  //                                 fontWeight: FontWeight.w600,
+  //                                 fontSize: 14.0),
+  //                           ),
+  //                           SizedBox(
+  //                             height: 5,
+  //                           ),
+  //                           Text(
+  //                               module.location
+  //                           )
+  //                         ],
+  //                       )
+  //                     ],
+  //                   ),
+  //                   Center(
+  //                     child: ElevatedButton(onPressed: ()=>{
+  //                     Navigator.pushNamed(context, AddNewServiceScreen.path,arguments: module)
+  //                     }, child: Text('Add a new Service')),
+  //                   )
+  //                 ],
+  //               ),
+  //             )
+  //           ],
+  //         )
+  //       ],
+  //     ),
+  //   );
+  // }
   Widget build(BuildContext context) {
-    double _width = MediaQuery.of(context).size.width;
-    double _height = MediaQuery.of(context).size.height;
-    dynamic module = ModalRoute.of(context).settings.arguments  ;
-    return Scaffold(
-      bottomNavigationBar: RaisedButton(
+    double width = MediaQuery.of(context).size.width;
+    double height = MediaQuery.of(context).size.height;
 
-        color: MainTheme.mainColor,
-        textColor: Colors.white,
-        child: Text(
-          "Book Now",
-          style: TextStyle(fontWeight: FontWeight.normal),
-        ),
-        padding: const EdgeInsets.symmetric(
-          vertical: 16.0,
-          horizontal: 32.0,
-        ),
-        onPressed: () {
-        },
-      ),
-      body: ListView(
-        controller: _scrollController,
-        children: [
-          GestureDetector(
-            child: AnimatedContainer(
-              duration: const Duration(seconds: 1),
-              // child: Image.network(
-              //   module.imgSrc,
-              //   fit: BoxFit.cover,
-              // ),
-              height: imageVisible == true ? 300 : 0,
-              width: 600,
+    return FutureBuilder(
+      future: loadService(prevModule),
+      builder: (context, snapshot) {
+        if (snapshot.data == null) {
+          return Scaffold(
+            bottomNavigationBar: ShimmerWidget.rectangle(
+              width: width,
+              height: 45,
             ),
-            onTap: (){
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(builder:(context) =>PhotosSlider(imagesUrls: module.imageUrls ,))
-              );
-            },
-          ),
-          Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              Container(
-                padding: const EdgeInsets.all(10),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(20),
-                  color: Colors.white,
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisSize: MainAxisSize.min,
+            body: ListView(
+              controller: _scrollController,
+              children: [
+                Stack(children: [
+                  GestureDetector(
+                    child: Container(
+                      child: Image.network(
+                        prevModule.imgSrc,
+                        fit: BoxFit.cover,
+                      ),
+                      height: imageVisible == true ? height * 0.4 : 0,
+                      width: width,
+                    ),
+                  ),
+                  Container(
+                      child: Padding(
+                    padding: const EdgeInsets.only(left: 10, top: 10),
+                    child: IconButton(
+                        onPressed: () {
+                          Navigator.pop(context);
+                        },
+                        icon: Icon(
+                          Icons.arrow_back,
+                          size: 30,
+                        )),
+                  )),
+                ]),
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    Row(
+                    Container(
+                      padding: const EdgeInsets.all(10),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(20),
+                        color: Colors.white,
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisSize: MainAxisSize.max,
+                        children: [
+                          const SizedBox(height: 40.0),
+                          ShimmerWidget.rectangle(
+                            width: width * 0.9,
+                            height: 20,
+                            shapeBorder: BorderRadius.circular(10),
+                          ),
+                          const SizedBox(height: 40.0),
+                          Center(
+                              child: ShimmerWidget.rectangle(
+                                  width: width * 0.9,
+                                  height: 20,
+                                  shapeBorder: BorderRadius.circular(10))),
+                          const SizedBox(height: 40),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              ShimmerWidget.rectangle(
+                                  width: width * 0.9,
+                                  height: 20,
+                                  shapeBorder: BorderRadius.circular(10))
+                            ],
+                          ),
+                          SizedBox(
+                            height: 40,
+                          ),
+                          ShimmerWidget.rectangle(
+                              width: width * 0.9,
+                              height: 20,
+                              shapeBorder: BorderRadius.circular(10)),
+                          SizedBox(
+                            height: 40,
+                          ),
+                          ShimmerWidget.rectangle(
+                              width: width * 0.9,
+                              height: 20,
+                              shapeBorder: BorderRadius.circular(10))
+                        ],
+                      ),
+                    )
+                  ],
+                )
+              ],
+            ),
+          );
+        }
+        return Scaffold(
+          body: ListView(
+            controller: _scrollController,
+            children: [
+              Stack(children: [
+                GestureDetector(
+                  child: AnimatedContainer(
+                    duration: const Duration(seconds: 1),
+                    child: Image.network(
+                      serviceModule.imageUrls[0],
+                      fit: BoxFit.cover,
+                    ),
+                    height: imageVisible == true ? height * 0.4 : 0,
+                    width: width,
+                  ),
+                  onTap: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => PhotosSlider(
+                                imagesUrls: serviceModule.imageUrls)));
+                  },
+                ),
+                Container(
+                    child: Padding(
+                  padding: const EdgeInsets.only(left: 10, top: 10),
+                  child: IconButton(
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                      icon: Icon(
+                        Icons.arrow_back,
+                        size: 30,
+                      )),
+                )),
+              ]),
+              Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Container(
+                    padding: const EdgeInsets.all(10),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(20),
+                      color: Colors.white,
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisSize: MainAxisSize.min,
                       children: [
-                        Column(
+                        Row(
                           children: [
-                            Padding(
-                              padding: const EdgeInsets.only(left: 5),
-                              child: Text(
-                                module.title,
-                                style: TextStyle(
-                                    color: Colors.black,
-                                    fontSize: 20.0,
-                                    fontWeight: FontWeight.bold),
-                              ),
+                            Column(
+                              children: [
+                                Padding(
+                                  padding: const EdgeInsets.only(left: 5),
+                                  child: Text(
+                                    prevModule.propertyModule.title,
+                                    style: TextStyle(
+                                        color: Colors.black,
+                                        fontSize: 20.0,
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                ),
+                              ],
+                            ),
+                            SizedBox(
+                              width: 0.45 * width,
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 10.0),
+                        Center(
+                          child: Text(
+                            serviceModule != null
+                                ? serviceModule.description
+                                : "",
+                            textAlign: TextAlign.justify,
+                            style: TextStyle(
+                                fontWeight: FontWeight.w300, fontSize: 14.0),
+                          ),
+                        ),
+                        const SizedBox(height: 30),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Column(
+                              children: [
+                                const SizedBox(width: 60),
+                                Text(
+                                  "Price".toUpperCase(),
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.w600,
+                                      fontSize: 14.0),
+                                ),
+                                SizedBox(
+                                  height: 5,
+                                ),
+                                Text(prevModule.price.toString() + " \$")
+                              ],
+                            ),
+                            Column(
+                              children: [
+                                Text(
+                                  "Location".toUpperCase(),
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.w600,
+                                      fontSize: 14.0),
+                                ),
+                                SizedBox(
+                                  height: 5,
+                                ),
+                                Text(prevModule.propertyModule.location),
+                              ],
+                            ),
+                            Column(
+                              children: [
+                                Text(
+                                  "Rating".toUpperCase(),
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.w600,
+                                      fontSize: 14.0),
+                                ),
+                                SizedBox(
+                                  height: 5,
+                                ),
+                                CustomStarBar(
+                                  starSize: 1,
+                                  starPadding: 0.6,
+                                  rating: prevModule.propertyModule.rating,
+                                ),
+                              ],
                             ),
                           ],
                         ),
                         SizedBox(
-                          width: _width*0.5,
+                          height: 40,
                         ),
-                        IconButton(
-                          icon: favorite
-                              ? Icon(
-                            Icons.favorite,
-                            color: MainTheme.mainColor,
-                          )
-                              : Icon(
-                            Icons.favorite_border,
-                          ),
-                          onPressed: () {
-                            setState(() {
-                              favorite = !favorite;
-                            });
-                          },
+                        CustomAminitiesListView(),
+                        SizedBox(
+                          height: 40,
+                        ),
+                        Center(
+                          child: ElevatedButton(
+                              style: ButtonStyle(
+                                  backgroundColor:
+                                      MaterialStateProperty.all<Color>(
+                                          MainTheme.mainColor)),
+                              onPressed: () => {
+                                    Navigator.pushNamed(
+                                        context, AllServices.path,
+                                        arguments: serviceModule.propertyModule)
+                                  },
+                              child: Text('Show all services ')),
                         )
                       ],
                     ),
-                    const SizedBox(height: 10.0),
-                    Text(
-                      module.description,
-                      textAlign: TextAlign.justify,
-                      style: TextStyle(
-                          fontWeight: FontWeight.w300, fontSize: 14.0),
-                    ),
-                    const SizedBox(height: 15),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        Column(
-                          children: [
-                            Text(
-                              "Price".toUpperCase(),
-                              style: TextStyle(
-                                  fontWeight: FontWeight.w600,
-                                  fontSize: 14.0),
-                            ),
-                            SizedBox(
-                              height: 5,
-                            ),
-                            // Text(
-                            //     module.price.toString()
-                            // )
-                          ],
-                        ),
-                        Column(
-                          children: [
-                            Text(
-                              "Rating".toUpperCase(),
-                              style: TextStyle(
-                                  fontWeight: FontWeight.w600,
-                                  fontSize: 14.0),
-                            ),
-                            SizedBox(
-                              height: 5,
-                            ),
-                            CustomStarBar(
-                              starSize: 12,
-                              starPadding: 0.6,
-                              rating: module.rating,
-                            ),
-                          ],
-                        ),
-                        Column(
-                          children: [
-                            Text(
-                              "Location".toUpperCase(),
-                              style: TextStyle(
-                                  fontWeight: FontWeight.w600,
-                                  fontSize: 14.0),
-                            ),
-                            SizedBox(
-                              height: 5,
-                            ),
-                            Text(
-                                module.location
-                            )
-                          ],
-                        )
-                      ],
-                    ),
-                    Center(
-                      child: ElevatedButton(onPressed: ()=>{
-                      Navigator.pushNamed(context, AddNewServiceScreen.path,arguments: module)
-                      }, child: Text('Add a new Service')),
-                    )
-                  ],
-                ),
+                  )
+                ],
               )
             ],
-          )
-        ],
-      ),
+          ),
+        );
+      },
     );
   }
 }
@@ -223,9 +507,9 @@ class CustomAminitiesCard extends StatelessWidget {
             children: [
               Card(
                   child: Icon(
-                    icon,
-                    size: 30,
-                  )),
+                icon,
+                size: 30,
+              )),
               Text(
                 title,
                 style: TextStyle(fontSize: 12, color: Colors.black),
@@ -260,7 +544,7 @@ class CustomStarBar extends StatelessWidget {
   final double starPadding;
   final double rating;
 
-  CustomStarBar({this.starSize, this.starPadding,this.rating});
+  CustomStarBar({this.starSize, this.starPadding, this.rating});
 
   @override
   Widget build(BuildContext context) {

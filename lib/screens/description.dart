@@ -86,6 +86,12 @@ class _DetailsScreenState extends State<DetailsScreen> {
     var args = ModalRoute.of(context).settings.arguments as Map;
     prevModule = args['module'];
     refreshFunction = args['refreshFunction'];
+    var images ;
+    try{
+      images = prevModule.imgSrc ;
+    }catch(e){
+      images = prevModule.imageUrls[0] ;
+    }
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
 
@@ -105,7 +111,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                   GestureDetector(
                     child: Container(
                       child: Image.network(
-                        prevModule.imgSrc,
+                        images,
                         fit: BoxFit.cover,
                       ),
                       height: imageVisible == true ? height * 0.4 : 0,
@@ -369,7 +375,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                                           Navigator.pushNamed(
                                               context, AllServices.path,
                                               arguments:
-                                                  serviceModule.propertyModule)
+                                                  {'module':serviceModule.propertyModule , 'showAddService' :false })
                                         },
                                     child: Text('Show all services ')),
                               )

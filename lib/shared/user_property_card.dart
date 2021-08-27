@@ -4,28 +4,27 @@ import 'package:prop_plus/modules/main_module.dart';
 import 'package:prop_plus/modules/property_module.dart';
 import 'package:prop_plus/modules/user_properties_module.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:prop_plus/screens/all_services.dart';
 import 'package:prop_plus/screens/description.dart';
 import 'package:prop_plus/screens/user_property_description_screen.dart';
 
-
-
 class UserPropertyCard extends StatefulWidget {
-  final PropertyModule module ;
-  const UserPropertyCard({Key key,this.module}) : super(key: key);
+  final PropertyModule module;
+  const UserPropertyCard({Key key, this.module}) : super(key: key);
 
   @override
   _UserPropertyCardState createState() => _UserPropertyCardState();
 }
 
 class _UserPropertyCardState extends State<UserPropertyCard> {
-
   bool favorite = false;
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: (){
-        Navigator.pushNamed(context, MyProperties_DetailsScreen.path,arguments: widget.module) ;
+      onTap: () {
+        Navigator.pushNamed(context, AllServices.path,
+            arguments: {'module' : widget.module , 'showAddService':true });
       },
       child: Container(
         child: Card(
@@ -41,15 +40,17 @@ class _UserPropertyCardState extends State<UserPropertyCard> {
                   width: 100,
                   height: 100,
                   decoration: BoxDecoration(
-                      // image: DecorationImage(
-                      //   image: NetworkImage(widget.module.imgSrc),
-                      //   fit: BoxFit.cover,
-                      // ),
                       borderRadius: BorderRadius.only(
                           topRight: FavouriteTheme.borderRadius,
                           topLeft: FavouriteTheme.borderRadius,
                           bottomLeft: FavouriteTheme.borderRadius,
                           bottomRight: FavouriteTheme.borderRadius)),
+                  child: Icon(
+                    widget.module.type == "Hotel"
+                        ? Icons.home_work_outlined
+                        : Icons.home_outlined,
+                    size: 60,
+                  ),
                 ),
                 SizedBox(
                   width: 20,
@@ -85,8 +86,7 @@ class _UserPropertyCardState extends State<UserPropertyCard> {
                               allowHalfRating: true,
                               itemCount: 5,
                               itemSize: 20,
-                              itemPadding:
-                              EdgeInsets.symmetric(horizontal: 2),
+                              itemPadding: EdgeInsets.symmetric(horizontal: 2),
                               itemBuilder: (context, _) => Icon(
                                 Icons.star,
                                 color: Colors.amber,

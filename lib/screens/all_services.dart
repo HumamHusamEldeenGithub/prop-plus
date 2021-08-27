@@ -10,6 +10,8 @@ import 'package:prop_plus/shared/service_card.dart';
 import 'package:prop_plus/shared/shimmer_widget.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
+import 'add_new_service_screen.dart';
+
 class AllServices extends StatefulWidget {
   static String path = "/all_services";
 
@@ -43,10 +45,12 @@ class AllServicesState extends State<AllServices> {
   }
 
   Future<List<ServiceModule>> getAllServicesFromDB() async {
-    dynamic prevModule = ModalRoute.of(context).settings.arguments;
+    dynamic args = ModalRoute.of(context).settings.arguments as Map;
+    dynamic prevModule = args['module'];
     var modules = await HTTP_Requests.getAllService(prevModule);
-    for (var i =0 ; i< modules.length ; i++){
-      modules[i].imageUrls = await HTTP_Requests.getAllImagesForService(modules[i].service_id);
+    for (var i = 0; i < modules.length; i++) {
+      modules[i].imageUrls =
+          await HTTP_Requests.getAllImagesForService(modules[i].service_id);
     }
     return modules;
   }
@@ -59,6 +63,8 @@ class AllServicesState extends State<AllServices> {
 
   @override
   Widget build(BuildContext context) {
+    dynamic args = ModalRoute.of(context).settings.arguments as Map;
+    bool showAddService = args['showAddService'];
     double _width = MediaQuery.of(context).size.width;
     double _height = MediaQuery.of(context).size.height;
     return Scaffold(
@@ -86,7 +92,6 @@ class AllServicesState extends State<AllServices> {
               return ListView.builder(
                 itemCount: 3,
                 itemBuilder: (context, index) {
-
                   return Padding(
                     padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
                     child: ShimmerWidget.rectangle(
@@ -96,11 +101,22 @@ class AllServicesState extends State<AllServices> {
                     ),
                   );
                 },
-              );;
+              );
+              ;
             }
             return ListView.builder(
-              itemCount: snapshot.data.length,
+              itemCount: snapshot.data.length + (showAddService ? 1 : 0),
               itemBuilder: (context, index) {
+                if (index == snapshot.data.length)
+                  return Center(
+                    child: ElevatedButton(
+                        onPressed: () => {
+                          Navigator.pushNamed(
+                              context, AddNewServiceScreen.path,
+                              arguments: args['module'])
+                        },
+                        child: Text('Add a new Service')),
+                  );
                 ServiceModule module = snapshot.data[index];
                 return ServiceCard(
                   module: module,
