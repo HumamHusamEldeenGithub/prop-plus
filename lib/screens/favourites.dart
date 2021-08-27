@@ -18,7 +18,6 @@ class Favourites extends StatefulWidget {
 }
 
 class FavouritesState extends State<Favourites> {
-
   bool _finishedLoading;
   RefreshController _refreshController =
       RefreshController(initialRefresh: false);
@@ -45,7 +44,7 @@ class FavouritesState extends State<Favourites> {
     setState(() {});
   }
 
-  void finishLoading(){
+  void finishLoading() {
     _finishedLoading = true;
   }
 
@@ -90,71 +89,78 @@ class FavouritesState extends State<Favourites> {
           scrollDirection: Axis.vertical,
           child: (_finishedLoading)
               ? Center(
-                  child: (MainWidget.databaseData['FavouriteModules'] != null&& MainWidget.databaseData['FavouriteModules'].isNotEmpty) ?Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children:
-                        MainWidget.databaseData['FavouriteModules'].map((card) {
-                      return FavouriteCard(
-                          refreshFunction: refreshPage, module: card,);
-                    }).toList(),
-                  ):
-                  Center(
-                    child: Padding(
-                      padding: EdgeInsets.only(top: 40),
-                      child: Text("You have no favourite services yet!"),
-                    ),
-                  )
-                )
-              : Container(
-                  child: Card(
-                      elevation: 8.0,
-                      margin:
-                          EdgeInsets.symmetric(horizontal: 10.0, vertical: 8.0),
-                      child: Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Row(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                ShimmerWidget.rectangle(
-                                  width: 100,
-                                  height: 100,
-                                  shapeBorder: BorderRadius.circular(8),
-                                ),
-                                SizedBox(
-                                  width: 20,
-                                ),
-                                Column(
-                                  children: [
-                                    SizedBox(
-                                      height: 15,
-                                    ),
-                                    ShimmerWidget.rectangle(
-                                      width: 200,
-                                      height: 10,
-                                      shapeBorder: BorderRadius.circular(10),
-                                    ),
-                                    SizedBox(
-                                      height: 20,
-                                    ),
-                                    ShimmerWidget.rectangle(
-                                      width: 200,
-                                      height: 10,
-                                      shapeBorder: BorderRadius.circular(10),
-                                    ),
-                                    SizedBox(
-                                      height: 20,
-                                    ),
-                                    ShimmerWidget.rectangle(
-                                      width: 200,
-                                      height: 10,
-                                      shapeBorder: BorderRadius.circular(10),
-                                    ),
-                                  ],
-                                ),
-                              ])))),
+                  child: (MainWidget.databaseData['FavouriteModules'] != null &&
+                          MainWidget
+                              .databaseData['FavouriteModules'].isNotEmpty)
+                      ? Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: MainWidget.databaseData['FavouriteModules']
+                              .map((card) {
+                            return FavouriteCard(
+                              refreshFunction: refreshPage,
+                              module: card,
+                            );
+                          }).toList(),
+                        )
+                      : Center(
+                          child: Padding(
+                            padding: EdgeInsets.only(top: 40),
+                            child: Text("You have no favourite services yet!"),
+                          ),
+                        ))
+              : Column(children: ShimmerWidgetList.list),
         ),
       ),
     );
   }
+}
+
+class ShimmerWidgetList {
+  static var list = [card, card, card, card];
+  static Widget card = Card(
+      elevation: 8.0,
+      margin: EdgeInsets.symmetric(horizontal: 10.0, vertical: 8.0),
+      child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                ShimmerWidget.rectangle(
+                  width: 100,
+                  height: 100,
+                  shapeBorder: BorderRadius.circular(8),
+                ),
+                SizedBox(
+                  width: 20,
+                ),
+                Column(
+                  children: [
+                    SizedBox(
+                      height: 15,
+                    ),
+                    ShimmerWidget.rectangle(
+                      width: 200,
+                      height: 10,
+                      shapeBorder: BorderRadius.circular(10),
+                    ),
+                    SizedBox(
+                      height: 20,
+                    ),
+                    ShimmerWidget.rectangle(
+                      width: 200,
+                      height: 10,
+                      shapeBorder: BorderRadius.circular(10),
+                    ),
+                    SizedBox(
+                      height: 20,
+                    ),
+                    ShimmerWidget.rectangle(
+                      width: 200,
+                      height: 10,
+                      shapeBorder: BorderRadius.circular(10),
+                    ),
+                  ],
+                ),
+              ])));
 }
