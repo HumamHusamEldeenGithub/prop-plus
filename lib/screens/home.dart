@@ -42,7 +42,6 @@ class HomeState extends State<Home> {
 
   void refreshPage() {
     setState(() {
-      print(MainWidget.databaseData['FavouriteServices']);
     });
   }
 

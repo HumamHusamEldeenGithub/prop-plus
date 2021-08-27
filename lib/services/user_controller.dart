@@ -21,10 +21,17 @@ class UserController{
   Future<UserModule>InitializeUser() async{
      _currentUser = await _authService.getUserModule();
      _currentUser.dbId = await HTTP_Requests.getUserId(_currentUser.uid);
-     MainWidget.databaseData['FavouriteServices'] = await HTTP_Requests.getFavouriteServicesById(_currentUser.dbId);
+     _currentUser.favouriteServices = await HTTP_Requests.getFavouriteServicesById(_currentUser.dbId);
      _currentUser.userName=await HTTP_Requests.getUsernameById(_currentUser.dbId.toString());
      _currentUser.avatarURl =await HTTP_Requests.getAvatarUrlById(_currentUser.dbId.toString());
      _currentUser.phoneNumber = await HTTP_Requests.getPhoneNumberById(_currentUser.dbId.toString());
+     UserModule newUser  = UserModule();
+     newUser.dbId = _currentUser.dbId;
+     newUser.favouriteServices = _currentUser.favouriteServices;
+     newUser.userName = _currentUser.userName;
+     newUser.avatarURl = _currentUser.avatarURl;
+     newUser.phoneNumber = _currentUser.phoneNumber;
+     MainWidget.userData['CurrentUser'] = newUser;
      return _currentUser;
   }
 

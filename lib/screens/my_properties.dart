@@ -3,8 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:prop_plus/constant/MainTheme.dart';
 import 'package:prop_plus/modules/main_module.dart';
 import 'package:prop_plus/modules/property_module.dart';
-import 'package:prop_plus/modules/user_properties_module.dart';
-import 'package:prop_plus/services/locater.dart';
 import 'package:prop_plus/services/user_controller.dart';
 import 'package:prop_plus/shared/favourite_card.dart';
 import 'package:prop_plus/shared/http_requests.dart';
@@ -27,7 +25,7 @@ class _MyPropertiesState extends State<MyProperties> {
   Future<List<PropertyModule>> getUserPropertiesFromDB() async {
     print('ENTER MY PROPERTIES');
     var modules = await HTTP_Requests.getUserProperties(
-        locater<UserController>().currentUser.dbId);
+        MainWidget.userData['CurrentUser'].dbId);
     return modules;
   }
 
@@ -167,7 +165,7 @@ class _MyPropertiesState extends State<MyProperties> {
                                   ),
                                 ]))));
               }
-              return ListView.builder(
+              return snapshot.data.length != 0? ListView.builder(
                 itemCount: snapshot.data.length,
                 itemBuilder: (context, index) {
                   PropertyModule module = snapshot.data[index];
@@ -175,6 +173,8 @@ class _MyPropertiesState extends State<MyProperties> {
                     module: module,
                   );
                 },
+              ) : Center(
+                  child: Text("You have no properties yet!")
               );
             },
           ),

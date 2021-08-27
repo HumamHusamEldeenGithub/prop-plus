@@ -7,6 +7,8 @@ import 'package:prop_plus/modules/user_module.dart';
 import 'package:prop_plus/services/locater.dart';
 import 'package:prop_plus/services/user_controller.dart';
 
+import '../main.dart';
+
 class Receipt extends StatefulWidget {
   static final path = "/receipt";
   final BookingModule bookingModule;
@@ -23,7 +25,7 @@ class _ReceiptState extends State<Receipt> {
   @override
   void initState() {
     super.initState();
-    user = locater.get<UserController>().currentUser;
+    user = MainWidget.userData['CurrentUser'];
     for(int i = 0 ;i <= widget.bookingModule.toDate.difference(widget.bookingModule.fromDate).inDays; i++ ){
       totalPrice += widget.bookingModule.serviceModule.price;
     }

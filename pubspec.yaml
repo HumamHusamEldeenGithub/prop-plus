@@ -47,6 +47,7 @@ dependencies:
   intl: ^0.17.0
   carousel_pro: ^1.0.0
   shimmer: ^2.0.0
+  image: ^3.0.2
 
 
 

@@ -12,6 +12,8 @@ import 'package:http/http.dart' as http;
 import 'package:prop_plus/shared/http_requests.dart';
 import 'package:prop_plus/shared/loading_widget.dart';
 
+import '../main.dart';
+
 class SignInScreen extends StatefulWidget {
   @override
   _SignInScreenState createState() => _SignInScreenState();
@@ -162,9 +164,8 @@ class _SignInScreenState extends State<SignInScreen> {
     if (response.statusCode == 201 || response.statusCode == 200) {
       // If the server did return a 201 CREATED response,
       // then parse the JSON.
-      locater.get<UserController>().currentUser.dbId =
+      MainWidget.userData['CurrentUser'].dbId =
           jsonDecode(response.body)['id'];
-      print(locater.get<UserController>().currentUser.dbId);
       Navigator.of(context).pushReplacementNamed('/home');
     } else {
       // If the server did not return a 201 CREATED response,

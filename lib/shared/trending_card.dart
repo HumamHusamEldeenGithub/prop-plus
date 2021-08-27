@@ -3,13 +3,10 @@ import 'package:prop_plus/constant/MainTheme.dart';
 import 'package:prop_plus/constant/TrendingTheme.dart';
 import 'package:prop_plus/main.dart';
 import 'package:prop_plus/modules/main_module.dart';
-import 'package:prop_plus/modules/user_module.dart';
 import 'package:prop_plus/screens/description.dart';
-import 'package:prop_plus/services/locater.dart';
 import 'package:prop_plus/services/user_controller.dart';
 import 'package:prop_plus/shared/http_requests.dart';
 import 'package:prop_plus/shared/loading_dialog.dart';
-import 'package:prop_plus/shared/loading_widget.dart';
 
 class TrendingCard extends StatefulWidget {
   final MainModule module;
@@ -27,23 +24,21 @@ class _TrendingCardState extends State<TrendingCard> {
   Future<void> onTapFavorite() async{
     if (!favorite) {
       await HTTP_Requests.addNewFavourite(
-        locater<UserController>()
-            .currentUser
+          MainWidget.userData['CurrentUser']
             .dbId
             .toString(),
         widget.module.service_id.toString()
       );
-      MainWidget.databaseData['FavouriteServices'].add(widget.module.service_id);
+      MainWidget.userData['CurrentUser'].favouriteServices.add(widget.module.service_id);
     }
     else {
       await HTTP_Requests.deleteFavourite(
-        locater<UserController>()
-            .currentUser
+          MainWidget.userData['CurrentUser']
             .dbId
             .toString(),
         widget.module.service_id.toString());
 
-      MainWidget.databaseData['FavouriteServices'].remove(widget.module.service_id);
+      MainWidget.userData['CurrentUser'].favouriteServices.remove(widget.module.service_id);
     }
     setState(() {
       favorite = !favorite;
@@ -59,8 +54,7 @@ class _TrendingCardState extends State<TrendingCard> {
   }
   @override
   Widget build(BuildContext context) {
-    favorite = MainWidget.databaseData['FavouriteServices']
-        .contains(widget.module.service_id);
+    favorite = MainWidget.userData['CurrentUser']?.favouriteServices?.contains(widget.module.service_id);
     return Padding(
         padding:
             const EdgeInsets.fromLTRB(TrendingTheme.trendingPadding, 0, 0, 10),

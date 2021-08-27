@@ -4,5 +4,6 @@ class UserModule{
   String userName;
   String avatarURl;
   String phoneNumber;
+  List<int> favouriteServices;
   UserModule({this.uid , this.userName , this.avatarURl});
 }

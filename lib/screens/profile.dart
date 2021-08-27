@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:prop_plus/main.dart';
 import 'package:prop_plus/modules/user_module.dart';
 import 'package:prop_plus/services/locater.dart';
 import 'package:prop_plus/services/user_controller.dart';
@@ -17,7 +18,7 @@ class Profile extends StatefulWidget {
 }
 
 class ProfileState extends State<Profile> {
-  UserModule currentUser = locater.get<UserController>().currentUser;
+  UserModule currentUser = MainWidget.userData['CurrentUser'];
   PickedFile image;
   RefreshController _refreshController =
       RefreshController(initialRefresh: false);
@@ -25,8 +26,7 @@ class ProfileState extends State<Profile> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    locater.get<UserController>().InitializeUser();
-    currentUser = locater.get<UserController>().currentUser;
+    currentUser = MainWidget.userData['CurrentUser'];
   }
 
   void _onRefresh() async {
@@ -34,8 +34,7 @@ class ProfileState extends State<Profile> {
     await widget.parentFunction;
     // if failed,use refreshFailed()
     _refreshController.refreshCompleted();
-    locater.get<UserController>().InitializeUser();
-    currentUser = locater.get<UserController>().currentUser;
+    currentUser = MainWidget.userData['CurrentUser'];
   }
 
   void _onLoading() async {
@@ -52,17 +51,17 @@ class ProfileState extends State<Profile> {
 
   bool _checkAvatarNotNull() {
     try {
-      return locater.get<UserController>().currentUser.avatarURl != null;
+      return MainWidget.userData['CurrentUser'].avatarURl != null;
     } catch (e) {
       return false;
     }
   }
 
   String getAvatarLink() {
-    print(locater.get<UserController>().currentUser.avatarURl);
+    print(currentUser.avatarURl);
     //print("Image is " + _checkAvatarNotNull().toString());
     if (_checkAvatarNotNull()) {
-      return locater.get<UserController>().currentUser.avatarURl;
+      return currentUser.avatarURl;
     } else {
       return "https://thumbs.dreamstime.com/b/creative-vector-illustration-default-avatar-profile-placeholder-isolated-background-art-design-grey-photo-blank-template-mo-107388687.jpg";
     }
@@ -72,6 +71,7 @@ class ProfileState extends State<Profile> {
   Widget build(BuildContext context) {
     double _width = MediaQuery.of(context).size.width;
     double _height = MediaQuery.of(context).size.height;
+    currentUser = MainWidget.userData['CurrentUser'];
     return Container(
       child: SmartRefresher(
         enablePullDown: true,

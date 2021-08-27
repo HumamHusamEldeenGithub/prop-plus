@@ -12,6 +12,8 @@ import 'package:prop_plus/services/locater.dart';
 import 'package:prop_plus/services/user_controller.dart';
 import 'dart:developer' as developer;
 
+import '../main.dart';
+
 // ignore: camel_case_types
 class HTTP_Requests {
 
@@ -606,7 +608,7 @@ class HTTP_Requests {
   static Future<void> sendBookRequest(
       String serviceId, String fromDate, String toDate) async {
     //TODO : get user's database id
-    String userId = locater.get<UserController>().currentUser.dbId.toString();
+    String userId = MainWidget.userData['CurrentUser'].dbId.toString();
 
     final response = await http.post(
       Uri.parse('https://propplus-production.herokuapp.com/bookings'),

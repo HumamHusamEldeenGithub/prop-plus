@@ -29,6 +29,8 @@ import 'dart:developer' as developer;
 import 'dart:async';
 import 'package:prop_plus/shared/http_requests.dart';
 
+import 'modules/user_module.dart';
+
 /*Future<void> initializeDefault() async {
   FirebaseApp app = await Firebase.initializeApp();
   assert(app != null);
@@ -80,6 +82,7 @@ class MyApp extends StatelessWidget {
 
 class MainWidget extends StatefulWidget {
   static var databaseData = new Map<String, List<dynamic>>();
+  static var userData = new Map<String, UserModule>();
   @override
   _MainWidgetState createState() => _MainWidgetState();
 }
@@ -147,7 +150,7 @@ class _MainWidgetState extends State<MainWidget> {
   Future<void> getDataFromDBForFavorite() async {
     MainWidget.databaseData['FavouriteModules'] =
         await HTTP_Requests.getFavouriteServicesWithDetails(
-            locater<UserController>().currentUser.dbId);
+            MainWidget.userData['CurrentUser'].dbId);
 
     _favouritesGlobalKey.currentState?.refreshPage();
     _favouritesGlobalKey.currentState?.finishLoading();
@@ -156,7 +159,7 @@ class _MainWidgetState extends State<MainWidget> {
   Future<void> getDataFromDBForBookings() async {
     MainWidget.databaseData['BookingsModules'] =
         await HTTP_Requests.getAllBookingsForUser(
-            locater<UserController>().currentUser.dbId);
+            MainWidget.userData['CurrentUser'].dbId);
 
     _bookingsGlobalKey.currentState?.refreshPage();
     _bookingsGlobalKey.currentState?.finishLoading();

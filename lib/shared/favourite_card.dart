@@ -31,12 +31,11 @@ class _FavouriteCardState extends State<FavouriteCard> {
 
   Future<void> onTapFavorite() async{
     await HTTP_Requests.deleteFavourite(
-      locater<UserController>()
-          .currentUser
+        MainWidget.userData['CurrentUser']
           .dbId
           .toString(),
       widget.module.service_id.toString());
-    MainWidget.databaseData['FavouriteServices'].remove(widget.module.service_id);
+    MainWidget.userData['CurrentUser'].favouriteServices.remove(widget.module.service_id);
     setState(() {
       widget.refreshFunction();
     });

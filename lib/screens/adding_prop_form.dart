@@ -16,6 +16,8 @@ import 'package:prop_plus/shared/loading_widget.dart';
 import 'package:prop_plus/shared/popup.dart';
 import 'package:progress_dialog/progress_dialog.dart';
 
+import '../main.dart';
+
 class PropertyInputForm extends StatefulWidget {
   @override
   _PropertyInputFormState createState() => _PropertyInputFormState();
@@ -240,7 +242,7 @@ class _PropertyInputFormState extends State<PropertyInputForm> {
   Future<void> submitForm() async {
     PropertyToApprove module = new PropertyToApprove(
         user_id:
-        locater<UserController>().currentUser.dbId,
+        MainWidget.userData['CurrentUser'].dbId,
         title: _title,
         phone: _phone,
         city: _city,

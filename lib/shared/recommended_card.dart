@@ -2,13 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:prop_plus/constant/MainTheme.dart';
 import 'package:prop_plus/main.dart';
-import 'package:prop_plus/modules/property_module.dart';
 import 'package:prop_plus/modules/main_module.dart';
 import 'package:prop_plus/screens/description.dart';
-import 'package:prop_plus/services/locater.dart';
 import 'package:prop_plus/services/user_controller.dart';
 import 'package:prop_plus/shared/http_requests.dart';
-import 'package:prop_plus/shared/loading_widget.dart';
 
 import 'loading_dialog.dart';
 
@@ -28,14 +25,14 @@ class _RecommendedCardState extends State<RecommendedCard> {
   Future<void> onTapFavorite() async {
     if (!favorite) {
       await HTTP_Requests.addNewFavourite(
-          locater<UserController>().currentUser.dbId.toString(),
+          MainWidget.userData['CurrentUser'].dbId.toString(),
           widget.module.service_id.toString());
-      MainWidget.databaseData['FavouriteServices'].add(widget.module.service_id);
+      MainWidget.userData['CurrentUser'].favouriteServices.add(widget.module.service_id);
     } else {
       await HTTP_Requests.deleteFavourite(
-          locater<UserController>().currentUser.dbId.toString(),
+          MainWidget.userData['CurrentUser'].dbId.toString(),
           widget.module.service_id.toString());
-      MainWidget.databaseData['FavouriteServices'].remove(widget.module.service_id);
+      MainWidget.userData['CurrentUser'].favouriteServices.remove(widget.module.service_id);
     }
     setState(() {
       favorite = !favorite;
@@ -50,7 +47,7 @@ class _RecommendedCardState extends State<RecommendedCard> {
 
   @override
   Widget build(BuildContext context) {
-    favorite = MainWidget.databaseData['FavouriteServices'].contains(widget.module.service_id);
+    favorite = MainWidget.userData['CurrentUser']?.favouriteServices?.contains(widget.module.service_id);
     return Padding(
       padding: const EdgeInsets.only(bottom: 20),
       child: GestureDetector(

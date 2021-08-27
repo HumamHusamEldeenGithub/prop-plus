@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:file_support/file_support.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:prop_plus/constant/MainTheme.dart';
@@ -10,9 +11,12 @@ import 'package:prop_plus/services/locater.dart';
 import 'package:prop_plus/services/user_controller.dart';
 import 'package:prop_plus/shared/http_requests.dart';
 import 'package:prop_plus/shared/loading_dialog.dart';
+import 'package:image/image.dart' as BinaryImages;
 import 'dart:developer' as developer;
 
 import 'package:prop_plus/shared/loading_widget.dart';
+
+import '../main.dart';
 
 class EditProfilePage extends StatefulWidget {
   @override
@@ -22,6 +26,7 @@ class EditProfilePage extends StatefulWidget {
 class _EditProfilePageState extends State<EditProfilePage> {
   bool showPassword = false;
   PickedFile image;
+  String avatarURL;
   final formKey = GlobalKey<FormState>();
   String _name ,_phone;
   UserModule currentUser;
@@ -32,26 +37,27 @@ class _EditProfilePageState extends State<EditProfilePage> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    locater.get<UserController>().InitializeUser();
-    currentUser = locater.get<UserController>().currentUser;
   }
 
-  Future<void> uploadImage() async{
+  Future<void> uploadImage(String imagePath) async{
     String imageUrl;
     imageUrl = await locater
         .get<UserController>()
-        .uploadProfilePicture(File(image.path));
+        .uploadProfilePicture(File(imagePath));
     await HTTP_Requests.updateAvatarURL(currentUser.dbId.toString(), imageUrl);
+    MainWidget.userData['CurrentUser'].avatarURl = imageUrl;
+    setStateCallback();
     setState(() {
-      setStateCallback();
-      locater.get<UserController>().currentUser.avatarURl = imageUrl;
-      imageUrl =null;
-      image=null;
+
     });
   }
 
   @override
   Widget build(BuildContext context) {
+    currentUser = MainWidget.userData['CurrentUser'];
+    print("HEYEYERY "+ currentUser.avatarURl.toString());
+    avatarURL = currentUser.avatarURl!=null ? currentUser.avatarURl
+    : "https://thumbs.dreamstime.com/b/creative-vector-illustration-default-avatar-profile-placeholder-isolated-background-art-design-grey-photo-blank-template-mo-107388687.jpg";
     setStateCallback = ModalRoute.of(context).settings.arguments;
     return Scaffold(
       appBar: AppBar(
@@ -79,7 +85,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
               showAlert(),
               Text(
                 "Edit Profile",
-                style: TextStyle(fontSize: 25, fontWeight: FontWeight.w500),
+                style: TextStyle(fontSize: MainTheme.fontXLarge,fontWeight: FontWeight.bold),
               ),
               SizedBox(
                 height: 15,
@@ -105,10 +111,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
                           image: DecorationImage(
                               fit: BoxFit.cover,
                               image: NetworkImage(
-                                locater.get<UserController>().currentUser.avatarURl!=null ?
-                                locater.get<UserController>().currentUser.avatarURl.toString():
-                                "https://thumbs.dreamstime.com/b/creative-vector-illustration-default-avatar-profile-placeholder-isolated-background-art-design-grey-photo-blank-template-mo-107388687.jpg"
-                              ))),
+                                avatarURL))),
                     ),
                     Positioned(
                         bottom: 0,
@@ -117,8 +120,14 @@ class _EditProfilePageState extends State<EditProfilePage> {
                           onTap: () async {
                             image = await ImagePicker.platform
                                 .pickImage(source: ImageSource.gallery);
+                            final tempDir = await getTemporaryDirectory();
+                            final path = tempDir.path;
+                            BinaryImages.Image decodedImage = BinaryImages.decodeImage(await image.readAsBytes());
+                            BinaryImages.Image smallerImage = BinaryImages.copyResize(decodedImage, width: 150);
+                            var compressedImage = new File('$path/img_temporary.jpg')..writeAsBytesSync(BinaryImages.encodeJpg(smallerImage, quality: 15));
+
                             if(image!=null)
-                              LoadingDialog.showLoadingDialog(context, uploadImage(), Text("Uploaded Image"), Text("Failed to upload image"),(){Navigator.pop(context);});
+                              LoadingDialog.showLoadingDialog(context, uploadImage(compressedImage.path), Text("Uploaded Image"), Text("Failed to upload image"),(){Navigator.pop(context);});
                           },
                           child: Container(
                             height: 40,
@@ -150,12 +159,12 @@ class _EditProfilePageState extends State<EditProfilePage> {
                 children: [
                   TextFormField(
                     decoration: InputDecoration(
-                      labelText: "FullName" ,
-                      hintText: "${currentUser.userName}",
+                      labelText: "Full Name" ,
+                      hintText: "${currentUser?.userName}",
                       enabledBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(5),
                         borderSide: BorderSide(
-                          color: Colors.black,
+                          color: Colors.grey,
                           width: 0.5,
                         ),
                       ),
@@ -173,11 +182,11 @@ class _EditProfilePageState extends State<EditProfilePage> {
                   TextFormField(
                     decoration: InputDecoration(
                       labelText: "Phone" ,
-                      hintText: "${currentUser.phoneNumber}",
+                      hintText: "${currentUser?.phoneNumber}",
                       enabledBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(5),
                         borderSide: BorderSide(
-                          color: Colors.black,
+                          color: Colors.grey,
                           width: 0.5,
                         ),
                       ),
@@ -291,8 +300,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
     if (validate()) {
       await HTTP_Requests.updateUserName(currentUser.dbId.toString(), _name);
       await HTTP_Requests.updatePhoneNumber(currentUser.dbId.toString(), _phone);
-      await locater.get<UserController>().InitializeUser();
-      currentUser = locater.get<UserController>().currentUser;
+      currentUser = MainWidget.userData['CurrentUser'];
     }
   }
 
