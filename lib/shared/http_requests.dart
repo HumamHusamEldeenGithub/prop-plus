@@ -785,6 +785,21 @@ class HTTP_Requests {
     return userModule;
   }
 
+  static Future getUserByPropertyId(String propertyId) async {
+    http.Response response;
+    response = await http.get(
+      Uri.parse("https://propplus-production.herokuapp.com/users/ByPropertyId/" + propertyId),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        'Authorization': authorizationKey,
+      },
+    );
+
+    var data = jsonDecode(response.body);
+    UserModule userModule = UserModule.fromJson(data);
+    return userModule;
+  }
+
   ////////////////////SEND/////////////////////////
 
   static List createCategoriesModules() {

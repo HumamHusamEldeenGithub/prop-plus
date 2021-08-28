@@ -51,9 +51,10 @@ class _ReceiptScreenState extends State<ReceiptScreen> {
           bookingModule.toDate.toString(),
           totalPrice.toString(),
           bookingModule.serviceModule.propertyModule.phone);
+      UserModule owner = await HTTP_Requests.getUserByPropertyId(bookingModule.serviceModule.propertyModule.id.toString()) ;
       await HTTP_Requests.sendBookingEmailToTheOwner(
-        bookingModule.serviceModule.propertyModule.id.toString(),
-        "humamhusameldeen.github@gmail.com",
+        owner.userName,
+        owner.email,
         bookingModule.serviceModule.propertyModule.title,
         bookingModule.fromDate.toString(),
         bookingModule.toDate.toString(),
