@@ -75,7 +75,7 @@ print(MainWidget.currentHomeStatus) ;
         builder: (BuildContext context, LoadStatus mode) {
           Widget body;
           if (mode == LoadStatus.idle) {
-            body = Text("pull up load");
+            body = Text("No more cards .");
           } else if (mode == LoadStatus.loading) {
             body = CupertinoActivityIndicator();
           } else if (mode == LoadStatus.failed) {
