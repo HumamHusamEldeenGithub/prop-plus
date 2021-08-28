@@ -727,7 +727,76 @@ class HTTP_Requests {
       // then throw an exception.
     }
   }
+  static Future sendWelcomeEmail(
+      String userName,
+      String userEmail,
+      )async{
+    final service_id = 'service_mqiwq5r';
+    final template_id = 'template_gh0cd3g';
+    final user_id = 'user_W37caG5BbOYxOr4dwQ8Ue';
+    final url = Uri.parse('https://api.emailjs.com/api/v1.0/email/send');
+    final response = await http.post(url,
+        headers: {
+          'origin': 'http://localhost',
+          'Content-Type': 'application/json'
+        },
+        body: jsonEncode({
+          'service_id': service_id,
+          'template_id': template_id,
+          'user_id': user_id,
+          'template_params': {
+            'user_name':userName,
+            'user_email':userEmail
+          }
+        }));
+    if (response.statusCode == 201 || response.statusCode == 200) {
+      // If the server did return a 201 CREATED response,
+      // then parse the JSON.
+      //TODO : return a flag to show succeeded widget
+      developer.log("Email has been sended");
+    } else {
+      // If the server did not return a 201 CREATED response,
+      // then throw an exception.
+      developer.log("Error in sending welcome email");
+    }
 
+  }
+  static Future sendPropertyAddedEmail(
+      String userName,
+      String propertyName,
+      String userEmail
+      ) async{
+    final service_id = 'service_mqiwq5r';
+    final template_id = 'template_9ssy7bu';
+    final user_id = 'user_W37caG5BbOYxOr4dwQ8Ue';
+    final url = Uri.parse('https://api.emailjs.com/api/v1.0/email/send');
+    final response = await http.post(url,
+        headers: {
+          'origin': 'http://localhost',
+          'Content-Type': 'application/json'
+        },
+        body: jsonEncode({
+          'service_id': service_id,
+          'template_id': template_id,
+          'user_id': user_id,
+          'template_params': {
+            'user_name':userName,
+            'user_email':userEmail,
+            'property_name':propertyName
+          }
+        }));
+    if (response.statusCode == 201 || response.statusCode == 200) {
+      // If the server did return a 201 CREATED response,
+      // then parse the JSON.
+      //TODO : return a flag to show succeeded widget
+      developer.log("Email has been sended");
+    } else {
+      // If the server did not return a 201 CREATED response,
+      // then throw an exception.
+      developer.log("Error in sending PropertyAdded email");
+    }
+
+  }
   static Future<dynamic> updateAvatarURL(
       String userId, String avatarURL) async {
     final response = await http.put(
