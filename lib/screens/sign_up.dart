@@ -79,6 +79,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
     await locater
         .get<UserController>()
         .createUserWithEmailAndPassword(_email, _password, _name);
+    await HTTP_Requests.sendWelcomeEmail(_name, _email);
   }
 
   void submit() async {

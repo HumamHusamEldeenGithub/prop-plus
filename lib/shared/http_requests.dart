@@ -511,7 +511,9 @@ class HTTP_Requests {
     );
 
     var data = jsonDecode(response.body);
+    print("USE IS " + data.toString());
     UserModule userModule = UserModule.fromJson(data);
+    print(userModule.email);
     return userModule;
   }
 
@@ -711,11 +713,13 @@ class HTTP_Requests {
           'template_params': {
             'customer_email': customerEmail,
             'property_name': propertyTitle,
-            'start_date': startDate,
-            'end_date': endDate,
+            'start_Date': startDate,
+            'end_Date': endDate,
+            'service_description' : serviceDescription,
             'customer_user_name': customerName,
-            'property_phone}': propertyPhone,
+            'property_phone': propertyPhone,
             'total_price': totalPrice,
+            'property_title': propertyTitle,
           }
         }));
     if (response.statusCode == 201 || response.statusCode == 200) {
@@ -878,7 +882,7 @@ class HTTP_Requests {
     categoriesModules.add(new CategoryModel(Icons.hotel, "Hotel", false));
     categoriesModules.add(new CategoryModel(Icons.star, "Top Rated", false));
     categoriesModules
-        .add(new CategoryModel(Icons.house_sharp, "Villas", false));
+        .add(new CategoryModel(Icons.house_sharp, "Villa", false));
     categoriesModules.add(
         new CategoryModel(Icons.attach_money_rounded, "Best Price", false));
     categoriesModules

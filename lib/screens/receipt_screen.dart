@@ -42,6 +42,7 @@ class _ReceiptScreenState extends State<ReceiptScreen> {
     try {
       await HTTP_Requests.sendPaymentRequest(
           bookingId.toString(), totalPrice, 0.toString());
+      print(MainWidget.userData['CurrentUser'].email);
       await HTTP_Requests.sendBookingEmailToCustomer(
           MainWidget.userData['CurrentUser'].userName,
           MainWidget.userData['CurrentUser'].email,
@@ -52,6 +53,8 @@ class _ReceiptScreenState extends State<ReceiptScreen> {
           totalPrice.toString(),
           bookingModule.serviceModule.propertyModule.phone);
       UserModule owner = await HTTP_Requests.getUserByPropertyId(bookingModule.serviceModule.propertyModule.id.toString()) ;
+
+      print(owner.email);
       await HTTP_Requests.sendBookingEmailToTheOwner(
         owner.userName,
         owner.email,

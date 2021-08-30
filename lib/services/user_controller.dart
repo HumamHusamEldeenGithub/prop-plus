@@ -28,6 +28,7 @@ class UserController{
     newUser.userName = _currentUser.userName;
     newUser.avatarURl = _currentUser.avatarURl;
     newUser.phoneNumber = _currentUser.phoneNumber;
+    newUser.email = _currentUser.email;
     MainWidget.userData['CurrentUser'] = newUser;
     return _currentUser;
   }

@@ -108,7 +108,7 @@ class _BookingCalenderState extends State<BookingCalender> {
           Container(
             height: 500,
             child: SfDateRangePicker(
-              enablePastDates: false,
+              //enablePastDates: false,
               controller: _controller,
               startRangeSelectionColor: MainTheme.mainColor,
               endRangeSelectionColor: MainTheme.mainColor,

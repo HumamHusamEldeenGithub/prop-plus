@@ -300,7 +300,6 @@ class _MyProperties_DetailsScreen extends State<MyProperties_DetailsScreen> {
                         SizedBox(
                           height: 40,
                         ),
-                        CustomAminitiesListView(),
                         SizedBox(
                           height: 40,
                         ),

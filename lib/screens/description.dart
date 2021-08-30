@@ -363,7 +363,6 @@ class _DetailsScreenState extends State<DetailsScreen> {
                         SizedBox(
                           height: 40,
                         ),
-                        CustomAminitiesListView(),
                         SizedBox(
                           height: 40,
                         ),
